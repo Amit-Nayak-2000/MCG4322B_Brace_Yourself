@@ -8,6 +8,7 @@ classdef SuperiorLink
         B1 % For B1 to H4, refer to dimension figure
         B2
         B3
+        L
         H1
         H2
         H3
