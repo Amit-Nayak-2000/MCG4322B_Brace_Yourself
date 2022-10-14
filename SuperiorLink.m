@@ -14,6 +14,7 @@ classdef SuperiorLink
         H3
         H4
         
+        
         %Physical Properties
         m % Mass
         rho %Density of material
@@ -22,19 +23,24 @@ classdef SuperiorLink
         SU %Ultimate Strength
         SY %Yield Strength
         
+        
         %Dynamical Properties
-        theta %Angle with respect to horizontal (x)
-        omega %Angular Velocity
-        alpha %Angular acceleration
-        comx %x position of centre of mass
-        comy %x position of centre of mass
-        vx %Linear velocity x-axis
-        vy %Linear velocity x-axis
-        ax %Linear Acceleration x-axis
-        ay %Linear Acceleration y-axis
-        
-        
-        
+        %vector for centre of mass with respect to thigh (initially 0)
+        com = [0;0;0];
+        %vector for centre of mass absolute (initially 0)
+        com_abs = [0;0;0];
+        %vector from centre of mass to anterior joint
+        rsa = [0;0;0];
+        %vector from centre of mass to posterior joint
+        rsp = [0;0;0];
+        %theta, omega and alpha initially set to 0, but will have values in
+        %k. 
+        theta = [0;0;0]; %Angle with respect to horizontal (x) 
+        omega  = [0;0;0]; %Angular Velocity
+        alpha  = [0;0;0]; %Angular acceleration
+        %v and a are initially set to 0, but will have values in i and j.
+        v = [0;0;0]; %Linear Velocity
+        a = [0;0;0]; %Linear Acceleration
     end
     
     methods

@@ -9,6 +9,7 @@ classdef PosteriorLink
         H %Total length of link.
         B %Base of link
         
+        
         %Physical Properties
         m % Mass
         rho %Density of material
@@ -17,16 +18,23 @@ classdef PosteriorLink
         SU %Ultimate Strength
         SY %Yield Strength
         
+        
         %Dynamical Properties
-        theta %Angle with respect to horizontal (x)
-        omega %Angular Velocity
-        alpha %Angular acceleration
-        comx %x position of centre of mass
-        comy %x position of centre of mass
-        vx %Linear velocity x-axis
-        vy %Linear velocity x-axis
-        ax %Linear Acceleration x-axis
-        ay %Linear Acceleration y-axis
+        %vector for centre of mass with respect to joint with superior link 
+        %(initially 0)
+        com = [0;0;0];
+        %vector for centre of mass absolute (initially 0)
+        com_abs = [0;0;0];
+        %Vector from centre of mass to superior joint
+        rsp = [0;0;0];
+        %theta, omega and alpha initially set to 0, but will have values in
+        %k. 
+        theta = [0;0;0]; %Angle with respect to horizontal (x) 
+        omega  = [0;0;0]; %Angular Velocity
+        alpha  = [0;0;0]; %Angular acceleration
+        %v and a are initially set to 0, but will have values in i and j.
+        v = [0;0;0]; %Linear Velocity
+        a = [0;0;0]; %Linear Acceleration
     end
     
     methods
