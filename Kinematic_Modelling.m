@@ -10,6 +10,8 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior, KinThigh
 %KinThigh and KinCalf are matrices of position, velocity and acceleration
 %from Winter's Data.
 
+%Maybe convert thetas to radians
+
 %% Start of inverse kinematics
 %1 is superior, 2 is anterior, 3 is inferior, 4 is posterior
 

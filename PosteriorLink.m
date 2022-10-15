@@ -20,13 +20,12 @@ classdef PosteriorLink
         
         
         %Dynamical Properties
-        %vector for centre of mass with respect to joint with superior link 
-        %(initially 0)
-        com = [0;0;0];
         %vector for centre of mass absolute (initially 0)
         com_abs = [0;0;0];
         %Vector from centre of mass to superior joint
         rsp = [0;0;0];
+        %Vector from centre of mass to inferior joint
+        rip = [0;0;0];
         %theta, omega and alpha initially set to 0, but will have values in
         %k. 
         theta = [0;0;0]; %Angle with respect to horizontal (x) 

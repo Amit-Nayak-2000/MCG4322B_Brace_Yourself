@@ -33,6 +33,8 @@ classdef SuperiorLink
         rsa = [0;0;0];
         %vector from centre of mass to posterior joint
         rsp = [0;0;0];
+        %vector from centre of mass to thigh contact point
+        rst = [0;0;0];
         %theta, omega and alpha initially set to 0, but will have values in
         %k. 
         theta = [0;0;0]; %Angle with respect to horizontal (x) 
