@@ -37,7 +37,7 @@ classdef InferiorLink
         ric = [0;0;0];
         %theta, omega and alpha initially set to 0, but will have values in
         %k. 
-        theta = [0;0;0]; %Angle with respect to horizontal (x) 
+        theta %Angle with respect to horizontal (x) 
         omega  = [0;0;0]; %Angular Velocity
         alpha  = [0;0;0]; %Angular acceleration
         %v and a are initially set to 0, but will have values in i and j.

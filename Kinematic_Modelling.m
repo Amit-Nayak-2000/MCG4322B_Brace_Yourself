@@ -11,6 +11,8 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior, KinThigh
 %from Winter's Data.
 
 %Maybe convert thetas to radians
+%TODO: update superior.theta/omega/alpha with thigh theta in winters data
+% update inferior.theta/omega/alpha with leg theta in winters data
 
 %% Start of inverse kinematics
 %1 is superior, 2 is anterior, 3 is inferior, 4 is posterior
@@ -20,9 +22,9 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior, KinThigh
 %theta_a is anterior theta
 %theta_p is posterior theta
 syms theta_a theta_p
-r1 = [Superior.L*cosd(Superior.theta(3)); Superior.L*sind(Superior.theta(3))];
+r1 = [Superior.L*cosd(Superior.theta); Superior.L*sind(Superior.theta)];
 r2 = [Anterior.L*cosd(theta_a); Anterior.L*sind(theta_a)];
-r3 = [Inferior.L*cosd(Inferior.theta(3)); Inferior.L*sind(Inferior.theta(3))];
+r3 = [Inferior.L*cosd(Inferior.theta); Inferior.L*sind(Inferior.theta)];
 r4 = [Posterior.L*cosd(theta_p); Posterior.L*sind(theta_p)];
 
 positioneqn = r1 + r2 + r3 + r4 == 0;
@@ -33,10 +35,10 @@ solve(positioneqn, [theta_a theta_p]);
 %d/dt(r1 + r2 + r3 + r4) = 0
 syms w_a w_p;
 %w_a is omega anterior, w_p is omega posterior
-v1 = [-Superior.L*Superior.omega(3)*sind(Superior.theta(3)); Superior.L*Superior.omega(3)*cosd(Superior.theta(3))];
-v2 = [-Anterior.L*w_a*sind(Anterior.theta(3)); Anterior.L*w_a*cosd(Anterior.theta(3))];
-v3 = [-Inferior.L*Inferior.omega(3)*sind(Inferior.theta(3)); Inferior.L*Inferior.omega(3)*cosd(Inferior.theta(3))];
-v4 = [-Posterior.L*w_p*sind(Posterior.theta(3)); Posterior.L*w_p*cosd(Posterior.theta(3))];
+v1 = [-Superior.L*Superior.omega(3)*sind(Superior.theta); Superior.L*Superior.omega(3)*cosd(Superior.theta)];
+v2 = [-Anterior.L*w_a*sind(Anterior.theta); Anterior.L*w_a*cosd(Anterior.theta)];
+v3 = [-Inferior.L*Inferior.omega(3)*sind(Inferior.theta); Inferior.L*Inferior.omega(3)*cosd(Inferior.theta)];
+v4 = [-Posterior.L*w_p*sind(Posterior.theta); Posterior.L*w_p*cosd(Posterior.theta)];
 
 velocityeqn = v1 + v2 + v3 + v4 == 0;
 [omega_soln_1, omega_soln_2] = solve(velocityeqn, [w_a w_p]);
@@ -49,17 +51,17 @@ Posterior.omega(3) = double(omega_soln_2);
 %d^2/dt^2(r1 + r2 + r3 + r4) = 0
 syms a_a a_p;
 %a_a is Anterior.alpha a_p is Posterior.alpha
-a1 = [-Superior.L*Superior.alpha(3)*sind(Superior.theta(3)) - Superior.L*(Superior.omega(3)^2)*cosd(Superior.theta(3)); 
-    Superior.L*Superior.alpha(3)*cosd(Superior.theta(3)) - Superior.L*(Superior.omega(3)^2)*sind(Superior.theta(3))];
+a1 = [-Superior.L*Superior.alpha(3)*sind(Superior.theta) - Superior.L*(Superior.omega(3)^2)*cosd(Superior.theta); 
+    Superior.L*Superior.alpha(3)*cosd(Superior.theta) - Superior.L*(Superior.omega(3)^2)*sind(Superior.theta)];
 
-a2 = [-Anterior.L*a_a*sind(Anterior.theta(3)) - Anterior.L*(Anterior.omega(3)^2)*cosd(Anterior.theta(3)); 
-    Anterior.L*a_a*cosd(Anterior.theta(3)) - Anterior.L*(Anterior.omega(3)^2)*sind(Anterior.theta(3))];
+a2 = [-Anterior.L*a_a*sind(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*cosd(Anterior.theta); 
+    Anterior.L*a_a*cosd(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*sind(Anterior.theta)];
 
-a3 = [-Inferior.L*Inferior.alpha(3)*sind(Inferior.theta(3)) - Inferior.L*(Inferior.omega(3)^2)*cosd(Inferior.theta(3)); 
-    Inferior.L*Inferior.alpha(3)*cosd(Inferior.theta(3)) - Inferior.L*(Inferior.omega(3)^2)*sind(Inferior.theta(3))];
+a3 = [-Inferior.L*Inferior.alpha(3)*sind(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*cosd(Inferior.theta); 
+    Inferior.L*Inferior.alpha(3)*cosd(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*sind(Inferior.theta)];
 
-a4 = [-Posterior.L*a_p*sind(Posterior.theta(3)) - Posterior.L*(Posterior.omega(3)^2)*cosd(Posterior.theta(3)); 
-    Posterior.L*a_p*cosd(Posterior.theta(3)) - Posterior.L*(Posterior.omega(3)^2)*sind(Posterior.theta(3))];
+a4 = [-Posterior.L*a_p*sind(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*cosd(Posterior.theta); 
+    Posterior.L*a_p*cosd(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*sind(Posterior.theta)];
 
 acceleqn = a1 + a2 + a3 + a4 == 0;
 [alpha_soln_1, alpha_soln_2] = solve(acceleqn, [a_a a_p]);
@@ -79,7 +81,7 @@ Superior.com_abs = KinThigh(:, 1) + Superior.com;
 %calculate linear velocity
 Superior.v = KinThigh(:, 2) + cross(Superior.omega, Superior.com);
 %calculate linear acceleration
-Superior.a = KinThigh(:, 3); + cross(Superior.alpha, Superior.com) + cross(Superior.omega, cross(Superior.omega, Superior.com));
+Superior.a = KinThigh(:, 3) + cross(Superior.alpha, Superior.com) + cross(Superior.omega, cross(Superior.omega, Superior.com));
 
 %Joint between Superior and Anterior Links:
 SA = Superior.com_abs + Superior.rsa;
@@ -107,7 +109,7 @@ Inferior.com_abs = KinCalf(:, 1) + Inferior.com;
 %calculate linear velocity
 Inferior.v = KinCalf(:, 2) + cross(Inferior.omega, Inferior.com);
 %calculate linear acceleration
-Inferior.a = KinCalf(:, 3); + cross(Inferior.alpha, Inferior.com) + cross(Inferior.omega, cross(Inferior.omega, Inferior.com));
+Inferior.a = KinCalf(:, 3) + cross(Inferior.alpha, Inferior.com) + cross(Inferior.omega, cross(Inferior.omega, Inferior.com));
 
 %% End of forward kinematics
 end

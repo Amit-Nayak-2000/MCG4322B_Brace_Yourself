@@ -33,10 +33,10 @@ F_ip = [F_ipx; F_ipy; 0];
 F_ia = [F_iax; F_iay; 0];
 %Force between brace and thigh.
 %Note! The sign convention is from trig identities.
-F_t = [F_tn*cosd(Superior.theta(3)) - F_ft*sind(Superior.theta(3)); F_tn*sind(Superior.theta(3)) + F_ft*cosd(Superior.theta(3)); 0];
+F_t = [F_tn*cosd(Superior.theta) - F_ft*sind(Superior.theta); F_tn*sind(Superior.theta) + F_ft*cosd(Superior.theta); 0];
 %Force between brace and calf.
 %Note! The sign convention is from trig identities.
-F_c = [F_cn*cosd(Inferior.theta(3)) - F_fc*sind(Inferior.theta(3)); F_cn*sind(Inferior.theta(3)) + F_fc*cosd(Inferior.theta(3)); 0];
+F_c = [F_cn*cosd(Inferior.theta) - F_fc*sind(Inferior.theta); F_cn*sind(Inferior.theta) + F_fc*cosd(Inferior.theta); 0];
 
 %12 equations & 12 unknowns.
 %% Superior Link
