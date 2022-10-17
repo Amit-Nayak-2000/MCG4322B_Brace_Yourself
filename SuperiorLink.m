@@ -82,8 +82,8 @@ classdef SuperiorLink < handle
             Xcom = Xnum / Xdenom; %sum of X(i)A(i) / sum of X(i)
             Ycom = Ynum / Ydenom; %sum of X(i)A(i) / sum of X(i)
             
-            comx = ((obj.B2/2 + Xcom) + (0.567*thighlength -(obj.H4-Ycom))) * cosd(obj.theta);
-            comy = - (((obj.B2/2 + Xcom) + (0.567*thighlength -(obj.H4-Ycom))) * sind(obj.theta));
+            comx = (obj.B2/2 + Xcom)*cosd(obj.theta) + (0.567*thighlength -(obj.H4-Ycom))*sind(obj.theta);
+            comy =  (obj.B2/2 + Xcom)*sind(obj.theta) - (0.567*thighlength -(obj.H4-Ycom))*cosd(obj.theta);
             
             obj.com = [comx; comy; 0];
         end

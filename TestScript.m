@@ -4,6 +4,14 @@
 mass = 56.7; %kilograms
 height = 1.524; %metres
 
+%Thigh/Calf Length from Winters Segment Model
+%Need to find a better way for thigh and calf diameter, but currently its
+%hard coded for the purpose of sample calculations. 
+thighlength = (0.530 - 0.285)*height;
+thighdiameter = 0.1;
+calflength = (0.285 - 0.0039)*height;
+calfdiameter = 0.08;
+
 %Instantiate Objects
 S = SuperiorLink;
 A = AnteriorLink;
@@ -30,6 +38,13 @@ addpath(genpath("Winter_Data"));
 %Column vectors of position, velocity, acceleration, angular position,
 %angular velocity and angular acceleration. 
 %Format in each column in terms of unit vectors is as follows [i; j; k].
+
+S.theta = 0;
+S = calculateCOM(S, thighlength);
+
+In.theta = 10;
+In = calculateCOM(In, calflength);
+
 
 
 
