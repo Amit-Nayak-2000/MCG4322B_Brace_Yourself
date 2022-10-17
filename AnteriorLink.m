@@ -1,4 +1,4 @@
-classdef AnteriorLink
+classdef AnteriorLink < handle
     %ANTERIORLINK
     %Contains essential properties of link.
     %Dimensions, Material Properties, Position, Velocities, Acclerations
