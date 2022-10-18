@@ -44,6 +44,9 @@ S = calculateCOM(S, thighlength);
 In.theta = 10;
 In = calculateCOM(In, calflength);
 
+%Superior.theta = theta_thigh - 90 deg.
+%Inferior.thetea = theta_calf + 90 deg.
+
 
 
 

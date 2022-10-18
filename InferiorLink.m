@@ -59,7 +59,7 @@ classdef InferiorLink < handle
             x(4) = obj.B3 / 2;
             
             y(1) = obj.H4 - (obj.H1 / 2);
-            y(2) = (obj.H4 - obj.H2) + (obj.H2 - obj.H1) * (1/3) * ( (2*obj.B2 + obj.B1) / (obj.B2 + obj.B1));
+            y(2) = (obj.H4 - obj.H2) - (obj.H2 - obj.H1) * (1/3) * ( (2*obj.B2 + obj.B1) / (obj.B2 + obj.B1));
             y(3) = (obj.H4 - obj.H3) + ((obj.H3 - obj.H2) / 2);
             y(4) = (obj.H4 - obj.H3) / 2;
             
