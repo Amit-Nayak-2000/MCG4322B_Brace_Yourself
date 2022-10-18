@@ -48,6 +48,11 @@ P.L = 0.8*P.H;
 
 thickness = 0.5/100;
 
+S.T = thickness;
+A.T = thickness;
+In.T = thickness;
+P.T = thickness;
+
 
 %Old Values
 % S.B1 = 0.03; 

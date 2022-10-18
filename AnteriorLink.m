@@ -8,6 +8,7 @@ classdef AnteriorLink < handle
         L %Length from joint to joint.
         H %Total length of link.
         B %Base of link
+        T %thickness
         
         
         %Physical Properties

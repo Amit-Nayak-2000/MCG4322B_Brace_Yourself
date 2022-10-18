@@ -13,6 +13,7 @@ classdef InferiorLink < handle
         H2
         H3
         H4
+        T %Thickness
         
         
         %Physical Properties
