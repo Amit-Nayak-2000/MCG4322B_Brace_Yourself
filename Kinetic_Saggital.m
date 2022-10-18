@@ -53,7 +53,10 @@ Ant_x = -F_sa(1) - F_ia(1) == Anterior.m*Anterior.a(1);
 %Sum of forces in y:
 Ant_y = -F_sa(2) - F_ia(2) + Anterior.m*g(2) == Anterior.m*Anterior.a(2);
 %Sum of moments about z:
-Ant_z = cross(Anterior.rsa, -F_sa) + cross(Anterior.ria, -F_ia) - Torque1(3) == Anterior.I*Anterior.alpha(3);
+%Anterior.rsa and Anterior.ria are negative because they were originally
+%defined as from the joint to the centre of mass. For this we need from the
+%centre of the mass to the joint.
+Ant_z = cross(-Anterior.rsa, -F_sa) + cross(-Anterior.ria, -F_ia) - Torque1(3) == Anterior.I*Anterior.alpha(3);
 
 %% Posterior Link
 %Sum of forces in x:
@@ -61,7 +64,10 @@ Pos_x = -F_sp(1) - F_ip(1) == Posterior.m*Posterior.a(1);
 %Sum of forces in y:
 Pos_y = -F_sp(2) - F_ip(2) + Posterior.m*g(2) == Posterior.m*Posterior.a(2);
 %Sum of moments about z:
-Pos_z = cross(Posterior.rsp, -F_sp) + cross(Posterior.rip, -F_ip) - Torque2(3) == Posterior.I*Posterior.alpha(3);
+%Posterior.rsp and Posterior.rip are negative because they were originally
+%defined as from the joint to the centre of mass. For this we need from the
+%centre of the mass to the joint.
+Pos_z = cross(-Posterior.rsp, -F_sp) + cross(-Posterior.rip, -F_ip) - Torque2(3) == Posterior.I*Posterior.alpha(3);
 
 %% Inferior Link
 %Sum of forces in x:

@@ -1,16 +1,15 @@
 %Test Script
 
-%Mass and Height parameters
+%User provided parameters
 mass = 56.7; %kilograms
 height = 1.524; %metres
+thighdiameter = 0.1; %metres
+calfdiameter = 0.08; %metres
 
 %Thigh/Calf Length from Winters Segment Model
-%Need to find a better way for thigh and calf diameter, but currently its
-%hard coded for the purpose of sample calculations. 
 thighlength = (0.530 - 0.285)*height;
-thighdiameter = 0.1;
 calflength = (0.285 - 0.0039)*height;
-calfdiameter = 0.08;
+
 
 %Instantiate Objects
 S = SuperiorLink;

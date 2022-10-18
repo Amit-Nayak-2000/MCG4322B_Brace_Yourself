@@ -94,7 +94,7 @@ classdef SuperiorLink < handle
             rxp = (obj.B2 / 2) - (obj.L / 2) - Xcom; % x component to joint SP.
             
             obj.rsa = [ry*sind(obj.theta) + rxa*cosd(obj.theta); -ry*cosd(obj.theta) + rxa*sind(obj.theta); 0];
-            obj.rsp = [ry*sind(obj.theta) - rxp*cosd(obj.theta); -ry*cosd(obj.theta) - rxp*sind(obj.theta); 0];
+            obj.rsp = [ry
         end
         
         function obj = calculateMass(obj)
