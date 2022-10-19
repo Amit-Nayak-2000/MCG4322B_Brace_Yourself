@@ -1,12 +1,15 @@
 %Test Script
 
-mass = 56.7;
-height = 1.524;
+%User provided parameters
+mass = 56.7; %kilograms
+height = 1.524; %metres
+thighdiameter = 0.1; %metres
+calfdiameter = 0.08; %metres
 
+%Thigh/Calf Length from Winters Segment Model
 thighlength = (0.530 - 0.285)*height;
-thighdiameter = 0.1;
 calflength = (0.285 - 0.0039)*height;
-calfdiameter = 0.08;
+
 
 %Instantiate Objects
 S = SuperiorLink;
@@ -16,55 +19,50 @@ P = PosteriorLink;
 T1 = TorsionalSpring;
 T2 = TorsionalSpring;
 
-disp("Link and Spring Object Instantiated");
+disp("Link and Spring Object Instantiated.");
 
-%Assign Dimensions to Objects
-%Lengths are in m.
-%Superior Link
-S.H4 = 0.4*thighlength;
-S.H3 = 0.87*S.H4;
-S.H2 = 0.33*S.H4;
-S.H1 = 0.2*S.H4;
+%Initialize dimensions based on Mass and Height
+Init_System(mass, height, S, In, P, A, T1, T2);
 
-S.B1 = 1.1*S.H1; 
-S.B2 = S.B1 / 2; 
-S.B3 = thighdiameter / 2;
-S.L = 0.8*S.B1;
+disp("Link and Spring Objects Initialized.");
 
-%Inferior Link
-In.H4 = 0.3*calflength;
-In.H3 = 0.87*In.H4;
-In.H2 = 0.33*In.H4;
-In.H1 = 0.2*In.H4;
+%Add subfolder to path in order to Parse.
+addpath(genpath("Winter_Data"));
+% %Parse Winter's Data
+% SegmentKinematics = importdata("Winter_Data/Winter_Appendix_data_A.3.csv");
+% disp("Winter's Data Parsed.");
 
-In.B1 = 1.5*S.B1; 
-In.B2 = In.B1 / 2; 
-In.B3 = calfdiameter / 2;
-In.L = 0.8*In.B1;
+%Obtain kinematic data of thigh and calf to compute kinematics of system.
 
-%Anterior Link
-A.B = 0.35*S.B1;
-A.H = 0.0565;
-A.L = 0.8*A.H;
+%Column vectors of position, velocity, acceleration, angular position,
+%angular velocity and angular acceleration. 
+%Format in each column in terms of unit vectors is as follows [i; j; k].
 
-%Posterior Link
-P.B = 0.35*S.B1;
-P.H = 0.0565;
-P.L = 0.8*P.H;
+S.theta = 0;
+S = calculateCOM(S, thighlength);
 
-thickness = 0.5/100;
+In.theta = 10;
+In = calculateCOM(In, calflength);
+
+%Superior.theta = theta_thigh - 90 deg.
+%Inferior.thetea = theta_calf + 90 deg.
 
 
 
 
 
 
-% S.B1 = 0.03; 
-% S.B2 = 0.015; 
-% S.B3 = 0.05;
-% S.L = 0.8*S.B1;
-% S.H4 = 0.15; 
-% S.H3 = 0.13;
-% S.H2 = 0.05;
-% S.H1 = 0.03;
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,4 +1,4 @@
-function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior, KinThigh, KinCalf)
+function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf)
 %KINEMATIC_MODELLING 
 %
 %Inverse kinematics will be used to get angular positions, velocities, and
@@ -10,9 +10,9 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior, KinThigh
 %KinThigh and KinCalf are matrices of position, velocity and acceleration
 %from Winter's Data.
 
-%Maybe convert thetas to radians
-%TODO: update superior.theta/omega/alpha with thigh theta in winters data
-% update inferior.theta/omega/alpha with leg theta in winters data
+%TODO: 
+%update superior.theta/omega/alpha with thigh theta in winters data
+%update inferior.theta/omega/alpha with leg theta in winters data
 
 %% Start of inverse kinematics
 %1 is superior, 2 is anterior, 3 is inferior, 4 is posterior
