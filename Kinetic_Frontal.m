@@ -20,13 +20,8 @@ function [] = Kinetic_Frontal(Superior,Inferior,Posterior,Height,Weight)
 %Symbolic variables will be assigned to unknowns initially. 
 %% Symbolic Variables
 
-syms F_tz F_cz F_kz KAM
+syms F_tz F_cz F_kz OA_KAM Healthy_KAM
 
-%Gravity vector
-g=[0; -9.81; 0];
-
-%Target frontal plane moment
-M_targ = [0.033*Height*Weight;0;0];
 
 %% Kinetics Equations
 
@@ -34,9 +29,10 @@ M_targ = [0.033*Height*Weight;0;0];
 Fz = F_tz + F_cz + F_kz ==0;
 
 %Sum Moments
-Mz = KAM + F_tz*(Superior.H4*cos(Superior.theta) +...
-    0.5*Posterior.H*sin(Posterior.theta))+ F_cz*(Inferior.H4*cos(Inferior.theta)...
-    - 0.5*Posterior.H*sin(Posterior.theta)) == M_targ;
+%To do add y forces x-prod
+Mz = OA_KAM + F_tz*(Superior.H4*cosd(Superior.theta) +...
+    0.5*Posterior.H*sind(Posterior.theta))+ F_cz*(Inferior.H4*cosd(Inferior.theta)...
+    - 0.5*Posterior.H*sind(Posterior.theta)) == Healthy_KAM;
 
 %% Solve system of equations
 syseqns = [Fz, Mz];
