@@ -87,7 +87,7 @@ classdef InferiorLink < handle
             obj.com = [comx; comy; 0];
         end
         
-        function obj = calculateMass(obj)
+        function obj = calculate_inertial_props(obj)
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
             A(3) = obj.B2 * (obj.H3 - obj.H2);

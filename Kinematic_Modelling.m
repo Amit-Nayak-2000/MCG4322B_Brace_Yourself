@@ -1,4 +1,4 @@
-function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf)
+function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf, thighlength, calflength)
 %KINEMATIC_MODELLING 
 %
 %Inverse kinematics will be used to get angular positions, velocities, and
@@ -15,7 +15,19 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,
 %update inferior.theta/omega/alpha with leg theta in winters data
 
 %% Start of inverse kinematics
-%1 is superior, 2 is anterior, 3 is inferior, 4 is posterior
+%assign biological theta/omega/alpha to superior and inferior links.
+Superior.theta = KinThigh(3,4) - 90;
+Inferior.theta = KinCalf(3,4) - 90;
+% Inferior.theta = KinCalf(3,4) + 90;
+
+Superior.omega(3) = KinThigh(3,5);
+Inferior.omega(3) = KinCalf(3,5);
+
+Superior.alpha(3) = KinThigh(3,6);
+Inferior.alpha(3) = KinCalf(3,6);
+
+%For the vectors in the inverse kinematics: 1 is superior, 2 is anterior, 3
+%is inferior, 4 is posterior.
 
 %Position:
 %r1 + r2 + r3 + r4 = 0
@@ -28,8 +40,15 @@ r3 = [Inferior.L*cosd(Inferior.theta); Inferior.L*sind(Inferior.theta)];
 r4 = [Posterior.L*cosd(theta_p); Posterior.L*sind(theta_p)];
 
 positioneqn = r1 + r2 + r3 + r4 == 0;
-solve(positioneqn, [theta_a theta_p]);
+thetas = solve(positioneqn, [theta_a theta_p]);
 %assign theta_a to Anterior.theta and theta_p to Posterior.theta
+pt1 = double(thetas.theta_a(1,1));
+pt2 = double(thetas.theta_a(2,1));
+pt3 = double(thetas.theta_p(1,1));
+pt4 = double(thetas.theta_p(2,1));
+
+Anterior.theta = pt2;
+Posterior.theta = pt4;
 
 %Velocity
 %d/dt(r1 + r2 + r3 + r4) = 0
@@ -72,6 +91,13 @@ Posterior.alpha(3) = double(alpha_soln_2);
 
 %% End of inverse kinematics
 %% Start of forward kinematics
+%Now that thetas for each link are computed, can calculate individual COM vectors.
+Superior = calculateCOM(Superior, thighlength);
+Anterior = calculateCOM(Anterior);
+Inferior = calculateCOM(obj, calflength);
+Posterior = calculateCOM(Posterior);
+
+
 %KinThigh and KinCalf are matrices.
 %1st col is position, 2nd col is velocity, 3rd col is acceleration. 
 

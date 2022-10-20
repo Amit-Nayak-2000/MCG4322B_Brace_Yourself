@@ -46,6 +46,11 @@ classdef AnteriorLink < handle
             obj.I = (1/12)*obj.m*obj.H^2;
         end
         
+        function obj = calculateCOM(obj)
+            obj.rsa = [0.5*obj.L*cosd(obj.theta); 0.5*obj.L*sind(obj.theta); 0];
+            obj.ria = -obj.rsa;
+        end
+        
     end
 end
 

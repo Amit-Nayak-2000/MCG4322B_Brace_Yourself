@@ -45,6 +45,12 @@ classdef PosteriorLink < handle
             obj.I = (1/12)*obj.m*obj.H^2;
         end
         
+        function obj = calculateCOM(obj)
+            %negative since theta angle starts at joint IP.
+            obj.rsp = [-0.5*obj.L*cosd(obj.theta); -0.5*obj.L*sind(obj.theta); 0];
+            obj.rip = -obj.rsp;
+        end
+        
     end
 end
 

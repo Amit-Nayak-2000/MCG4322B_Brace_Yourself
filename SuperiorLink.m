@@ -97,7 +97,7 @@ classdef SuperiorLink < handle
             obj.rsp = [ry*sind(obj.theta) - rxp*cosd(obj.theta); -ry*cosd(obj.theta) - rxp*sind(obj.theta); 0];
         end
         
-        function obj = calculateMass(obj)
+        function obj = calculate_inertial_props(obj)
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
             A(3) = obj.B2 * (obj.H3 - obj.H2);

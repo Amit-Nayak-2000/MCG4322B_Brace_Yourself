@@ -2,7 +2,7 @@
 
 %User provided parameters
 mass = 56.7; %kilograms
-height = 1.524; %metres
+height = 1.73; %metres
 thighdiameter = 0.1; %metres
 calfdiameter = 0.08; %metres
 
@@ -26,40 +26,60 @@ Init_System(mass, height, S, In, P, A, T1, T2);
 
 disp("Link and Spring Objects Initialized.");
 
-%Add subfolder to path in order to Parse.
-addpath(genpath("Winter_Data"));
-% %Parse Winter's Data
-% SegmentKinematics = importdata("Winter_Data/Winter_Appendix_data_A.3.csv");
-% disp("Winter's Data Parsed.");
+%Parse Winters Data
+WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
+kinematicsdata = WinterData{3};
+frame = 37;
 
-%Obtain kinematic data of thigh and calf to compute kinematics of system.
+%Obtain biological kinematics of calf and thigh.
+kincalf = [kinematicsdata(frame,16), kinematicsdata(frame,17), kinematicsdata(frame,18), 0, 0, 0; 
+           kinematicsdata(frame,19), kinematicsdata(frame,20), kinematicsdata(frame,21), 0, 0, 0;
+           0, 0, 0, kinematicsdata(frame,13), kinematicsdata(frame,14), kinematicsdata(frame,15);];
+       
+kinthigh = [kinematicsdata(frame,26), kinematicsdata(frame,27), kinematicsdata(frame,28), 0, 0, 0; 
+           kinematicsdata(frame,29), kinematicsdata(frame,30), kinematicsdata(frame,31), 0, 0, 0;
+           0, 0, 0, kinematicsdata(frame,23), kinematicsdata(frame,24), kinematicsdata(frame,25);];
+ 
+disp("Biological Kinematic Data Obtained.");
 
-%Column vectors of position, velocity, acceleration, angular position,
-%angular velocity and angular acceleration. 
-%Format in each column in terms of unit vectors is as follows [i; j; k].
+Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength);
 
-S.theta = 0;
-S = calculateCOM(S, thighlength);
 
-In.theta = 10;
-In = calculateCOM(In, calflength);
 
+
+
+
+
+
+
+
+
+
+%notes
 %Superior.theta = theta_thigh - 90 deg.
-%Inferior.thetea = theta_calf + 90 deg.
+%Inferior.theta = theta_calf + 90 deg.
 
+%leg indexes from winters (col, value):
+%13, theta
+%14, omega
+%15, alpha
+%16, comx
+%17, velx
+%18, accelx
+%19, comy
+%20, vely
+%21, accely
 
-
-
-
-
-
-
-
-
-
-
-
-
+%Thigh (col, value):
+%23, theta
+%24, omega
+%25, alpha
+%26, comx
+%27, velx
+%28, accelx
+%29, comy
+%30, vely
+%31, accely 
 
 
 

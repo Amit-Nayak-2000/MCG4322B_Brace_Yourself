@@ -53,6 +53,11 @@ A.T = thickness;
 In.T = thickness;
 P.T = thickness;
 
+S = calculate_inertial_props(S);
+A = calculate_inertial_props(A);
+In = calculate_inertial_props(In);
+P = calculate_inertial_props(P);
+
 
 %Old Values
 % S.B1 = 0.03; 
