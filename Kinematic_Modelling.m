@@ -18,7 +18,6 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,
 %assign biological theta/omega/alpha to superior and inferior links.
 Superior.theta = KinThigh(3,4) - 90;
 Inferior.theta = KinCalf(3,4) - 90;
-% Inferior.theta = KinCalf(3,4) + 90;
 
 Superior.omega(3) = KinThigh(3,5);
 Inferior.omega(3) = KinCalf(3,5);
@@ -92,9 +91,10 @@ Posterior.alpha(3) = double(alpha_soln_2);
 %% End of inverse kinematics
 %% Start of forward kinematics
 %Now that thetas for each link are computed, can calculate individual COM vectors.
+verticaloffset = GetFemoralOffset(Superior, Inferior, Anterior, Posterior);
 Superior = calculateCOM(Superior, thighlength);
 Anterior = calculateCOM(Anterior);
-Inferior = calculateCOM(obj, calflength);
+Inferior = calculateCOM(Inferior, calflength, verticaloffset);
 Posterior = calculateCOM(Posterior);
 
 

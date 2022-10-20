@@ -47,7 +47,8 @@ classdef InferiorLink < handle
     
     methods
         
-        function obj = calculateCOM(obj, calflength)
+        function obj = calculateCOM(obj, calflength, vertcomponent)
+            %vertcomponent is offset from femoral condyle
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
             A(3) = obj.B2 * (obj.H3 - obj.H2);
@@ -81,8 +82,8 @@ classdef InferiorLink < handle
             Xcom = Xnum / Xdenom; %sum of X(i)A(i) / sum of X(i)
             Ycom = Ynum / Ydenom; %sum of X(i)A(i) / sum of X(i)
             
-            comx = -(Xcom - obj.B2/2)*cosd(obj.theta) - (0.433*calflength -(obj.H4-Ycom))*sind(obj.theta);
-            comy = -(Xcom - obj.B2/2)*sind(obj.theta) + (0.433*calflength -(obj.H4-Ycom))*cosd(obj.theta);
+            comx = -(Xcom - obj.B2/2)*cosd(obj.theta) - (0.433*calflength -(obj.H4-Ycom) - vertcomponent)*sind(obj.theta);
+            comy = -(Xcom - obj.B2/2)*sind(obj.theta) + (0.433*calflength -(obj.H4-Ycom) - vertcomponent)*cosd(obj.theta);
             
             obj.com = [comx; comy; 0];
         end

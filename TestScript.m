@@ -57,7 +57,7 @@ Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength);
 
 %notes
 %Superior.theta = theta_thigh - 90 deg.
-%Inferior.theta = theta_calf + 90 deg.
+%Inferior.theta = theta_calf - 90 deg.
 
 %leg indexes from winters (col, value):
 %13, theta
@@ -80,9 +80,3 @@ Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength);
 %29, comy
 %30, vely
 %31, accely 
-
-
-
-
-
-
