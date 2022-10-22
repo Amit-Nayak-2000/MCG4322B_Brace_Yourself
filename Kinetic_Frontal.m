@@ -26,7 +26,7 @@ syms F_tz F_cz F_kz OA_KAM Healthy_KAM
 %% Kinetics Equations
 
 %Sum forces in Z
-Fz = F_tz + F_cz + F_kz ==0;
+Fz = -F_tz + -F_cz + F_kz ==0;
 
 %Sum Moments
 %To do add y forces x-prod

@@ -15,6 +15,10 @@ classdef TorsionalSpring
     end
     
     methods
+        function obj = calculateSpringConst(obj, mass)
+            obj.K = 0.0022*mass; 
+        end
+        
         
     end
 end

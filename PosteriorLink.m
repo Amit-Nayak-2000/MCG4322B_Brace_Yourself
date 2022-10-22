@@ -33,6 +33,10 @@ classdef PosteriorLink < handle
         %v and a are initially set to 0, but will have values in i and j.
         v = [0;0;0]; %Linear Velocity
         a = [0;0;0]; %Linear Acceleration
+        
+        %Force Vectors
+        F_sp = [0;0;0];
+        F_ip = [0;0;0];
     end
     
     methods

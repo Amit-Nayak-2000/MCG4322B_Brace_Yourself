@@ -34,6 +34,10 @@ classdef AnteriorLink < handle
         %v and a are initially set to 0, but will have values in i and j.
         v = [0;0;0]; %Linear Velocity
         a = [0;0;0]; %Linear Acceleration
+        
+        %Force Vectors
+        F_sa = [0;0;0];
+        F_ia = [0;0;0];
     end
     
     methods
