@@ -43,6 +43,15 @@ kinthigh = [kinematicsdata(frame,26), kinematicsdata(frame,27), kinematicsdata(f
 disp("Biological Kinematic Data Obtained.");
 
 Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength);
+disp("Kinematics Calculated");
+
+%give torsional spring its K based on user mass:
+T1 = calculateSpringConst(T1, mass);
+T2 = calculateSpringConst(T2, mass);
+
+%calculate forces
+Kinetic_Saggital(S,In,P,A, T1, T2);
+disp("Kinetics Calculated");
 
 
 

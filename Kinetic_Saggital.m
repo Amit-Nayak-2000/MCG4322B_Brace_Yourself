@@ -22,8 +22,8 @@ g = [0; -9.81; 0];
 %TODO: finish torques.
 TS1.theta = Anterior.theta - Superior.theta - 180;
 TS2.theta = -180 - Posterior.theta + Inferior.theta;
-Torque1 = TS1.K * TS1.theta;
-Torque2 = TS2.K * TS2.theta;
+Torque1 = [0; 0; TS1.K * TS1.theta];
+Torque2 = [0; 0; TS2.K * TS2.theta];
 %% Unknown Force Vectors
 %Reaction force between Superior and Posterior links.
 F_sp = [F_spx; F_spy; 0];
@@ -47,7 +47,7 @@ Sup_x = F_sp(1) + F_sa(1) + F_t(1) == Superior.m*Superior.a(1);
 %Sum of forces in y:
 Sup_y = F_sp(2) + F_sa(2) + Superior.m*g(2) + F_t(2) == Superior.m*Superior.a(2);
 %Sum of moments about z:
-Sup_z = cross(Superior.rsp, F_sp) + cross(Superior.rsa, F_sa) + cross(Superior.rst, F_t) + Torque1 == Superior.I*Superior.alpha(3);
+Sup_z = cross(Superior.rsp, F_sp) + cross(Superior.rsa, F_sa) + cross(Superior.rst, F_t) + Torque1 == Superior.I*Superior.alpha;
 
 %% Anterior Link
 %Sum of forces in x:
@@ -58,7 +58,7 @@ Ant_y = -F_sa(2) - F_ia(2) + Anterior.m*g(2) == Anterior.m*Anterior.a(2);
 %Anterior.rsa and Anterior.ria are negative because they were originally
 %defined as from the joint to the centre of mass. For this we need from the
 %centre of the mass to the joint.
-Ant_z = cross(-Anterior.rsa, -F_sa) + cross(-Anterior.ria, -F_ia) - Torque1 == Anterior.I*Anterior.alpha(3);
+Ant_z = cross(-Anterior.rsa, -F_sa) + cross(-Anterior.ria, -F_ia) - Torque1 == Anterior.I*Anterior.alpha;
 
 %% Posterior Link
 %Sum of forces in x:
@@ -69,7 +69,7 @@ Pos_y = -F_sp(2) - F_ip(2) + Posterior.m*g(2) == Posterior.m*Posterior.a(2);
 %Posterior.rsp and Posterior.rip are negative because they were originally
 %defined as from the joint to the centre of mass. For this we need from the
 %centre of the mass to the joint.
-Pos_z = cross(-Posterior.rsp, -F_sp) + cross(-Posterior.rip, -F_ip) - Torque2 == Posterior.I*Posterior.alpha(3);
+Pos_z = cross(-Posterior.rsp, -F_sp) + cross(-Posterior.rip, -F_ip) - Torque2 == Posterior.I*Posterior.alpha;
 
 %% Inferior Link
 %Sum of forces in x:
@@ -77,9 +77,9 @@ Inf_x = F_ip(1) + F_ia(1) + F_c(1) == Inferior.m*Inferior.a(1);
 %Sum of forces in y:
 Inf_y = F_ip(2) + F_ia(2) + Inferior.m*g(2) + F_c(2) == Inferior.m*Inferior.a(2);
 %Sum of moments about z:
-Inf_z = cross(Inferior.rip, F_ip) + cross(Inferior.ria, F_ia) + cross(Superior.ric, F_c) + Torque2 == Inferior.I*Inferior.alpha(3);
+Inf_z = cross(Inferior.rip, F_ip) + cross(Inferior.ria, F_ia) + cross(Inferior.ric, F_c) + Torque2 == Inferior.I*Inferior.alpha;
 %% Solve system of equations
-syseqns = [Sup_x, Sup_y, Sup_z, Ant_x, Ant_y, Ant_z, Pos_x, Pos_y, Pos_z, Inf_x, Inf_y, Inf_z];
+syseqns = [Sup_x, Sup_y, Sup_z(3), Ant_x, Ant_y, Ant_z(3), Pos_x, Pos_y, Pos_z(3), Inf_x, Inf_y, Inf_z(3)];
 sol = solve(syseqns, [F_spx, F_spy, F_ipx, F_ipy, F_sax, F_say, F_iax, F_iay, F_tn, F_ft, F_cn, F_fc]);
 
 %assign values to superior link
