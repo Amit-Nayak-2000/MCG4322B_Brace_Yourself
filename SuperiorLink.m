@@ -61,7 +61,7 @@ classdef SuperiorLink < handle
             x(4) = obj.B3 / 2;
             
             y(1) = obj.H4 - (obj.H1 / 2);
-            y(2) = (obj.H4 - obj.H2) - (obj.H2 - obj.H1) * (1/3) * ( (2*obj.B2 + obj.B1) / (obj.B2 + obj.B1));
+            y(2) = (obj.H4 - obj.H1) - (obj.H2 - obj.H1) * (1/3) * ( (2*obj.B2 + obj.B1) / (obj.B2 + obj.B1));
             y(3) = (obj.H4 - obj.H3) + ((obj.H3 - obj.H2) / 2);
             y(4) = (obj.H4 - obj.H3) / 2;
             
@@ -70,14 +70,16 @@ classdef SuperiorLink < handle
             Ynum = 0;
             Ydenom = 0;
             
+            
+            %Denominators should be sum of areas not x or y
             for i=1:4
                 Xnum = Xnum + x(i)*A(i);
                 
                 Ynum = Ynum + y(i)*A(i);
                 
-                Xdenom = Xdenom + x(i);
+                Xdenom = Xdenom + A(i);
                 
-                Ydenom = Ydenom + y(i);
+                Ydenom = Ydenom + A(i);
             end
             
             Xcom = Xnum / Xdenom; %sum of X(i)A(i) / sum of X(i)
@@ -89,6 +91,7 @@ classdef SuperiorLink < handle
             obj.com = [comx; comy; 0];
             
             %rsa & rsp calcs
+          
             ry = obj.H4 - Ycom - (obj.H1 / 2); % y component
             rxa = (obj.B2 / 2) + (obj.L / 2) - Xcom; % x component to joint SA.
             rxp = (obj.B2 / 2) - (obj.L / 2) - Xcom; % x component to joint SP.
