@@ -54,6 +54,8 @@ disp("Torsional Springs Initialized.");
 Kinetic_Saggital(S,In,P,A, T1, T2);
 disp("Kinetics Calculated.");
 
+disp("Frame: " + frame);
+
 
 
 
