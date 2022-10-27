@@ -18,11 +18,8 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
-theta_a = pt2;
-theta_p = pt4;
-
-T1.beta = theta_a - 180; %assign betas to spring
-T2.beta = -180 - theta_p;
+T1.beta = 180 - pt1 ; %assign betas to spring
+T2.beta = 180 - pt1;
 
 offsettheta = pt4;
 

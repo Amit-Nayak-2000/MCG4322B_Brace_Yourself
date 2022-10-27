@@ -20,10 +20,10 @@ syms F_ipx F_ipy F_ia F_iax F_iay F_tn F_ft F_cn
 %Gravity vector
 g = [0; -9.81; 0];
 %TODO: finish torques.
-TS1.theta = Anterior.theta - Superior.theta - 180;
-TS2.theta = -180 - Posterior.theta + Inferior.theta;
-Torque1 = [0; 0; TS1.K * TS1.theta];
-Torque2 = [0; 0; TS2.K * TS2.theta];
+TS1.theta = 180 - abs(Anterior.theta) - abs(Superior.theta);
+TS2.theta = 180 - abs(Posterior.theta) - abs(Inferior.theta);
+Torque1 = [0; 0; -TS1.K * (TS1.theta - TS1.beta)];
+Torque2 = [0; 0; -TS2.K * (TS2.theta - TS2.beta)];
 %% Unknown Force Vectors
 %Reaction force between Superior and Posterior links.
 F_sp = [F_spx; F_spy; 0];
