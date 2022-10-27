@@ -1,22 +1,27 @@
-classdef TorsionalSpring
+classdef TorsionalSpring < handle
     %TORSIONALSPRING 
-    %Contains essential properties of spring.
-    %Dimensions, Material Properties, spring constant, etc...
+    %Helical Torsional Spring
     
     properties
-        beta %resting angle
-        C %No idea what this is...
-        d 
-        D
-        E %Elastic Modulus
+        beta %Resting angle
+        C %Spring Index
+        d %Coil Diameter
+        D %Mean Diameter
+        E = 201e9; % Elastic modulus of SAE 1070 Carbon Steel 
+        SU = 640e6;
+        SY = 495e6;
         Na %Active turns
-        K %spring constant
-        theta %spring deflection
+        K %Spring Rate
+        theta %Deflection of Spring
+        l1 %length to standoff/moment arm (Superior/Inferior link)
+        l2 %length to standoff/moment arm (Anterior/Posterior link)
     end
     
     methods
-        function obj = calculateSpringConst(obj, mass)
+        function obj = initSpring(obj, mass, mainlink, sublink)
             obj.K = 0.0022*mass; 
+            obj.l1 = 0.4*mainlink.L;
+            obj.l2 = 0.4*sublink.L;
         end
         
         

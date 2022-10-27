@@ -1,4 +1,4 @@
-function [offset] = GetFemoralOffset(Superior,Inferior,Anterior,Posterior)
+function [offset] = GetInitKinematics(Superior,Inferior,Anterior,Posterior, T1, T2)
 %GETFEMORALOFFSET 
 %Getting vertical distance between Superior and Inferior Links at 0 deg
 %flexion.
@@ -18,6 +18,11 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
+theta_a = pt2;
+theta_p = pt4;
+
+T1.beta = theta_a - 180; %assign betas to spring
+T2.beta = -180 - theta_p;
 
 offsettheta = pt4;
 

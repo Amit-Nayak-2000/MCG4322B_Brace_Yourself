@@ -29,7 +29,7 @@ disp("Link and Spring Objects Initialized.");
 %Parse Winters Data
 WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
 kinematicsdata = WinterData{3};
-frame = 60;
+frame = 37; 
 
 %Obtain biological kinematics of calf and thigh.
 kincalf = [kinematicsdata(frame,16), kinematicsdata(frame,17), kinematicsdata(frame,18), 0, 0, 0; 
@@ -42,16 +42,17 @@ kinthigh = [kinematicsdata(frame,26), kinematicsdata(frame,27), kinematicsdata(f
  
 disp("Biological Kinematic Data Obtained.");
 
-Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength);
-disp("Kinematics Calculated");
+Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2);
+disp("Kinematics Calculated.");
 
-%give torsional spring its K based on user mass:
-T1 = calculateSpringConst(T1, mass);
-T2 = calculateSpringConst(T2, mass);
+%Initialize Torsional Springs:
+T1 = initSpring(T1, mass, S, A);
+T2 = initSpring(T2, mass, In, P);
+disp("Torsional Springs Initialized.");
 
 %calculate forces
 Kinetic_Saggital(S,In,P,A, T1, T2);
-disp("Kinetics Calculated");
+disp("Kinetics Calculated.");
 
 
 

@@ -1,4 +1,4 @@
-function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf, thighlength, calflength)
+function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf,thighlength, calflength, T1, T2)
 %KINEMATIC_MODELLING 
 %
 %Inverse kinematics will be used to get angular positions, velocities, and
@@ -46,8 +46,9 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
-Anterior.theta = pt2;
-Posterior.theta = pt4;
+Anterior.theta = pt2; 
+Posterior.theta = pt4; 
+%remember to put in some logic for angles down the road
 
 %Velocity
 %d/dt(r1 + r2 + r3 + r4) = 0
@@ -91,7 +92,7 @@ Posterior.alpha(3) = double(alpha_soln_2);
 %% End of inverse kinematics
 %% Start of forward kinematics
 %Now that thetas for each link are computed, can calculate individual COM vectors.
-verticaloffset = GetFemoralOffset(Superior, Inferior, Anterior, Posterior);
+verticaloffset = GetInitKinematics(Superior, Inferior, Anterior, Posterior, T1, T2);
 Superior = calculateCOM(Superior, thighlength);
 Anterior = calculateCOM(Anterior);
 Inferior = calculateCOM(Inferior, calflength, verticaloffset);
