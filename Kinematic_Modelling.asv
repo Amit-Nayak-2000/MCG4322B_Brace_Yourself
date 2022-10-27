@@ -50,10 +50,7 @@ pt4 = double(thetas.theta_p(2,1));
 Anterior.theta = pt2; 
 Posterior.theta = pt4; 
 
-if(Anterior.theta < 180 && Anterior.theta > 0)
-    Anterior.theta = pt1;
-    Posterior.theta = pt3;
-end
+if(Anterior.theta < 180 || Anterior.theta > 0)
     
     
 %remember to put in some logic for angles down the road
