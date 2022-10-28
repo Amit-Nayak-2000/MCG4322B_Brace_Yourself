@@ -24,6 +24,9 @@ TS1.theta = 180 - abs(Anterior.theta) - abs(Superior.theta);
 TS2.theta = 180 - abs(Posterior.theta) - abs(Inferior.theta);
 Torque1 = [0; 0; -TS1.K * (TS1.theta - TS1.beta)];
 Torque2 = [0; 0; -TS2.K * (TS2.theta - TS2.beta)];
+
+TS1.Torque = Torque1;
+TS2.Torque = Torque2;
 %% Unknown Force Vectors
 %Reaction force between Superior and Posterior links.
 F_sp = [F_spx; F_spy; 0];

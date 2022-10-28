@@ -15,6 +15,8 @@ classdef TorsionalSpring < handle
         theta %Deflection of Spring
         l1 %length to standoff/moment arm (Superior/Inferior link)
         l2 %length to standoff/moment arm (Anterior/Posterior link)
+        
+        Torque = [0;0;0];
     end
     
     methods
