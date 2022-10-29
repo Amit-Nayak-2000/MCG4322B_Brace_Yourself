@@ -2,10 +2,11 @@ classdef SuperiorLink < handle
     %SUPERIORLINK 
     %Contains essential properties of link.
     %Dimensions, Material Properties, Position, Velocities, Acclerations
+    %and Forces.
     
     properties
         %Geometric Dimensions of Link
-        B1 % For B1 to H4, refer to dimension figure
+        B1 % For B1 to H4, refer to definition of dimension figure in report.
         B2
         B3
         L
@@ -17,15 +18,16 @@ classdef SuperiorLink < handle
         
         
         %Physical Properties
-        m % Mass
+        m % Mass (kg)
         rho = 8000; %Density of 304 stainless steel (kg/m^3)
-        I % Moment of inertia
+        I % Moment of inertia (kg m^2)
         E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
         SU = 505e6; %Ultimate Tensile Strength of 304 stainless steel (Pa)
         SY = 215e6; %Yield Strength of 304 stainless steel (Pa)
         
         
         %Dynamical Properties
+        %Position vectors units are (m).
         %vector for centre of mass with respect to thigh (initially 0)
         com = [0;0;0];
         %vector for centre of mass absolute (initially 0)
@@ -37,24 +39,25 @@ classdef SuperiorLink < handle
         %vector from centre of mass to thigh contact point for sum of
         %moments
         rst = [0;0;0];
-        %omega and alpha initially set to 0, but will have values in k.  
-        theta %Angle with respect to horizontal (x) 
-        omega  = [0;0;0]; %Angular Velocity
-        alpha  = [0;0;0]; %Angular acceleration
+        theta %Angle with respect to horizontal-x (deg)
+        %omega and alpha initially set to 0, but will have values in k.
+        omega  = [0;0;0]; %Angular Velocity (rad/s)
+        alpha  = [0;0;0]; %Angular acceleration (rad/s^2)
         %v and a are initially set to 0, but will have values in i and j.
-        v = [0;0;0]; %Linear Velocity
-        a = [0;0;0]; %Linear Acceleration
+        v = [0;0;0]; %Linear Velocity (m/s)
+        a = [0;0;0]; %Linear Acceleration (m/s^2)
         
         %Force Vectors
-        F_t = [0;0;0];
-        F_sa = [0;0;0];
-        F_sp = [0;0;0];
+        F_t = [0;0;0]; %(N)
+        F_sa = [0;0;0]; %(N)
+        F_sp = [0;0;0]; %(N)
     end
     
     methods
         
-        %TO BE TESTED
+        %Method to calculate COM and position vectors.
         function obj = calculateCOM(obj, thighlength)
+            %COM calculation
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
             A(3) = obj.B2 * (obj.H3 - obj.H2);
@@ -93,7 +96,7 @@ classdef SuperiorLink < handle
             comy = (Xcom - obj.B2/2)*sind(obj.theta) - (0.567*thighlength -(obj.H4-Ycom))*cosd(obj.theta);
             obj.com = [comx; comy; 0];
             
-            %rsa & rsp calcs
+            %rsa & rsp calculations
             ry = obj.H4 - Ycom - (obj.H1 / 2); % y component
             rxa = (obj.B2 / 2) + (obj.L / 2) - Xcom; % x component to joint SA.
             rxp = abs((obj.B2 / 2) - (obj.L / 2) - Xcom); % x component to joint SP, need abs val since signs are handled below.
@@ -101,7 +104,7 @@ classdef SuperiorLink < handle
             obj.rsa = [ry*sind(obj.theta) + rxa*cosd(obj.theta); -ry*cosd(obj.theta) + rxa*sind(obj.theta); 0];
             obj.rsp = [ry*sind(obj.theta) - rxp*cosd(obj.theta); -ry*cosd(obj.theta) - rxp*sind(obj.theta); 0];
             
-            %rst calc
+            %rst calculation
             obj.rst = [-Ycom*sind(obj.theta) + (obj.B3 - Xcom)*cosd(obj.theta); Ycom*cosd(obj.theta) + (obj.B3 - Xcom)*sind(obj.theta); 0];
             
             
@@ -119,7 +122,7 @@ classdef SuperiorLink < handle
             %mass = density * volume
             obj.m = obj.rho*volume;
             
-            %need these for distance between axes
+            %need these for distance between axes for parallel axis theorem
             x(1) = obj.B2 / 2;
             x(2) = obj.B2 / 2;
             x(3) = obj.B2 / 2;
@@ -129,8 +132,7 @@ classdef SuperiorLink < handle
             y(3) = (obj.H4 - obj.H3) + ((obj.H3 - obj.H2) / 2);
             y(4) = (obj.H4 - obj.H3) / 2;
             
-            %calculate centroid, could store this in a variable in the
-            %future since already done this calc in other func. 
+            %calculate individual axis
             Xnum = 0;
             Xdenom = 0;
             Ynum = 0;

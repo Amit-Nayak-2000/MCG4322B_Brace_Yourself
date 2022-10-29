@@ -2,10 +2,11 @@ classdef InferiorLink < handle
     %INFERIORLINK 
     %Contains essential properties of link.
     %Dimensions, Material Properties, Position, Velocities, Acclerations
+    %and Forces. 
     
     properties
-        %Geometric Dimensions of Link
-        B1 % For B1 to H4, refer to dimension figure
+        %Geometric Dimensions of Link (m)
+        B1 % For B1 to H4, refer to definition of dimension figure in report
         B2
         B3
         L
@@ -17,15 +18,16 @@ classdef InferiorLink < handle
         
         
         %Physical Properties
-        m % Mass
+        m % Mass (kg)
         rho = 8000; %Density of 304 stainless steel (kg/m^3)
-        I % Moment of inertia
+        I % Moment of inertia (kg m^2)
         E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
         SU = 505e6; %Ultimate Tensile Strength of 304 stainless steel (Pa)
         SY = 215e6; %Yield Strength of 304 stainless steel (Pa)
         
         
         %Dynamical Properties
+        %position vectors units are (m)
         %vector for centre of mass with respect to calf (initially 0)
         com = [0;0;0];
         %vector for centre of mass absolute (initially 0)
@@ -36,22 +38,23 @@ classdef InferiorLink < handle
         rip = [0;0;0];
         %vector from centre of mass to calf contact point for sum of moments
         ric = [0;0;0];
-        %omega and alpha initially set to 0, but will have values in k. 
-        theta %Angle with respect to horizontal (x) 
-        omega  = [0;0;0]; %Angular Velocity
-        alpha  = [0;0;0]; %Angular acceleration
+        theta %Angle with respect to horizontal-x (deg)
+        %omega and alpha initially set to 0, but will have values in k.
+        omega  = [0;0;0]; %Angular Velocity (rad/s)
+        alpha  = [0;0;0]; %Angular acceleration (rad/s^2)
         %v and a are initially set to 0, but will have values in i and j.
-        v = [0;0;0]; %Linear Velocity
-        a = [0;0;0]; %Linear Acceleration
+        v = [0;0;0]; %Linear Velocity (m/s)
+        a = [0;0;0]; %Linear Acceleration (m/s^2)
         
         %Force Vectors
-        F_c = [0;0;0];
-        F_ip = [0;0;0];
-        F_ia = [0;0;0];
+        F_c = [0;0;0]; %(N)
+        F_ip = [0;0;0]; %(N)
+        F_ia = [0;0;0]; %(N)
     end
     
     methods
         
+        %Method to calculate COM and position vectors.
         function obj = calculateCOM(obj, calflength, vertcomponent)
             %vertcomponent is offset from femoral condyle
             A(1) = obj.B1*obj.H1;
@@ -92,18 +95,19 @@ classdef InferiorLink < handle
             
             obj.com = [comx; comy; 0];
             
-            %rip and ria calcs
-            ry = obj.H4 - Ycom - (obj.H1 / 2); % y component, same as sup
-            rxa = (obj.B2 / 2) + (obj.L / 2) - Xcom; % x component to joint IA, same as sup.
+            %rip and ria calculations
+            ry = obj.H4 - Ycom - (obj.H1 / 2); % y component
+            rxa = (obj.B2 / 2) + (obj.L / 2) - Xcom; % x component to joint IA.
             rxp = abs((obj.B2 / 2) - (obj.L / 2) - Xcom); % x component to joint IP, need abs val since signs are handled below.
             
             obj.ria = [-ry*sind(obj.theta) - rxa*cosd(obj.theta); ry*cosd(obj.theta) - rxa*sind(obj.theta); 0];
             obj.rip = [-ry*sind(obj.theta) + rxp*cosd(obj.theta); ry*cosd(obj.theta) + rxp*sind(obj.theta); 0];
             
-            %ric calc
+            %ric calculation
             obj.ric = [Ycom*sind(obj.theta) - (obj.B3 - Xcom)*cosd(obj.theta); -Ycom*cosd(obj.theta) - (obj.B3 - Xcom)*sind(obj.theta); 0];
         end
         
+        %Method to calculate mass and moment of inertia. 
         function obj = calculate_inertial_props(obj)
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
@@ -112,9 +116,10 @@ classdef InferiorLink < handle
             
             volume = obj.T*(A(1) + A(2) + A(3) + A(4));
             
+            %mass = density * volume.
             obj.m = obj.rho*volume;
             
-            %need these for distance between axes
+            %need these for distance between axes in parallel axis theorem.
             x(1) = obj.B2 / 2;
             x(2) = obj.B2 / 2;
             x(3) = obj.B2 / 2;
@@ -124,8 +129,7 @@ classdef InferiorLink < handle
             y(3) = (obj.H4 - obj.H3) + ((obj.H3 - obj.H2) / 2);
             y(4) = (obj.H4 - obj.H3) / 2;
             
-            %calculate centroid, could store this in a variable in the
-            %future since already done this calc in other func. 
+            %calculate individual axis 
             Xnum = 0;
             Xdenom = 0;
             Ynum = 0;
@@ -171,7 +175,7 @@ classdef InferiorLink < handle
                 Ifinal = Ifinal + I(i) + M(i)*((Xcom - x(i))^2 + (Ycom - y(i))^2);
             end
             
-            obj.I = Ifinal;
+            obj.I = Ifinal; %mass moment of inertia.
             
         end
     end

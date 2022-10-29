@@ -1,7 +1,9 @@
 function [offset] = GetInitKinematics(Superior,Inferior,Anterior,Posterior, T1, T2)
-%GETFEMORALOFFSET 
+%GETINITKINEMATICS 
 %Getting vertical distance between Superior and Inferior Links at 0 deg
 %flexion.
+%Also getting spring angles for when user is standing straight (0
+%deflection point for springs).
 %Same code as first part of Kinematic_Modelling
 %Setting Superior and Posterior angles to 0 (standing straight)
 syms theta_a theta_p
@@ -18,11 +20,12 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
-T1.beta = 180 - pt1 ; %assign betas to spring
+T1.beta = 180 - pt1 ; %assign initial angles to springs
 T2.beta = 180 - pt1;
 
 offsettheta = pt4;
 
+%vertical offset
 offset = abs(Posterior.L*sind(offsettheta));
 end
 

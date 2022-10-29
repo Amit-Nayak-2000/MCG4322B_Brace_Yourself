@@ -10,10 +10,6 @@ function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,
 %KinThigh and KinCalf are matrices of position, velocity and acceleration
 %from Winter's Data.
 
-%TODO: 
-%update superior.theta/omega/alpha with thigh theta in winters data
-%update inferior.theta/omega/alpha with leg theta in winters data
-
 %% Start of inverse kinematics
 %assign biological theta/omega/alpha to superior and inferior links.
 Superior.theta = KinThigh(3,4) - 90;
@@ -50,14 +46,12 @@ pt4 = double(thetas.theta_p(2,1));
 Anterior.theta = pt2; 
 Posterior.theta = pt4; 
 
+%logic to swap angles when nessecary
 if(Anterior.theta < 180 && Anterior.theta > 0)
     Anterior.theta = pt1;
     Posterior.theta = pt3;
 end
     
-    
-%remember to put in some logic for angles down the road
-
 %Velocity
 %d/dt(r1 + r2 + r3 + r4) = 0
 syms w_a w_p;
@@ -99,7 +93,7 @@ Posterior.alpha(3) = double(alpha_soln_2);
 
 %% End of inverse kinematics
 %% Start of forward kinematics
-%Now that thetas for each link are computed, can calculate individual COM vectors.
+%Now that thetas for each link are computed, can calculate individual COMs and Position Vectors.
 verticaloffset = GetInitKinematics(Superior, Inferior, Anterior, Posterior, T1, T2);
 Superior = calculateCOM(Superior, thighlength);
 Anterior = calculateCOM(Anterior);

@@ -19,12 +19,14 @@ syms F_ipx F_ipy F_ia F_iax F_iay F_tn F_ft F_cn
 
 %Gravity vector
 g = [0; -9.81; 0];
-%TODO: finish torques.
+%Thetas for springs based on link angles
 TS1.theta = 180 - abs(Anterior.theta) - abs(Superior.theta);
 TS2.theta = 180 - abs(Posterior.theta) - abs(Inferior.theta);
+%Torque Calculation using hooke's law.
 Torque1 = [0; 0; -TS1.K * (TS1.theta - TS1.beta)];
 Torque2 = [0; 0; -TS2.K * (TS2.theta - TS2.beta)];
 
+%assign torques to spring objects
 TS1.Torque = Torque1;
 TS2.Torque = Torque2;
 %% Unknown Force Vectors
