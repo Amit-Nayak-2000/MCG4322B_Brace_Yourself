@@ -18,6 +18,7 @@ In = InferiorLink;
 P = PosteriorLink;
 T1 = TorsionalSpring;
 T2 = TorsionalSpring;
+ZF = Z_forces;
 
 disp("Link and Spring Object Instantiated.");
 
@@ -52,6 +53,7 @@ disp("Torsional Springs Initialized.");
 
 %calculate forces
 Kinetic_Saggital(S,In,P,A, T1, T2);
+Kinetic_Frontal(S,In,P,ZF,frame,mass);
 disp("Kinetics Calculated.");
 
 disp("Frame: " + frame);
