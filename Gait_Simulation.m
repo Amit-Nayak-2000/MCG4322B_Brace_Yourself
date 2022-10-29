@@ -36,7 +36,7 @@ syms Da Dp;
 % assume(Da ~=0);
 % assume(Dp ~=0);
 
-for i=1:10
+for i=1:25
     %Obtain biological kinematics of calf and thigh.
 kincalf = [kinematicsdata(i,16), kinematicsdata(i,17), kinematicsdata(i,18), 0, 0, 0; 
            kinematicsdata(i,19), kinematicsdata(i,20), kinematicsdata(i,21), 0, 0, 0;
@@ -51,8 +51,8 @@ Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2);
 
 disp(A.theta + ", " + P.theta);
 
-ICR1 = Da*cosd(A.theta) - Dp*cosd(P.theta) == 0;
-ICR2 = Da*sind(A.theta) - Dp*sind(P.theta) == 0;
+ICR1 = Da*cosd(A.theta) + Dp*cosd(P.theta)+S.L*cosd(S.theta) == 0;
+ICR2 = Da*sind(A.theta) + Dp*sind(P.theta)+S.L*sind(S.theta) == 0;
 
 ICRsoln = solve([ICR1, ICR2], [Da, Dp]);
 
@@ -68,4 +68,5 @@ disp(percentage + "% completed.");
     
 end
 
+plotICR(ICRx,ICRy);
 

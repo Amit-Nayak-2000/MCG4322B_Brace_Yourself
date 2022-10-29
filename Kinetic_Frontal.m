@@ -1,4 +1,4 @@
-function [] = Kinetic_Frontal(Superior,Inferior,Posterior,Height,Weight)
+function [] = Kinetic_Frontal(Superior,Inferior,Posterior,Z_forces,frame,mass)
 %KINETIC MODELLING FRONTAL PLANE
 %Inputs: Link objects
 %Output: Updated force attributes within objects.
@@ -20,22 +20,59 @@ function [] = Kinetic_Frontal(Superior,Inferior,Posterior,Height,Weight)
 %Symbolic variables will be assigned to unknowns initially. 
 %% Symbolic Variables
 
-syms F_tz F_cz F_kz OA_KAM Healthy_KAM
+syms F_tz F_cz F_kz R_kz
+    
+%% Parse KAM Data
 
+KAM_Data = Parse_Winter_Data("KAM_data.xlsx");
+
+OA_KAM_Data = KAM_Data{1};
+Healthy_KAM_Data = KAM_Data{2};
+
+[tf,row_OA] = ismember(frame,OA_KAM_Data(:,3));
+[tf,row_healthy] = ismember(frame,Healthy_KAM_Data(:,3));
+
+OA_KAM=mass*OA_KAM_Data(row_OA,2);
+M_k=mass*Healthy_KAM_Data(row_healthy,2);
 
 %% Kinetics Equations
 
-%Sum forces in Z
-Fz = -F_tz + -F_cz + F_kz ==0;
+%Knee Brace Equations
 
-%Sum Moments
-%To do add y forces x-prod
-Mz = OA_KAM + F_tz*(Superior.H4*cosd(Superior.theta) +...
-    0.5*Posterior.H*sind(Posterior.theta))+ F_cz*(Inferior.H4*cosd(Inferior.theta)...
-    - 0.5*Posterior.H*sind(Posterior.theta)) == Healthy_KAM;
+%Sum forces in Z on the brace
+Fz_br = F_tz + F_cz - F_kz == 0;
+
+%Sum of frontal moments on the brace
+Mz_br = -F_tz*(Superior.H4*cosd(Superior.theta)...
+    +0.5*Posterior.H*sind(Posterior.theta))...
+    +F_cz*(Inferior.H4*cosd(Inferior.theta)...
+    + 0.5*Posterior.H*sind(Posterior.theta)) == 0;
+
+%Leg equations
+
+%Sum of forces in Z on the brace
+Fz_leg = F_kz + R_kz - F_cz == 0;
+
+%Sum of frontal moments on the lower leg
+Mz_leg = OA_KAM...
+    -F_cz*(Inferior.H4*cosd(Inferior.theta)...
+    + 0.5*Posterior.H*sind(Posterior.theta))+M_k == 0;
 
 %% Solve system of equations
-syseqns = [Fz, Mz];
+syseqns = [Fz_br, Mz_br, Fz_leg, Mz_leg];
+sol = solve(syseqns,[F_tz, F_cz, F_kz, R_kz]);
+
+%Brace force on thigh
+Z_forces.F_tz=double(sol.F_tz);
+
+%Brace force on calf
+Z_forces.F_cz=double(sol.F_cz);
+
+%Brace force on knee
+Z_forces.F_kz=double(sol.F_kz);
+
+%Knee reaction force
+Z_forces.R_kz=double(sol.R_kz);
 
 end
 
