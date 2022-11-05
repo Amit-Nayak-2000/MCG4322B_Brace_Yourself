@@ -50,6 +50,10 @@ classdef InferiorLink < handle
         F_c = [0;0;0]; %(N)
         F_ip = [0;0;0]; %(N)
         F_ia = [0;0;0]; %(N)
+        
+        %Force Components for Interface with Calf
+        F_cn %normal calf force
+        F_ct %tangential calf force
     end
     
     methods

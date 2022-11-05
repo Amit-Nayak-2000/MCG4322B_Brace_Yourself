@@ -4,8 +4,8 @@ classdef TorsionalSpring < handle
     %Contains geometric, material and torque information about spring.
     
     properties
-        beta %Resting angle (NOTE THAT THIS IS A DIFFERENT BETA FROM THE ONE IN SHIGLEYS).
-        %IT WILL BE CHANGED IN THE FUTURE.
+        theta0 %Resting angle 
+        beta
         C %Spring Index
         d %Coil Diameter (m)
         D %Mean Diameter (m)

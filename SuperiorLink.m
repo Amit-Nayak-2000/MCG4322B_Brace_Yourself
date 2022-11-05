@@ -51,6 +51,10 @@ classdef SuperiorLink < handle
         F_t = [0;0;0]; %(N)
         F_sa = [0;0;0]; %(N)
         F_sp = [0;0;0]; %(N)
+        
+        %Force Components
+        F_tn %normal thigh force
+        F_tt %tangential thigh force
     end
     
     methods

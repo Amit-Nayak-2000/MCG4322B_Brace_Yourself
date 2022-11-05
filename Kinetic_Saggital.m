@@ -20,11 +20,12 @@ syms F_ipx F_ipy F_ia F_iax F_iay F_tn F_ft F_cn
 %Gravity vector
 g = [0; -9.81; 0];
 %Thetas for springs based on link angles
-TS1.theta = 180 - abs(Anterior.theta) - abs(Superior.theta);
-TS2.theta = 180 - abs(Posterior.theta) - abs(Inferior.theta);
+% TS1.theta = 180 - abs(Anterior.theta) - abs(Superior.theta);
+% TS2.theta = 180 - abs(Posterior.theta) - abs(Inferior.theta);
+[TS1.theta, TS2.theta] = GetSpringAngles(Superior, Anterior, Inferior, Posterior);
 %Torque Calculation using hooke's law.
-Torque1 = [0; 0; -TS1.K * (TS1.theta - TS1.beta)];
-Torque2 = [0; 0; -TS2.K * (TS2.theta - TS2.beta)];
+Torque1 = [0; 0; -TS1.K * (TS1.theta - TS1.theta0)];
+Torque2 = [0; 0; -TS2.K * (TS2.theta - TS2.theta0)];
 
 %assign torques to spring objects
 TS1.Torque = Torque1;
@@ -97,6 +98,9 @@ Superior.F_sa(2) = double(sol.F_say);
 Superior.F_t(1) = double(sol.F_tn)*cosd(Superior.theta) - double(sol.F_ft)*sind(Superior.theta);
 Superior.F_t(2) = double(sol.F_tn)*sind(Superior.theta) + double(sol.F_ft)*cosd(Superior.theta);
 
+Superior.F_tn = double(sol.F_tn);
+Superior.F_tt = double(sol.F_ft);
+
 %assign values to anterior link
 %on anterior and posterior links, the reaction forces are defined as equal
 %and opposite to the superior and inferior links.
@@ -123,7 +127,8 @@ Inferior.F_ia(2) = double(sol.F_iay);
 Inferior.F_c(1) = double(sol.F_cn)*cosd(Inferior.theta) - double(sol.F_fc)*sind(Inferior.theta);
 Inferior.F_c(2) = -double(sol.F_cn)*sind(Inferior.theta) + double(sol.F_fc)*cosd(Inferior.theta);
 
-
+Inferior.F_cn = double(sol.F_cn);
+Inferior.F_ct = double(sol.F_fc);
 
 end
 
