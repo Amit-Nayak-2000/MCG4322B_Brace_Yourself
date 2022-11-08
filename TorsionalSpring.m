@@ -12,6 +12,7 @@ classdef TorsionalSpring < handle
         E = 201e9; % Elastic modulus of SAE 1070 Carbon Steel (Pa)
         SU = 640e6; %Ultimate Tensile strength of SAE 1070 Carbon Steel (Pa)
         SY = 495e6; %Yield Strength of SAE 1070 Carbon Steel (Pa)
+        Nb %body turns
         Na %Active turns
         K %Spring Rate (Nm/deg kg)
         theta %Deflection of Spring (deg)

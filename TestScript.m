@@ -58,6 +58,11 @@ disp("Kinetics Calculated.");
 
 disp("Frame: " + frame);
 
+S.outputDimensions();
+In.outputDimensions();
+A.outputDimensions();
+P.outputDimensions();
+
 
 
 
