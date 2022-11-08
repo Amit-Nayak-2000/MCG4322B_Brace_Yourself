@@ -15,6 +15,7 @@ classdef InferiorLink < handle
         H3
         H4
         T %Thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -50,6 +51,9 @@ classdef InferiorLink < handle
         F_c = [0;0;0]; %(N)
         F_ip = [0;0;0]; %(N)
         F_ia = [0;0;0]; %(N)
+        
+        %file names
+        file
     end
     
     methods
