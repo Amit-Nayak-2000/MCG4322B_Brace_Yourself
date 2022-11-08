@@ -109,13 +109,13 @@ Kinetic_Saggital(S,In,P,A,T1,T2);
 
 [NA1(dataindex), NA2(dataindex)] = GetSpringAngles(S, A, In, P);
 
-spring1data(dataindex) = T1.theta;
-spring2data(dataindex) = T2.theta;
+spring1data(dataindex) = T1.Torque(3);
+spring2data(dataindex) = T2.Torque(3);
  
-%-S.H4*
-totalextensivetorque(dataindex) =  S.F_tn;
-%-(In.H4 + In.offset)*
-totalextensivetorque2(dataindex) =   In.F_cn;
+%
+totalextensivetorque(dataindex) =  -S.H4*S.F_tn;
+%
+totalextensivetorque2(dataindex) =  -(In.H4 + In.offset)*In.F_cn;
 totalPE(dataindex) = T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2;
 
 framess(dataindex) = kinematicsdata(i, 1);
