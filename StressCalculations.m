@@ -38,7 +38,39 @@ F_spring1 = TorsionalSpring.Torque(3)*0.4*Superior.L;
 
 end
 function [] = InferiorStress()
+% calculates stresses related to inferior link
+% inputs: 
+% output: 
 
+% description
+
+%% Symbolic Variables
+% constants
+g = 9.81;
+
+% longitudinal forces
+syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
+syms F_ipxlong F_ipylong F_spring2
+
+% stresses
+syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
+syms tau_i1 tau_i2 tau_i3 sigma_irupture
+
+%% longitudinal force calculations
+F_ct = -Inferior.F_c(1)*sind(Inferior.theta) + Inferior.F_c(2)*cosd(Inferior.theta);
+F_cn = Inferior.F_c(1)*cosd(Inferior.theta) + Inferior.F_c(2)*sind(Inferior.theta);
+F_icomxlong = Inferior.m*Inferior.a(1)*cosd(Inferior.theta) + Inferior.m*Inferior.a(2)*sind(Inferior.theta) - Inferior.m*g*sind(Inferior.theta); 
+F_icomylong = -Inferior.m*Inferior.a(1)*sind(Inferior.theta) + Inferior.m*Inferior.a(2)*cosd(Inferior.theta) - Inferior.m*g*cosd(Inferior.theta);
+F_iaxlong = Inferior.F_sa(1)*cosd(Inferior.theta) + Inferior.F_sa(2)*sind(Inferior.theta);
+F_iaylong = -Inferior.F_sa(1)*sind(Inferior.theta) + Inferior.F_sa(2)*cosd(Inferior.theta);
+F_ipxlong = Inferior.F_sp(1)*cosd(Inferior.theta) + Inferior.F_sp(2)*sind(Inferior.theta);
+F_ipylong = -Inferior.F_sp(1)*sind(Inferior.theta) + Inferior.F_sp(2)*cosd(Inferior.theta);
+F_spring2 = -TorsionalSpring.Torque(3)*0.4*Superior.L; %i think its the 0.4 of the superior link right? check
+
+%% stress calculations
+
+
+%% return or modifying object values
 end
 function [] = AnteriorStress()
 
