@@ -58,10 +58,30 @@ F_ipylong = -Inferior.F_ip(1)*sind(Inferior.theta) + Inferior.F_isp(2)*cosd(Infe
 F_spring2 = -TorsionalSpring.Torque(3)*0.4*Inferior.L; %CHECK
 
 %% stress calculations
-%x long
+%along x long
 if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
-    sigma_ix = 
-    
+    sigma_ix = F_cn/((Inferior.H4-Inferior.H3)*Inferior.T);
+else
+    sigma_ix = (F_icomxlong + F_iaxlong + F_ipxlong)/((Inferior.H4-Inferior.H3)*Inferior.T);
+end
+
+%along y long
+if abs(F_ct + F_icomylong)>abs(F_iaxlong + F_ipxlong + F_sping2)
+    sigma_i1y = (F_ct + F_icomylong)/(Inferior.B1*Inferior.T);
+else
+    sigma_i1y = (F_iaxlong + F_ipxlong + F_sping2)/(Inferior.B1*Inferior.T);
+end
+
+if abs(F_ct)>abs(F_icomylong + F_iaxlong + F_ipxlong + F_sping2)
+    sigma_i2y = F_ct / (Inferior.B2*Inferior.T);
+    sigma_i3y = F_ct / (Inferior.B3*Inferior.T);
+else
+    sigma_i2y = (F_icomylong + F_iaxlong + F_ipxlong + F_sping2) / (Inferior.B2*Inferior.T);
+    sigma_i3y = (F_icomylong + F_iaxlong + F_ipxlong + F_sping2) / (Inferior.B3*Inferior.T);
+end
+
+%bending
+
 end
 function [] = AnteriorStress()
 
