@@ -46,7 +46,6 @@ framess = zeros(1 ,endframe - startframe + 1);
 %bio knee moment is col 15 in Winter's Data
 biokneemoment = zeros(1, endframe - startframe + 1);
 newkneemoment = zeros(1, endframe - startframe + 1);
-percentage = zeros(1, endframe - startframe + 1);
 
 g = [0; -9.81; 0];
 
@@ -76,8 +75,6 @@ rankle = [-calflength*cosd(calfangle); -calflength*sind(calfangle); 0];
 Fankle = [rxnforcedata(i, 10); rxnforcedata(i, 11); 0];
 %bio ankle moment is col 14 in Winter's Data
 Tankle = [0; 0; rxnforcedata(i, 14)];
-%bio knee moment is col 15 in Winter's Data
-biokneemoment(dataindex) = rxnforcedata(i, 15);
 
 %calculate forces
 Kinetic_Saggital(S,In,P,A,T1,T2);
@@ -89,13 +86,11 @@ Kinetic_Saggital(S,In,P,A,T1,T2);
 TorqueOnCalf(dataindex) =  -(In.H4 + In.offset)*In.F_cn;
 totalPE(dataindex) = T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2;
 
-Tknee = Icalf*calfalpha - [0;0;TorqueOnCalf(dataindex)] - cross(rcom, Mcalf*calfacel) - cross(rcom, Mcalf*g) - cross(rankle, Fankle) - Tankle;
-
-newkneemoment(dataindex) = Tknee(3);
+Tknee = Icalf*calfalpha - TorqueOnCalf - cross(rcom, mcalf*calfacel) - cross(rcom, mcalf*g) - cross(rankle, Fankle) - 
 
 
 framess(dataindex) = kinematicsdata(i, 1);
-percentage(dataindex) = ((i - startframe + 1)/(endframe - startframe + 1)) * 100;
-disp(percentage(dataindex) + "% completed.");
+percentage = ((i - startframe + 1)/(endframe - startframe + 1)) * 100;
+disp(percentage + "% completed.");
     
 end
