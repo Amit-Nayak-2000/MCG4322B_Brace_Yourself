@@ -45,6 +45,7 @@ syms F_ipxlong F_ipylong F_spring2
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture
+syms moment_i1 moment_i2
 
 %% longitudinal force calculations
 F_ct = -Inferior.F_c(1)*sind(Inferior.theta) + Inferior.F_c(2)*cosd(Inferior.theta);
@@ -74,9 +75,19 @@ end
 
 if abs(F_ct)>abs(F_icomylong + F_iaxlong + F_ipxlong + F_sping2)
     sigma_i2y = F_ct / (Inferior.B2*Inferior.T);
+    sigma_i3y = F_ct / (Inferior.B3*Inferior.T);
 else
-    
+    sigma_i2y = (F_icomylong + F_iaxlong + F_ipxlong + F_sping2) / (Inferior.B2*Inferior.T);
+    sigma_i3y = (F_icomylong + F_iaxlong + F_ipxlong + F_sping2) / (Inferior.B3*Inferior.T);
 end
+
+%bending
+moment_i1 = F_ct*Inferior.B3;
+moment_i2 = Inferior.I*Inferior.alpha - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - J)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - J)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2;
+%^ i need to define J, also I*alpha... which index for alpha
+
+sigma_ibend1 = -moment_i1*((Inferior.H4-Inferior.H3)/2) / (Inferior.B3*(Inferior.H4-Inferior.H4
+sigma_ibend2 = 
 
 end
 function [] = AnteriorStress()
