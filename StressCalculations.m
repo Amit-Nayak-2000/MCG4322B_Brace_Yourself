@@ -34,7 +34,7 @@ function [] = InferiorStress()
 
 % description
 
-%% Symbolic Variables
+%% symbolic variables
 % constants
 g = 9.81;
 
@@ -57,6 +57,11 @@ F_ipxlong = Inferior.F_ip(1)*cosd(Inferior.theta) + Inferior.F_ip(2)*sind(Inferi
 F_ipylong = -Inferior.F_ip(1)*sind(Inferior.theta) + Inferior.F_isp(2)*cosd(Inferior.theta);
 F_spring2 = -TorsionalSpring.Torque(3)*0.4*Inferior.L; %CHECK
 
+%% stress calculations
+%x long
+if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
+    
+    
 end
 function [] = AnteriorStress()
 
