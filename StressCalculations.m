@@ -60,7 +60,7 @@ F_spring2 = -TorsionalSpring.Torque(3)*0.4*Inferior.L; %CHECK
 %% stress calculations
 %x long
 if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
-    
+    sigma_ix = 
     
 end
 function [] = AnteriorStress()
