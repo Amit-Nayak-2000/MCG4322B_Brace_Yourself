@@ -82,9 +82,10 @@ else
 end
 
 %bending
-moment_i1 = F_ct*Inferior.B3;
-moment_i2 = Inferior.I*Inferior.alpha - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - J)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - J)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2;
-%^ i need to define J, also I*alpha... which index for alpha
+moment_i1 = (Inferior.B3/2)*F_ct - (Inferior.B3/2 - Inferior.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
+% do we have to add I*alpha
+moment_i2 = Inferior.I*Inferior.alpha(3) - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2;
+% in alpha z right, does F_ct and F_cn need to be added
 
 sigma_ibend1 = -moment_i1*((Inferior.H4-Inferior.H3)/2) / ((Inferior.B3*(Inferior.H4-Inferior.H3)^3)/12)
 %sigma_ibend2 = idk what y and I is for this shape
