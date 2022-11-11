@@ -25,6 +25,7 @@ T1 = TorsionalSpring;
 T2 = TorsionalSpring;
 
 
+
 %Initialize dimensions based on Mass and Height
 Init_System(mass, height, S, In, P, A, T1, T2);
 
@@ -47,6 +48,8 @@ framess = zeros(1 ,endframe - startframe + 1);
 biokneemoment = zeros(1, endframe - startframe + 1);
 newkneemoment = zeros(1, endframe - startframe + 1);
 percentage = zeros(1, endframe - startframe + 1);
+newIalpha = zeros(1, endframe - startframe + 1);
+bioIalpha = zeros(1, endframe - startframe + 1);
 
 g = [0; -9.81; 0];
 
@@ -78,21 +81,32 @@ Fankle = [rxnforcedata(i, 10); rxnforcedata(i, 11); 0];
 Tankle = [0; 0; rxnforcedata(i, 14)];
 %bio knee moment is col 15 in Winter's Data
 biokneemoment(dataindex) = rxnforcedata(i, 15);
+bioIalpha(dataindex) = Icalf*calfalpha(3);
 
 %calculate forces
 Kinetic_Saggital(S,In,P,A,T1,T2);
+BraceMass = 2*(S.m + A.m + In.m + P.m);
+NonDimFactor = (56.7 + BraceMass) / 56.7;
 
 
 % Torque if we looked at thigh instead of calf
 % -S.H4*S.F_tn;
 
-TorqueOnCalf(dataindex) =  -(In.H4 + In.offset)*In.F_cn;
-totalPE(dataindex) = T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2;
+%multiplied by 2 since both sides of the knee
+TorqueOnCalf(dataindex) =  -2*(In.H4 + In.offset)*In.F_cn;
+totalPE(dataindex) = 2*(T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2);
 
-Tknee = Icalf*calfalpha - [0;0;TorqueOnCalf(dataindex)] - cross(rcom, Mcalf*calfacel) - cross(rcom, Mcalf*g) - cross(rankle, Fankle) - Tankle;
 
-newkneemoment(dataindex) = Tknee(3);
+%this is essentially bio torque - torque from calf.
+% Tknee = Icalf*calfalpha - [0;0;TorqueOnCalf(dataindex)] - cross(rcom, Mcalf*calfacel) - cross(rcom, Mcalf*g) - cross(rankle, Fankle) - Tankle;
+% newkneemoment(dataindex) = Tknee(3); %fix this
 
+newkneemoment(dataindex) = NonDimFactor*biokneemoment(dataindex) - TorqueOnCalf(dataindex);
+
+% 
+% %scenario where Ialpha changes
+% newIA = [0;0;TorqueOnCalf(dataindex)] + cross(rcom, Mcalf*calfacel) + cross(rcom, Mcalf*g) + cross(rankle, Fankle) + Tankle;
+% newIalpha(dataindex) = newIA(3);
 
 framess(dataindex) = kinematicsdata(i, 1);
 percentage(dataindex) = ((i - startframe + 1)/(endframe - startframe + 1)) * 100;
