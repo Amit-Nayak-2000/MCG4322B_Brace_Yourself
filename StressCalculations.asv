@@ -65,7 +65,7 @@ F_iaxlong = Inferior.F_sa(1)*cosd(Inferior.theta) + Inferior.F_sa(2)*sind(Inferi
 F_iaylong = -Inferior.F_sa(1)*sind(Inferior.theta) + Inferior.F_sa(2)*cosd(Inferior.theta);
 F_ipxlong = Inferior.F_sp(1)*cosd(Inferior.theta) + Inferior.F_sp(2)*sind(Inferior.theta);
 F_ipylong = -Inferior.F_sp(1)*sind(Inferior.theta) + Inferior.F_sp(2)*cosd(Inferior.theta);
-F_spring2 = -TorsionalSpring.Torque(3)*0.4*Superior.L; %i think its the 0.4 of the superior link right? check
+F_spring2 = TorsionalSpring.Torque(3)*0.4*Superior.L;
 
 %% stress calculations
 
