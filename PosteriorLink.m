@@ -10,6 +10,7 @@ classdef PosteriorLink < handle
         H %Total length of link.
         B %Base of link
         T %Thickness
+        bolt_hole_diam
         
         %Physical Properties
         m % Mass (kg)
@@ -39,6 +40,9 @@ classdef PosteriorLink < handle
         %Force Vectors
         F_sp = [0;0;0]; %(N)
         F_ip = [0;0;0]; %(N)
+        
+        %file names
+        file
     end
     
     methods
@@ -59,6 +63,16 @@ classdef PosteriorLink < handle
             %negative since theta angle starts at joint IP.
             obj.rsp = [-0.5*obj.L*cosd(obj.theta); -0.5*obj.L*sind(obj.theta); 0];
             obj.rip = -obj.rsp;
+        end
+        
+        %method to output dimensions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/PosteriorLink.txt','w');
+            fprintf(fileID,'"B"=%.6f\n',obj.B);
+            fprintf(fileID,'"L"=%.6f\n',obj.L);
+            fprintf(fileID,'"H"=%.6f\n',obj.H);
+            fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fclose(fileID); 
         end
         
     end

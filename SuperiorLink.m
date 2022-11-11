@@ -15,6 +15,7 @@ classdef SuperiorLink < handle
         H3
         H4
         T %Thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -51,6 +52,14 @@ classdef SuperiorLink < handle
         F_t = [0;0;0]; %(N)
         F_sa = [0;0;0]; %(N)
         F_sp = [0;0;0]; %(N)
+        
+        %file names
+        file
+        
+        %Force Components
+        F_tn %normal thigh force
+        F_tt %tangential thigh force
+
     end
     
     methods
@@ -183,6 +192,21 @@ classdef SuperiorLink < handle
             
             
             
+        end
+        
+        %method to output dimensions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/SuperiorLink.txt','w');
+            fprintf(fileID,'"B1"=%.6f\n',obj.B1);
+            fprintf(fileID,'"B2"=%.6f\n',obj.B2);
+            fprintf(fileID,'"B3"=%.6f\n',obj.B3);
+            fprintf(fileID,'"L"=%.6f\n',obj.L);
+            fprintf(fileID,'"H1"=%.6f\n',obj.H1);
+            fprintf(fileID,'"H2"=%.6f\n',obj.H2);
+            fprintf(fileID,'"H3"=%.6f\n',obj.H3);
+            fprintf(fileID,'"H4"=%.6f\n',obj.H4);
+            fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fclose(fileID); 
         end
     end
 end

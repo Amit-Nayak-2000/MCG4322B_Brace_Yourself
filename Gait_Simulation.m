@@ -1,10 +1,10 @@
 %Simulation of Instantaneous Centre of Rotation of Brace
 
 %User provided parameters
-mass = 56.7; %kilograms
-height = 1.73; %metres
-thighdiameter = 0.1; %metres
-calfdiameter = 0.08; %metres
+mass = 86.7; %kilograms
+height = 2; %metres
+thighdiameter = 0.2; %metres
+calfdiameter = 0.16; %metres
 
 %Thigh/Calf Length from Winters Segment Model
 thighlength = (0.530 - 0.285)*height;
@@ -36,7 +36,12 @@ syms Da Dp;
 % assume(Da ~=0);
 % assume(Dp ~=0);
 
-for i=1:25
+
+
+ICRx=ones(1,75);
+ICRy=ones(1,75);
+
+for i=1:75
     %Obtain biological kinematics of calf and thigh.
 kincalf = [kinematicsdata(i,16), kinematicsdata(i,17), kinematicsdata(i,18), 0, 0, 0; 
            kinematicsdata(i,19), kinematicsdata(i,20), kinematicsdata(i,21), 0, 0, 0;
@@ -67,6 +72,6 @@ percentage = (i/70) * 100;
 disp(percentage + "% completed.");
     
 end
-
+[S.L, In.L, P.L, A.L]
 plotICR(ICRx,ICRy);
 

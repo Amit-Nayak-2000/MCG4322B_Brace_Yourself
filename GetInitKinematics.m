@@ -20,8 +20,8 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
-T1.beta = 180 - pt1 ; %assign initial angles to springs
-T2.beta = 180 - pt1;
+T1.theta0 = 180 - pt1 ; %assign initial angles to springs
+T2.theta0 = 180 - pt1;
 
 offsettheta = pt4;
 

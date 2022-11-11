@@ -11,6 +11,7 @@ classdef AnteriorLink < handle
         H %Total length of link.
         B %Base of link
         T %thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -41,6 +42,9 @@ classdef AnteriorLink < handle
         %Force Vectors
         F_sa = [0;0;0]; %(N)
         F_ia = [0;0;0]; %(N)
+        
+        %file names
+        file
     end
     
     methods
@@ -60,6 +64,16 @@ classdef AnteriorLink < handle
         function obj = calculateCOM(obj)
             obj.rsa = [0.5*obj.L*cosd(obj.theta); 0.5*obj.L*sind(obj.theta); 0];
             obj.ria = -obj.rsa;
+        end
+        
+        %method to output dimensions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/AnteriorLink.txt','w');
+            fprintf(fileID,'"B"=%.6f\n',obj.B);
+            fprintf(fileID,'"L"=%.6f\n',obj.L);
+            fprintf(fileID,'"H"=%.6f\n',obj.H);
+            fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fclose(fileID); 
         end
         
     end
