@@ -36,19 +36,21 @@ else
     sigma_sx = (F_scomxlong + F_saxlong + F_spxlong)/((Superior.H4-Superior.H3)*Superior.T);
 end
 
-% along y long
-if abs(F_tt + F_tcomylong) > abs(F_saylong + F_spylong + F_spring2)
+% along y long and rupture
+if abs(F_tt + F_tcomylong) > abs(F_saylong + F_spylong + F_spring1)
     sigma_s1y = (F_tt + F_scomylong)/(Superior.B1*Superior.T);
+    sigma_srupture = (F_tt + F_scomylong)/(Superior.B1*Superior.T); % need to subtract Bearing.D*Superior.T from area
 else
-    sigma_s1y = (F_saylong + F_spylong + F_spring2)/(Superior.B1*Superior.T);
+    sigma_s1y = (F_saylong + F_spylong + F_spring1)/(Superior.B1*Superior.T);
+    sigma_srupture = (F_saylong + F_spylong + F_spring1)/(Superior.B1*Superior.T); % need to subtract Bearing.D*Superior.T from area
 end
 
-if abs(F_tt) > abs(F_scomylong + F_saylong + F_spylong + F_spring2)
-    sigma_s2y = F_tt / (Superior.B2*Inferior.T);
-    sigma_s3y = F_tt / (Superior.B3*Inferior.T);
+if abs(F_tt) > abs(F_scomylong + F_saylong + F_spylong + F_spring1)
+    sigma_s2y = F_tt / (Superior.B2*Superior.T);
+    sigma_s3y = F_tt / (Superior.B3*Superior.T);
 else
-    sigma_s2y = (F_scomylong + F_saylong + F_spylong + F_spring2) / (Inferior.B2*Inferior.T);
-    sigma_s3y = (F_scomylong + F_saylong + F_spylong + F_spring2) / (Inferior.B3*Inferior.T);
+    sigma_s2y = (F_scomylong + F_saylong + F_spylong + F_spring1) / (Superior.B2*Superior.T);
+    sigma_s3y = (F_scomylong + F_saylong + F_spylong + F_spring1) / (Superior.B3*Superior.T);
 end
 
 % bending
@@ -57,8 +59,24 @@ moment_s1 = Superior.I*Superior.alpha(3) + (Superior.B3/2)*F_tt - (Superior.B3/2
 moment_s2 = Superior.I*Superior.alpha(3) - (Superior.L/2)*F_saylong - (Superior.H4 - Superior.com(2) - Superior.H1/2)*F_saxlong - (Superior.L/2)*F_spylong + (Superior.H4 - Superior.com(2) - Superior.H1/2)*F_spxlong + ((Superior.L/2)-0.4*Superior.L)*F_spring1;
 % in alpha z right, does F_ct and F_cn need to be added
 
-sigma_sbend1 = -moment_s1*((Superior.H4-Superior.H3)/2) / ((Superior.B3*(Superior.H4-Superior.H3)^3)/12)
+sigma_sbend1 = -moment_s1*((Superior.H4-Superior.H3)/2) / ((Superior.B3*(Superior.H4-Superior.H3)^3)/12);
 %sigma_ibend2 = -moment_s2 * ?y? / ?I?
+
+% shear
+if abs(F_tn + F_scomxlong) > abs(F_saxlong + F_spxlong)
+    tau_s1 = (F_tn + F_scomxlong)/(Superior.B1*Superior.T);
+else
+    tau_s1 = (F_saxlong + F_spxlong)/(Superior.B1*Superior.T);
+end
+
+if abs(F_tn) > abs(F_scomxlong + F_saxlong + F_spxlong)
+    tau_s2 = (F_tn)/(Superior.B2*Superior.T);
+    tau_s3 = (F_tn)/(Superior.B3*Superior.T);
+else
+    tau_s2 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B2*Superior.T);
+    tau_s3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
+end
+
 
 %% return or modifying object values
 % we will figure this out soon
