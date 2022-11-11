@@ -101,6 +101,20 @@ tau_i1 = shear_i1/(Inferior.B1*Inferior.T); %should i use B1 here or should we u
 tau_i2 = shear_i2/(Inferior.B2*Inferior.T);
 tau_i3 = shear_i3/(Inferior.B3*Inferior.T);
 
+% shear
+if abs(F_cn + F_icomxlong) > abs(F_iaxlong + F_ipxlong)
+    tau_i1 = (F_cn + F_icomxlong)/(Inferior.B1*Inferior.T);
+else
+    tau_i1 = (F_iaxlong + F_ipxlong)/(Inferior.B1*Inferior.T);
+end
+
+if abs(F_cn) > abs(F_scomxlong + F_saxlong + F_spxlong)
+    tau_i2 = (F_tn)/(Superior.B2*Superior.T);
+    tau_i3 = (F_tn)/(Superior.B3*Superior.T);
+else
+    tau_i2 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B2*Superior.T);
+    tau_i3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
+end
 
 end
 function [] = AnteriorStress()
