@@ -4,14 +4,15 @@ classdef TorsionalSpring < handle
     %Contains geometric, material and torque information about spring.
     
     properties
-        beta %Resting angle (NOTE THAT THIS IS A DIFFERENT BETA FROM THE ONE IN SHIGLEYS).
-        %IT WILL BE CHANGED IN THE FUTURE.
+        theta0 %Resting angle 
+        beta
         C %Spring Index
         d %Coil Diameter (m)
         D %Mean Diameter (m)
         E = 201e9; % Elastic modulus of SAE 1070 Carbon Steel (Pa)
         SU = 640e6; %Ultimate Tensile strength of SAE 1070 Carbon Steel (Pa)
         SY = 495e6; %Yield Strength of SAE 1070 Carbon Steel (Pa)
+        Nb %body turns
         Na %Active turns
         K %Spring Rate (Nm/deg kg)
         theta %Deflection of Spring (deg)

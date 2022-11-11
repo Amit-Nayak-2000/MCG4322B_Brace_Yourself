@@ -47,6 +47,8 @@ classdef InferiorLink < handle
         v = [0;0;0]; %Linear Velocity (m/s)
         a = [0;0;0]; %Linear Acceleration (m/s^2)
         
+        offset; %offset from femoral condyles
+        
         %Force Vectors
         F_c = [0;0;0]; %(N)
         F_ip = [0;0;0]; %(N)
@@ -54,12 +56,18 @@ classdef InferiorLink < handle
         
         %file names
         file
+
+        %Force Components for Interface with Calf
+        F_cn %normal calf force
+        F_ct %tangential calf force
+        
     end
     
     methods
         
         %Method to calculate COM and position vectors.
         function obj = calculateCOM(obj, calflength, vertcomponent)
+            obj.offset = vertcomponent;
             %vertcomponent is offset from femoral condyle
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
@@ -181,6 +189,21 @@ classdef InferiorLink < handle
             
             obj.I = Ifinal; %mass moment of inertia.
             
+        end
+        
+        %Method to output dimesions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/InferiorLink.txt','w');
+            fprintf(fileID,'"B1"=%.6f\n',obj.B1);
+            fprintf(fileID,'"B2"=%.6f\n',obj.B2);
+            fprintf(fileID,'"B3"=%.6f\n',obj.B3);
+            fprintf(fileID,'"L"=%.6f\n',obj.L);
+            fprintf(fileID,'"H1"=%.6f\n',obj.H1);
+            fprintf(fileID,'"H2"=%.6f\n',obj.H2);
+            fprintf(fileID,'"H3"=%.6f\n',obj.H3);
+            fprintf(fileID,'"H4"=%.6f\n',obj.H4);
+            fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fclose(fileID); 
         end
     end
 end

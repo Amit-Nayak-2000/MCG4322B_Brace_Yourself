@@ -65,6 +65,16 @@ classdef PosteriorLink < handle
             obj.rip = -obj.rsp;
         end
         
+        %method to output dimensions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/PosteriorLink.txt','w');
+            fprintf(fileID,'"B"=%.6f\n',obj.B);
+            fprintf(fileID,'"L"=%.6f\n',obj.L);
+            fprintf(fileID,'"H"=%.6f\n',obj.H);
+            fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fclose(fileID); 
+        end
+        
     end
 end
 
