@@ -67,18 +67,18 @@ else
 end
 
 %along y long
-if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_spring2)
+if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipxlong + F_spring2)
     sigma_i1y = (F_ct + F_icomylong)/(Inferior.B1*Inferior.T);
 else
-    sigma_i1y = (F_iaylong + F_ipylong + F_spring2)/(Inferior.B1*Inferior.T);
+    sigma_i1y = (F_iaxlong + F_ipxlong + F_spring2)/(Inferior.B1*Inferior.T);
 end
 
-if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_spring2)
+if abs(F_ct)>abs(F_icomylong + F_iaxlong + F_ipxlong + F_spring2)
     sigma_i2y = F_ct / (Inferior.B2*Inferior.T);
     sigma_i3y = F_ct / (Inferior.B3*Inferior.T);
 else
-    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (Inferior.B2*Inferior.T);
-    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (Inferior.B3*Inferior.T);
+    sigma_i2y = (F_icomylong + F_iaxlong + F_ipxlong + F_spring2) / (Inferior.B2*Inferior.T);
+    sigma_i3y = (F_icomylong + F_iaxlong + F_ipxlong + F_spring2) / (Inferior.B3*Inferior.T);
 end
 
 %bending
