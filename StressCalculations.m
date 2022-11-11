@@ -29,7 +29,36 @@ F_spylong = -Superior.F_sp(1)*sind(Superior.theta) + Superior.F_sp(2)*cosd(Super
 F_spring1 = TorsionalSpring.Torque(3)*0.4*Superior.L;
 
 %% stress calculations
+% along x long
+if abs(F_tn) > abs(F_scomxlong + F_saxlong + F_spxlong)
+    sigma_sx = F_tn/((Superior.H4-Superior.H3)*Superior.T);
+else
+    sigma_sx = (F_scomxlong + F_saxlong + F_spxlong)/((Superior.H4-Superior.H3)*Superior.T);
+end
 
+% along y long
+if abs(F_tt + F_tcomylong) > abs(F_saylong + F_spylong + F_spring2)
+    sigma_s1y = (F_tt + F_scomylong)/(Superior.B1*Superior.T);
+else
+    sigma_s1y = (F_saylong + F_spylong + F_spring2)/(Superior.B1*Superior.T);
+end
+
+if abs(F_tt) > abs(F_scomylong + F_saylong + F_spylong + F_spring2)
+    sigma_s2y = F_tt / (Superior.B2*Inferior.T);
+    sigma_s3y = F_tt / (Superior.B3*Inferior.T);
+else
+    sigma_s2y = (F_scomylong + F_saylong + F_spylong + F_spring2) / (Inferior.B2*Inferior.T);
+    sigma_s3y = (F_scomylong + F_saylong + F_spylong + F_spring2) / (Inferior.B3*Inferior.T);
+end
+
+% bending
+moment_s1 = Superior.I*Superior.alpha(3) + (Superior.B3/2)*F_tt - (Superior.B3/2 - Superior.B2/2)*(F_scomylong + F_saylong + F_spylong + F_spring1);
+% do we have to add I*alpha
+moment_s2 = Superior.I*Superior.alpha(3) - (Superior.L/2)*F_saylong - (Superior.H4 - Superior.com(2) - Superior.H1/2)*F_saxlong - (Superior.L/2)*F_spylong + (Superior.H4 - Superior.com(2) - Superior.H1/2)*F_spxlong + ((Superior.L/2)-0.4*Superior.L)*F_spring1;
+% in alpha z right, does F_ct and F_cn need to be added
+
+sigma_sbend1 = -moment_s1*((Superior.H4-Superior.H3)/2) / ((Superior.B3*(Superior.H4-Superior.H3)^3)/12)
+%sigma_ibend2 = -moment_s2 * ?y? / ?I?
 
 %% return or modifying object values
 % we will figure this out soon
