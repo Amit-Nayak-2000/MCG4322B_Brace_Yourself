@@ -15,6 +15,7 @@ classdef InferiorLink < handle
         H3
         H4
         T %Thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -53,9 +54,13 @@ classdef InferiorLink < handle
         F_ip = [0;0;0]; %(N)
         F_ia = [0;0;0]; %(N)
         
+        %file names
+        file
+
         %Force Components for Interface with Calf
         F_cn %normal calf force
         F_ct %tangential calf force
+        
     end
     
     methods

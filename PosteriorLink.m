@@ -10,6 +10,7 @@ classdef PosteriorLink < handle
         H %Total length of link.
         B %Base of link
         T %Thickness
+        bolt_hole_diam
         
         %Physical Properties
         m % Mass (kg)
@@ -39,6 +40,9 @@ classdef PosteriorLink < handle
         %Force Vectors
         F_sp = [0;0;0]; %(N)
         F_ip = [0;0;0]; %(N)
+        
+        %file names
+        file
     end
     
     methods

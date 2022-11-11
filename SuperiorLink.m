@@ -15,6 +15,7 @@ classdef SuperiorLink < handle
         H3
         H4
         T %Thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -52,9 +53,13 @@ classdef SuperiorLink < handle
         F_sa = [0;0;0]; %(N)
         F_sp = [0;0;0]; %(N)
         
+        %file names
+        file
+        
         %Force Components
         F_tn %normal thigh force
         F_tt %tangential thigh force
+
     end
     
     methods

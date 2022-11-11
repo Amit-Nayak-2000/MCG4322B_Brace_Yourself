@@ -11,6 +11,7 @@ classdef AnteriorLink < handle
         H %Total length of link.
         B %Base of link
         T %thickness
+        bolt_hole_diam
         
         
         %Physical Properties
@@ -41,6 +42,9 @@ classdef AnteriorLink < handle
         %Force Vectors
         F_sa = [0;0;0]; %(N)
         F_ia = [0;0;0]; %(N)
+        
+        %file names
+        file
     end
     
     methods
