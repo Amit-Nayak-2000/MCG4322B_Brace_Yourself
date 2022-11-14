@@ -8,6 +8,7 @@ function [] = StressCalculations(Superior, Inferior, Anterior, Posterior, Torsio
 %% Symbolic Variables
 % constants
 g = 9.81;
+%E = 
 
 %% Superior Link
 
@@ -88,9 +89,10 @@ end
 syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
 syms F_ipxlong F_ipylong F_spring2
 
-% stresses
+% stresses and safety factors
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 
+syms SF_ix SF_i1y SF_i2y SF_i3y SF_ibend1 SF_ibend2 SF_ishear1 SF_ishear2 SF_ishear3 SF_irupture
 
 % longitudinal force calculations
 F_ct = -Inferior.F_c(1)*sind(Inferior.theta) + Inferior.F_c(2)*cosd(Inferior.theta);
@@ -151,9 +153,16 @@ else
 end
 
 % Safety Factors
-
-
-
+SF_ix = sigma_ix/E;
+SF_i1y = sigma_i1y/E;
+SF_i2y = sigma_i2y/E;
+SF_i3y = sigma_i3y/E;
+SF_ibend1 = sigma_ibend1/E;
+SF_ibend2 = sigma_ibend2/E;
+SF_ishear1 = tau_i1/E;
+SF_ishear2 = tau_i2/E;
+SF_ishear3 = tau_i3/E;
+SF_irupture = sigma_irupture/E;
 
 
 %% Anterior Link
