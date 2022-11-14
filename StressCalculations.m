@@ -105,7 +105,7 @@ F_ipxlong = Inferior.F_ip(1)*cosd(Inferior.theta) + Inferior.F_ip(2)*sind(Inferi
 F_ipylong = -Inferior.F_ip(1)*sind(Inferior.theta) + Inferior.F_isp(2)*cosd(Inferior.theta);
 F_spring2 = -TorsionalSpring.Torque(3)*0.4*Inferior.L;
 
-% stress calculations
+% Stress Calculations
 % along x long
 if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
     sigma_ix = F_cn/((Inferior.H4-Inferior.H3)*Inferior.T);
@@ -243,9 +243,20 @@ syms sigma_px sigma_py sigma_pbend tau_p1 tau_p2 sigma_prupture
 
 
 %% Bolts
+syms tau_sa tau_sp tau_ia tau_ip
+syms SF_shearsa SF_shearsp SF_shearia SF_shearip
 
+% Stress Calculations
+tau_sa = (4*norm(Superior.F_sa))/pi*Bolt.d; %NEED to create bolt object, d for diameter
+tau_sp = (4*norm(Superior.F_sp))/pi*Bolt.d;
+tau_ia = (4*norm(Superior.F_ia))/pi*Bolt.d;
+tau_ip = (4*norm(Superior.F_ip))/pi*Bolt.d;
 
-
+%Safety Factor
+SF_shearsa = tau_sa/Bolt.E; %NEED to define bolt mod in bolt object
+SF_shearsp = tau_sp/Bolt.E; 
+SF_shearia = tau_ia/Bolt.E; 
+SF_shearip = tau_ip/Bolt.E; 
 
 %% Bearings
 
