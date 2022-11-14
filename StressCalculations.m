@@ -1,6 +1,6 @@
-function [] = StressCalculations(Superior, TorsionalSpring)
+function [] = StressCalculations(Superior, Inferior, Anterior, Posterior, TorsionalSpring)
 % calculates stresses related to superior link
-% inputs: (S, T)
+% inputs: ( , )
 % output: [ , , , , ]
 
 % description
@@ -9,6 +9,9 @@ function [] = StressCalculations(Superior, TorsionalSpring)
 % constants
 g = 9.81;
 
+%% Superior Link
+
+% Symbols
 % longitudinal forces
 syms F_tt F_tn F_scomxlong F_scomylong F_saxlong F_saylong
 syms F_spxlong F_spylong F_spring1
@@ -17,7 +20,7 @@ syms F_spxlong F_spylong F_spring1
 syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
 syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2
 
-%% longitudinal force calculations
+% longitudinal force calculations
 F_tt = -Superior.F_t(1)*sind(Superior.theta) + Superior.F_t(2)*cosd(Superior.theta);
 F_tn = Superior.F_t(1)*cosd(Superior.theta) + Superior.F_t(2)*sind(Superior.theta);
 F_scomxlong = Superior.m*Superior.a(1)*cosd(Superior.theta) + Superior.m*Superior.a(2)*sind(Superior.theta) - Superior.m*g*sind(Superior.theta); 
@@ -28,7 +31,7 @@ F_spxlong = Superior.F_sp(1)*cosd(Superior.theta) + Superior.F_sp(2)*sind(Superi
 F_spylong = -Superior.F_sp(1)*sind(Superior.theta) + Superior.F_sp(2)*cosd(Superior.theta);
 F_spring1 = -TorsionalSpring.Torque(3)*0.4*Superior.L;
 
-%% stress calculations
+% stress calculations
 % along x long
 if abs(F_tn) > abs(F_scomxlong + F_saxlong + F_spxlong)
     sigma_sx = F_tn/((Superior.H4-Superior.H3)*Superior.T);
@@ -75,23 +78,10 @@ else
     tau_s3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
 end
 
-
-%% return or modifying object values
-% we will figure this out soon
+% Safety Factors
 
 
-
-end
-function [] = InferiorStress()
-% calculates stresses related to inferior link
-% inputs: 
-% output: 
-
-% description
-
-%% Symbolic Variables
-% constants
-g = 9.81;
+%% Inferior Link
 
 % longitudinal forces
 syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
@@ -100,40 +90,179 @@ syms F_ipxlong F_ipylong F_spring2
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture
+syms moment_i1 moment_i2 shearforce_i1 shearforce_i2 shearforce_i3
 
-%% longitudinal force calculations
+% longitudinal force calculations
 F_ct = -Inferior.F_c(1)*sind(Inferior.theta) + Inferior.F_c(2)*cosd(Inferior.theta);
 F_cn = Inferior.F_c(1)*cosd(Inferior.theta) + Inferior.F_c(2)*sind(Inferior.theta);
 F_icomxlong = Inferior.m*Inferior.a(1)*cosd(Inferior.theta) + Inferior.m*Inferior.a(2)*sind(Inferior.theta) - Inferior.m*g*sind(Inferior.theta); 
 F_icomylong = -Inferior.m*Inferior.a(1)*sind(Inferior.theta) + Inferior.m*Inferior.a(2)*cosd(Inferior.theta) - Inferior.m*g*cosd(Inferior.theta);
-F_iaxlong = Inferior.F_sa(1)*cosd(Inferior.theta) + Inferior.F_sa(2)*sind(Inferior.theta);
-F_iaylong = -Inferior.F_sa(1)*sind(Inferior.theta) + Inferior.F_sa(2)*cosd(Inferior.theta);
-F_ipxlong = Inferior.F_sp(1)*cosd(Inferior.theta) + Inferior.F_sp(2)*sind(Inferior.theta);
-F_ipylong = -Inferior.F_sp(1)*sind(Inferior.theta) + Inferior.F_sp(2)*cosd(Inferior.theta);
-F_spring2 = -TorsionalSpring.Torque(3)*0.4*Superior.L; %i think its the 0.4 of the superior link right? check
+F_iaxlong = Inferior.F_ia(1)*cosd(Inferior.theta) + Inferior.F_ia(2)*sind(Inferior.theta);
+F_iaylong = -Inferior.F_ia(1)*sind(Inferior.theta) + Inferior.F_ia(2)*cosd(Inferior.theta);
+F_ipxlong = Inferior.F_ip(1)*cosd(Inferior.theta) + Inferior.F_ip(2)*sind(Inferior.theta);
+F_ipylong = -Inferior.F_ip(1)*sind(Inferior.theta) + Inferior.F_isp(2)*cosd(Inferior.theta);
+F_spring2 = -TorsionalSpring.Torque(3)*0.4*Inferior.L; %CHECK
 
-%% stress calculations
+% stress calculations
+% along x long
+if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
+    sigma_ix = F_cn/((Inferior.H4-Inferior.H3)*Inferior.T);
+else
+    sigma_ix = (F_icomxlong + F_iaxlong + F_ipxlong)/((Inferior.H4-Inferior.H3)*Inferior.T);
+end
+
+% along y long
+if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_spring2)
+    sigma_i1y = (F_ct + F_icomylong)/(Inferior.B1*Inferior.T);
+    %add rupture
+else
+    sigma_i1y = (F_iaylong + F_ipylong + F_spring2)/(Inferior.B1*Inferior.T);
+    %add rupture
+end
+
+if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_spring2)
+    sigma_i2y = F_ct / (Inferior.B2*Inferior.T);
+    sigma_i3y = F_ct / (Inferior.B3*Inferior.T);
+else
+    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (Inferior.B2*Inferior.T);
+    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (Inferior.B3*Inferior.T);
+end
+
+% bending
+moment_i1 = (Inferior.B3/2)*F_ct - (Inferior.B3/2 - Inferior.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
+% add I*alpha
+moment_i2 = Inferior.I*Inferior.alpha(3) - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2;
+% add F_cn (+)
+
+sigma_ibend1 = -moment_i1*((Inferior.H4-Inferior.H3)/2) / ((Inferior.B3*(Inferior.H4-Inferior.H3)^3)/12)
+sigma_ibend2 = %idk what y and I is for this shape
+
+% shear
+shearforce_i1 = F_iaxlong + F_ipxlong; 
+shearforce_i2 = F_icomxlong;
+shearforce_i3 = F_cn;
+% slight confusion, i think im supposed to keep adding...
+tau_i1 = shear_i1/(Inferior.B1*Inferior.T); %should i use B1 here or should we use 
+tau_i2 = shear_i2/(Inferior.B2*Inferior.T);
+tau_i3 = shear_i3/(Inferior.B3*Inferior.T);
+
+% shear
+if abs(F_cn + F_icomxlong) > abs(F_iaxlong + F_ipxlong)
+    tau_i1 = (F_cn + F_icomxlong)/(Inferior.B1*Inferior.T);
+else
+    tau_i1 = (F_iaxlong + F_ipxlong)/(Inferior.B1*Inferior.T);
+end
+
+if abs(F_cn) > abs(F_scomxlong + F_saxlong + F_spxlong)
+    tau_i2 = (F_tn)/(Superior.B2*Superior.T);
+    tau_i3 = (F_tn)/(Superior.B3*Superior.T);
+else
+    tau_i2 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B2*Superior.T);
+    tau_i3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
+end
+
+% Safety Factors
+
+
+
+
+
+%% Anterior Link
+
+% longitudinal forces
+syms F_acomxlong F_acomylong F_asxlong F_asylong F_aixlong F_aiylong
+
+% stresses
+syms sigma_ax sigma_ay sigma_abend tau_a1 tau_a2 sigma_arupture
+
+% longitudinal force calculations
+% F_acomxlong = 
+% F_acomylong = 
+% F_asxlong = 
+% F_axylong = 
+% F_aixlong = 
+% F_aiylong = 
+
+% stress calculations
+% along x long
+
+
+% along y long and rupture
+
+
+% bending
+
+
+% shear
+
+
+% Safety Factors
+
+
+
+%% Posterior Link
+
+% longitudinal forces
+syms F_pcomxlong F_pcomylong F_psxlong F_psylong F_pixlong F_piylong
+
+% stresses
+syms sigma_px sigma_py sigma_pbend tau_p1 tau_p2 sigma_prupture
+
+% longitudinal force calculations
+% F_pcomxlong = 
+% F_pcomylong = 
+% F_psxlong = 
+% F_pxylong = 
+% F_pixlong = 
+% F_piylong = 
+
+% stress calculations
+% along x long
+
+
+% along y long and rupture
+
+
+% bending
+
+
+% shear
+
+
+% Safety Factors
+
+
+
+
+%% Velcro
+
+
+
+
+%% Springs
+
+
+
+
+%% Bolts
+
+
+
+
+%% Bearings
+
+
 
 
 %% return or modifying object values
-end
-function [] = AnteriorStress()
+% we will figure this out soon
+
+
+
+%% Safety Factors Calculations
+
+
+
 
 end
-function [] = PosteriorStress()
-
-end
-function [] = VelcroStress()
-
-end
-function [] = SpringStress()
-
-end
-function [] = BoltStress()
-
-end
-function [] = BearingStress()
-
-end
-
 
