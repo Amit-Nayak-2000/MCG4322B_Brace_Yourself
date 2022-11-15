@@ -57,6 +57,7 @@ classdef SafetyFactor < handle
         tau_sp 
         tau_ia 
         tau_ip
+
         
         % Bearings
         

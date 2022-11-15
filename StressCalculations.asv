@@ -332,7 +332,6 @@ SF.tau_p1 = P.G/tau_p1;
 SF.tau_p2 = P.G/tau_p2;
 
 %% Velcro
-
 % SYMBOLS
 syms tau_vt tau_vc
 syms SF.tau_vt SF.tau_vc
