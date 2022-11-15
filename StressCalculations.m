@@ -94,6 +94,7 @@ SF_tau_s3 = tau_s3/S.G;
 
 %% Inferior Link
 
+% Symbols
 % longitudinal forces
 syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
 syms F_ipxlong F_ipylong F_spring2
@@ -101,8 +102,10 @@ syms F_ipxlong F_ipylong F_spring2
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 
-syms SF_ix SF_i1y SF_i2y SF_i3y SF_ibend1 SF_ibend2 SF_ishear1 SF_ishear2 SF_ishear3 SF_irupture
 
+% safety factors
+syms SF_sigma_ix SF_sigma_i1y SF_sigma_i2y SF_sigma_i3y SF_sigma_ibend1 SF_sigma_ibend2
+syms SF_tau_i1 SF_tau_i2 SF_tau_i3 SF_sigma_irupture 
 
 % longitudinal force calculations
 F_ct = -I.F_c(1)*sind(I.theta) + I.F_c(2)*cosd(I.theta);
@@ -113,10 +116,9 @@ F_iaxlong = I.F_ia(1)*cosd(I.theta) + I.F_ia(2)*sind(I.theta);
 F_iaylong = -I.F_ia(1)*sind(I.theta) + I.F_ia(2)*cosd(I.theta);
 F_ipxlong = I.F_ip(1)*cosd(I.theta) + I.F_ip(2)*sind(I.theta);
 F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_isp(2)*cosd(I.theta);
-F_spring2 = -TorsionalSpring.Torque(3)*0.4*I.L; %CHECK
-% need to change F_spring2 to F_ispring2
+F_spring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
 
-% stress calculations
+% Stress Calculations
 % along x long
 if abs(F_cn)>abs(F_icomxlong + F_iaxlong + F_ipxlong)
     sigma_ix = F_cn/((I.H4-I.H3)*I.T);
@@ -127,10 +129,10 @@ end
 % along y long
 if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_spring2)
     sigma_i1y = (F_ct + F_icomylong)/(I.B1*I.T);
-    %add rupture
+    %add rupture sigma_irupture = 
 else
     sigma_i1y = (F_iaylong + F_ipylong + F_spring2)/(I.B1*I.T);
-    %add rupture
+    %add rupture sigma_irupture = 
 end
 
 if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_spring2)
@@ -142,40 +144,38 @@ else
 end
 
 % bending
-moment_i1 = Inferior.I*Inferior.alpha(3) + (Inferior.B3/2)*F_ct - (Inferior.B3/2 - Inferior.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
-moment_i2 = Inferior.I*Inferior.alpha(3) - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2 + Inferior.com(2)*F_cn;
+moment_i1 = I.I*I.alpha(3) + (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
+moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_spring2 + I.com(2)*F_cn;
 
-sigma_ibend1 = -moment_i1*((Inferior.H4-Inferior.H3)/2) / ((Inferior.B3*(Inferior.H4-Inferior.H3)^3)/12);
+sigma_ibend1 = -moment_i1*((I.H4-I.H3)/2) / ((I.B3*(I.H4-I.H3)^3)/12);
 sigma_ibend2 = %idk what y and I is for this shape
 
 % shear
 if abs(F_cn + F_icomxlong) > abs(F_iaxlong + F_ipxlong)
-    tau_i1 = (F_cn + F_icomxlong)/(Inferior.B1*Inferior.T);
+    tau_i1 = (F_cn + F_icomxlong)/(I.B1*I.T);
 else
-    tau_i1 = (F_iaxlong + F_ipxlong)/(Inferior.B1*Inferior.T);
+    tau_i1 = (F_iaxlong + F_ipxlong)/(I.B1*I.T);
 end
 
-if abs(F_cn) > abs(F_scomxlong + F_saxlong + F_spxlong)
-    tau_i2 = (F_tn)/(Superior.B2*Superior.T);
-    tau_i3 = (F_tn)/(Superior.B3*Superior.T);
+if abs(F_cn) > abs(F_icomxlong + F_iaxlong + F_ipxlong)
+    tau_i2 = (F_cn)/(I.B2*I.T);
+    tau_i3 = (F_cn)/(I.B3*I.T);
 else
-    tau_i2 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B2*Superior.T);
-    tau_i3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
+    tau_i2 = (F_icomxlong + F_iaxlong + F_ipxlong)/(I.B2*I.T);
+    tau_i3 = (F_icomxlong + F_iaxlong + F_ipxlong)/(I.B3*I.T);
 end
 
 % Safety Factors
-SF_ix = sigma_ix/E;
-SF_i1y = sigma_i1y/E;
-SF_i2y = sigma_i2y/E;
-SF_i3y = sigma_i3y/E;
-SF_ibend1 = sigma_ibend1/E;
-SF_ibend2 = sigma_ibend2/E;
-SF_ishear1 = tau_i1/E;
-SF_ishear2 = tau_i2/E;
-SF_ishear3 = tau_i3/E;
-SF_irupture = sigma_irupture/E;
-
-
+SF_sigma_ix = sigma_ix/I.E;
+SF_sigma_i1y = sigma_i1y/I.E;
+SF_sigma_i2y = sigma_i2y/I.E;
+SF_sigma_i3y = sigma_i3y/I.E;
+SF_sigma_ibend1 = sigma_ibend1/I.E;
+SF_sigma_ibend2 = sigma_ibend2/I.E;
+SF_sigma_irupture = sigma_irupture/I.E;
+SF_tau_i1 = tau_i1/I.G;
+SF_tau_i2 = tau_i2/I.G;
+SF_tau_i3 = tau_i3/I.G;
 
 %% Anterior Link
 
