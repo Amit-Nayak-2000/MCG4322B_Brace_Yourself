@@ -245,6 +245,9 @@ syms F_pcomxlong F_pcomylong F_psxlong F_psylong F_pixlong F_piylong F_pspring2 
 % stresses
 syms sigma_p1y sigma_p2y sigma_pbend tau_p1 tau_p2 sigma_prupture1 sigma_prupture2
 
+% safety factors
+syms SF_sigma_p1y SF_sigma_p2y SF_sigma_pbend SF_tau_p1 SF_tau_p2 SF_sigma_prupture1 SF_sigma_prupture2
+
 % longitudinal force calculations
 F_pcomxlong = P.m*P.a(1)*sind(P.theta) - P.m*P.a(2)*cosd(P.theta) + P.m*g*cosd(P.theta);
 F_pcomylong = P.m*P.a(1)*cosd(P.theta) + P.m*P.a(2)*sind(P.theta) - P.m*g*sind(P.theta);
@@ -294,7 +297,13 @@ else
 end
 
 % Safety Factors
-
+SF_sigma_p1y = sigma_p1y/P.E;
+SF_sigma_p2y = sigma_p2y/P.E;
+SF_sigma_pbend = sigma_pbend/P.E;
+SF_sigma_prupture1 = sigma_prupture1/P.E;
+SF_sigma_prupture2 = sigma_prupture2/P.E;
+SF_tau_p1 = tau_p1/P.G;
+SF_tau_p2 = tau_p2/P.G;
 
 %% Velcro
 
@@ -311,18 +320,16 @@ syms tau_sa tau_sp tau_ia tau_ip
 syms SF_shearsa SF_shearsp SF_shearia SF_shearip
 
 % Stress Calculations
-tau_sa = (4*norm(Superior.F_sa))/pi*Bolt.d; %NEED to create bolt object, d for diameter
-tau_sp = (4*norm(Superior.F_sp))/pi*Bolt.d;
-tau_ia = (4*norm(Superior.F_ia))/pi*Bolt.d;
-tau_ip = (4*norm(Superior.F_ip))/pi*Bolt.d;
+tau_sa = (4*norm(S.F_sa))/pi*Bolt.D; %NEED to create bolt object, d for diameter
+tau_sp = (4*norm(S.F_sp))/pi*Bolt.D;
+tau_ia = (4*norm(S.F_ia))/pi*Bolt.D;
+tau_ip = (4*norm(S.F_ip))/pi*Bolt.D;
 
 %Safety Factor
 SF_shearsa = tau_sa/Bolt.E; %NEED to define bolt mod in bolt object
 SF_shearsp = tau_sp/Bolt.E; 
 SF_shearia = tau_ia/Bolt.E; 
 SF_shearip = tau_ip/Bolt.E; 
-
-
 
 
 %% Bearings
