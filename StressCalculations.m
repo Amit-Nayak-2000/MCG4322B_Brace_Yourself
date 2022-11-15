@@ -245,6 +245,9 @@ syms F_pcomxlong F_pcomylong F_psxlong F_psylong F_pixlong F_piylong F_pspring2 
 % stresses
 syms sigma_p1y sigma_p2y sigma_pbend tau_p1 tau_p2 sigma_prupture1 sigma_prupture2
 
+% safety factors
+syms SF_sigma_p1y SF_sigma_p2y SF_sigma_pbend SF_tau_p1 SF_tau_p2 SF_sigma_prupture1 SF_sigma_prupture2
+
 % longitudinal force calculations
 F_pcomxlong = P.m*P.a(1)*sind(P.theta) - P.m*P.a(2)*cosd(P.theta) + P.m*g*cosd(P.theta);
 F_pcomylong = P.m*P.a(1)*cosd(P.theta) + P.m*P.a(2)*sind(P.theta) - P.m*g*sind(P.theta);
@@ -294,7 +297,13 @@ else
 end
 
 % Safety Factors
-
+SF_sigma_p1y = sigma_p1y/P.E;
+SF_sigma_p2y = sigma_p2y/P.E;
+SF_sigma_pbend = sigma_pbend/P.E;
+SF_sigma_prupture1 = sigma_prupture1/P.E;
+SF_sigma_prupture2 = sigma_prupture2/P.E;
+SF_tau_p1 = tau_p1/P.G;
+SF_tau_p2 = tau_p2/P.G;
 
 %% Velcro
 
