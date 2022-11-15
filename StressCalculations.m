@@ -320,10 +320,10 @@ syms tau_sa tau_sp tau_ia tau_ip
 syms SF_shearsa SF_shearsp SF_shearia SF_shearip
 
 % Stress Calculations
-tau_sa = (4*norm(Superior.F_sa))/pi*Bolt.d; %NEED to create bolt object, d for diameter
-tau_sp = (4*norm(Superior.F_sp))/pi*Bolt.d;
-tau_ia = (4*norm(Superior.F_ia))/pi*Bolt.d;
-tau_ip = (4*norm(Superior.F_ip))/pi*Bolt.d;
+tau_sa = (4*norm(S.F_sa))/pi*Bolt.D; %NEED to create bolt object, d for diameter
+tau_sp = (4*norm(S.F_sp))/pi*Bolt.D;
+tau_ia = (4*norm(S.F_ia))/pi*Bolt.D;
+tau_ip = (4*norm(S.F_ip))/pi*Bolt.D;
 
 %Safety Factor
 SF_shearsa = tau_sa/Bolt.E; %NEED to define bolt mod in bolt object
