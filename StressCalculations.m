@@ -1,4 +1,4 @@
-function [] = StressCalculations(S, I, A, P, TorsionalSpring)
+function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC)
 % calculates stresses related to S link
 % inputs: ( , )
 % output: [ , , , , ]
@@ -179,13 +179,17 @@ SF_tau_i3 = tau_i3/I.G;
 
 %% Anterior Link
 
+% SYMBOLS
 % longitudinal forces
 syms F_acomxlong F_acomylong F_asxlong F_asylong F_aixlong F_aiylong F_aspring1 moment_a
 
 % stresses
 syms sigma_a1y sigma_a2y sigma_abend tau_a1 tau_a2 sigma_arupture1 sigma_arupture2
 
-% longitudinal force calculations
+% safety factors
+syms SF_sigma_a1y SF_sigma_a2y SF_sigma_abend SF_tau_a1 SF_tau_a2 SF_sigma_arupture1 SF_sigma_arupture2
+
+% LONGITUDINAL FORCE CALCULATIONS
 F_acomxlong = -A.m*A.a(1)*sind(A.theta) + A.m*A.a(2)*cosd(A.theta) - A.m*g*cosd(A.theta);
 F_acomylong = -A.m*A.a(1)*cosd(A.theta) - A.m*A.a(2)*sind(A.theta) + A.m*g*sind(A.theta);
 F_asxlong = -A.F_sa(1)*sind(A.theta) + A.F_sa(2)*cosd(A.theta);
@@ -194,7 +198,7 @@ F_aixlong = -A.F_ia(1)*sind(A.theta) + A.F_ia(2)*cosd(A.theta);
 F_aiylong = -A.F_ia(1)*cosd(A.theta) - A.F_ia(2)*sind(A.theta);
 F_aspring1 = -1*F_sspring1;
 
-% stress calculations
+% STRESS CALCULATIONS
 % along y long and rupture
 if abs(F_asylong) > abs(F_acomylong + F_aiylong)
     sigma_a1y = (F_asylong)/(A.B*A.T);
@@ -233,9 +237,14 @@ else
     tau_a2 = (F_aixlong)/(A.B*A.T);
 end
 
-% Safety Factors
-
-
+% SAFETY FACTOR CALCULATIONS
+SF_sigma_a1y = sigma_a1y/A.E;
+SF_sigma_a2y = sigma_a2y/A.E;
+SF_sigma_abend = sigma_abend/A.E;
+SF_sigma_arupture1 = sigma_arupture1/A.E;
+SF_sigma_arupture2 = sigma_arupture2/A.E;
+SF_tau_a1 = tau_a1/A.G;
+SF_tau_a2 = tau_a2/A.G;
 
 %% Posterior Link
 
@@ -297,9 +306,17 @@ end
 
 
 %% Velcro
+% SYMBOLS
+syms tau_vt tau_vc
+syms SF_tau_vt SF_tau_vc
 
+% STRESS CALCULATIONS
+tau_vt = F_tn / (VT.L * VT.W);
+tau_vc = F_cn / (VC.L * VC.W);
 
-
+% SAFETY FACTOR CALCULATIONS
+SF_tau_vt = VT.G/tau_vt;
+SF_tau_vc = VC.G/tau_vc;
 
 %% Springs
 
@@ -332,10 +349,6 @@ SF_shearip = tau_ip/Bolt.E;
 
 %% return or modifying object values
 % we will figure this out soon
-
-
-
-%% Safety Factors Calculations
 
 
 
