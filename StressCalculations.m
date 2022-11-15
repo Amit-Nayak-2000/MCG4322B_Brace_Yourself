@@ -332,8 +332,6 @@ SF_shearia = tau_ia/Bolt.E;
 SF_shearip = tau_ip/Bolt.E; 
 
 
-
-
 %% Bearings
 
 
