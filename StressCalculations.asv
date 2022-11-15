@@ -1,5 +1,5 @@
-function [] = StressCalculations(Superior, Inferior, Anterior, Posterior, TorsionalSpring)
-% calculates stresses related to superior link
+function [] = StressCalculations(S, Inferior, Anterior, Posterior, TorsionalSpring)
+% calculates stresses related to S link
 % inputs: ( , )
 % output: [ , , , , ]
 
@@ -21,8 +21,8 @@ syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
 syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2
 
 % longitudinal force calculations
-F_tt = -Superior.F_t(1)*sind(Superior.theta) + Superior.F_t(2)*cosd(Superior.theta);
-F_tn = Superior.F_t(1)*cosd(Superior.theta) + Superior.F_t(2)*sind(Superior.theta);
+F_tt = -S.F_t(1)*sind(S.theta) + S.F_t(2)*cosd(S.theta);
+F_tn = S.F_t(1)*cosd(S.theta) + S.F_t(2)*sind(S.theta);
 F_scomxlong = Superior.m*Superior.a(1)*cosd(Superior.theta) + Superior.m*Superior.a(2)*sind(Superior.theta) - Superior.m*g*sind(Superior.theta); 
 F_scomylong = -Superior.m*Superior.a(1)*sind(Superior.theta) + Superior.m*Superior.a(2)*cosd(Superior.theta) - Superior.m*g*cosd(Superior.theta);
 F_saxlong = Superior.F_sa(1)*cosd(Superior.theta) + Superior.F_sa(2)*sind(Superior.theta);
@@ -243,7 +243,7 @@ F_psxlong = Posterior.F_sp(1)*sind(Posterior.theta) - Posterior.F_sp(2)*cosd(Pos
 F_psylong = Posterior.F_sp(1)*cosd(Posterior.theta) + Posterior.F_sp(2)*sind(Posterior.theta);
 F_pixlong = Posterior.F_ip(1)*sind(Posterior.theta) - Posterior.F_ip(2)*cosd(Posterior.theta);
 F_piylong = Posterior.F_ip(1)*cosd(Posterior.theta) + Posterior.F_ip(2)*sind(Posterior.theta);
-F_pspring2 = -1*F_spring2; %F_ps
+F_pspring2 = -1*F_spring2; %F_pspring2
 
 % stress calculations
 % along y long and rupture
