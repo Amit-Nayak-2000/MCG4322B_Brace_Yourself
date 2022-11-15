@@ -53,7 +53,10 @@ classdef SafetyFactor < handle
         
         
         % Bolts
-        
+        tau_sa 
+        tau_sp 
+        tau_ia 
+        tau_ip
         
         % Bearings
         

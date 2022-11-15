@@ -19,8 +19,8 @@ syms F_spxlong F_spylong F_sspring1
 syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
 syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2
 % safety factors
-syms SF_sigma_sx SF_sigma_s1y SF_sigma_s2y SF_sigma_s3y SF_sigma_sbend1 SF_sigma_sbend2
-syms SF_sigma_srupture SF_tau_s1 SF_tau_s2 SF_tau_s3
+syms SF.sigma_sx SF.sigma_s1y SF.sigma_s2y SF.sigma_s3y SF.sigma_sbend1 SF.sigma_sbend2
+syms SF.sigma_srupture SF.tau_s1 SF.tau_s2 SF.tau_s3
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_tt = -S.F_t(1)*sind(S.theta) + S.F_t(2)*cosd(S.theta);
@@ -81,16 +81,16 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF_sigma_sx = sigma_sx/S.E;
-SF_sigma_s1y = sigma_s1y/S.E;
-SF_sigma_s2y = sigma_s2y/S.E;
-SF_sigma_s3y = sigma_s3y/S.E;
-SF_sigma_sbend1 = sigma_sbend1/S.E;
-SF_sigma_sbend2 = sigma_sbend2/S.E;
-SF_sigma_srupture = sigma_srupture/S.E;
-SF_tau_s1 = tau_s1/S.G;
-SF_tau_s2 = tau_s2/S.G;
-SF_tau_s3 = tau_s3/S.G;
+SF.sigma_sx = S.E/sigma_sx;
+SF.sigma_s1y = S.E/sigma_s1y;
+SF.sigma_s2y = S.E/sigma_s2y;
+SF.sigma_s3y = S.E/sigma_s3y;
+SF.sigma_sbend1 = S.E/sigma_sbend1;
+SF.sigma_sbend2 = S.E/sigma_sbend2;
+SF.sigma_srupture = S.E/sigma_srupture;
+SF.tau_s1 = S.G/tau_s1;
+SF.tau_s2 = S.G/tau_s2;
+SF.tau_s3 = S.G/tau_s3;
 
 %% Inferior Link
 
@@ -104,8 +104,8 @@ syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 
 
 % safety factors
-syms SF_sigma_ix SF_sigma_i1y SF_sigma_i2y SF_sigma_i3y SF_sigma_ibend1 SF_sigma_ibend2
-syms SF_tau_i1 SF_tau_i2 SF_tau_i3 SF_sigma_irupture 
+syms SF.sigma_ix SF.sigma_i1y SF.sigma_i2y SF.sigma_i3y SF.sigma_ibend1 SF.sigma_ibend2
+syms SF.tau_i1 SF.tau_i2 SF.tau_i3 SF.sigma_irupture 
 
 % longitudinal force calculations
 F_ct = -I.F_c(1)*sind(I.theta) + I.F_c(2)*cosd(I.theta);
@@ -166,16 +166,16 @@ else
 end
 
 % Safety Factors
-SF_sigma_ix = sigma_ix/I.E;
-SF_sigma_i1y = sigma_i1y/I.E;
-SF_sigma_i2y = sigma_i2y/I.E;
-SF_sigma_i3y = sigma_i3y/I.E;
-SF_sigma_ibend1 = sigma_ibend1/I.E;
-SF_sigma_ibend2 = sigma_ibend2/I.E;
-SF_sigma_irupture = sigma_irupture/I.E;
-SF_tau_i1 = tau_i1/I.G;
-SF_tau_i2 = tau_i2/I.G;
-SF_tau_i3 = tau_i3/I.G;
+SF.sigma_ix = I.E/sigma_ix;
+SF.sigma_i1y = I.E/sigma_i1y;
+SF.sigma_i2y = I.E/sigma_i2y;
+SF.sigma_i3y = I.E/sigma_i3y;
+SF.sigma_ibend1 = I.E/sigma_ibend1;
+SF.sigma_ibend2 = I.E/sigma_ibend2;
+SF.sigma_irupture = I.E/sigma_irupture;
+SF.tau_i1 = I.G/tau_i1;
+SF.tau_i2 = I.G/tau_i2;
+SF.tau_i3 = I.G/tau_i3;
 
 %% Anterior Link
 
@@ -187,7 +187,7 @@ syms F_acomxlong F_acomylong F_asxlong F_asylong F_aixlong F_aiylong F_aspring1 
 syms sigma_a1y sigma_a2y sigma_abend tau_a1 tau_a2 sigma_arupture1 sigma_arupture2
 
 % safety factors
-syms SF_sigma_a1y SF_sigma_a2y SF_sigma_abend SF_tau_a1 SF_tau_a2 SF_sigma_arupture1 SF_sigma_arupture2
+syms SF.sigma_a1y SF.sigma_a2y SF.sigma_abend SF.tau_a1 SF.tau_a2 SF.sigma_arupture1 SF.sigma_arupture2
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_acomxlong = -A.m*A.a(1)*sind(A.theta) + A.m*A.a(2)*cosd(A.theta) - A.m*g*cosd(A.theta);
@@ -238,13 +238,13 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF_sigma_a1y = sigma_a1y/A.E;
-SF_sigma_a2y = sigma_a2y/A.E;
-SF_sigma_abend = sigma_abend/A.E;
-SF_sigma_arupture1 = sigma_arupture1/A.E;
-SF_sigma_arupture2 = sigma_arupture2/A.E;
-SF_tau_a1 = tau_a1/A.G;
-SF_tau_a2 = tau_a2/A.G;
+SF.sigma_a1y = A.E/sigma_a1y;
+SF.sigma_a2y = A.E/sigma_a2y;
+SF.sigma_abend = A.E/sigma_abend;
+SF.sigma_arupture1 = A.E/sigma_arupture1;
+SF.sigma_arupture2 = A.E/sigma_arupture2;
+SF.tau_a1 = A.G/tau_a1;
+SF.tau_a2 = A.G/tau_a2;
 
 %% Posterior Link
 
@@ -255,7 +255,7 @@ syms F_pcomxlong F_pcomylong F_psxlong F_psylong F_pixlong F_piylong F_pspring2 
 syms sigma_p1y sigma_p2y sigma_pbend tau_p1 tau_p2 sigma_prupture1 sigma_prupture2
 
 % safety factors
-syms SF_sigma_p1y SF_sigma_p2y SF_sigma_pbend SF_tau_p1 SF_tau_p2 SF_sigma_prupture1 SF_sigma_prupture2
+syms SF.sigma_p1y SF.sigma_p2y SF.sigma_pbend SF.tau_p1 SF.tau_p2 SF.sigma_prupture1 SF.sigma_prupture2
 
 % longitudinal force calculations
 F_pcomxlong = P.m*P.a(1)*sind(P.theta) - P.m*P.a(2)*cosd(P.theta) + P.m*g*cosd(P.theta);
@@ -306,26 +306,26 @@ else
 end
 
 % Safety Factors
-SF_sigma_p1y = sigma_p1y/P.E;
-SF_sigma_p2y = sigma_p2y/P.E;
-SF_sigma_pbend = sigma_pbend/P.E;
-SF_sigma_prupture1 = sigma_prupture1/P.E;
-SF_sigma_prupture2 = sigma_prupture2/P.E;
-SF_tau_p1 = tau_p1/P.G;
-SF_tau_p2 = tau_p2/P.G;
+SF.sigma_p1y = P.E/sigma_p1y;
+SF.sigma_p2y = P.E/sigma_p2y;
+SF.sigma_pbend = P.E/sigma_pbend;
+SF.sigma_prupture1 = P.E/sigma_prupture1;
+SF.sigma_prupture2 = P.E/sigma_prupture2;
+SF.tau_p1 = P.G/tau_p1;
+SF.tau_p2 = P.G/tau_p2;
 
 %% Velcro
 % SYMBOLS
 syms tau_vt tau_vc
-syms SF_tau_vt SF_tau_vc
+syms SF.tau_vt SF.tau_vc
 
 % STRESS CALCULATIONS
 tau_vt = F_tn / (VT.L * VT.W);
 tau_vc = F_cn / (VC.L * VC.W);
 
 % SAFETY FACTOR CALCULATIONS
-SF_tau_vt = VT.G/tau_vt;
-SF_tau_vc = VC.G/tau_vc;
+SF.tau_vt = VT.G/tau_vt;
+SF.tau_vc = VC.G/tau_vc;
 
 %% Springs
 
@@ -334,19 +334,19 @@ SF_tau_vc = VC.G/tau_vc;
 
 %% Bolts
 syms tau_sa tau_sp tau_ia tau_ip
-syms SF_shearsa SF_shearsp SF_shearia SF_shearip
+syms SF.tau_sa SF.tau_sp SF.tau_ia SF.tau_ip
 
 % Stress Calculations
-tau_sa = (4*norm(S.F_sa))/pi*Bolt.D; %NEED to create bolt object, d for diameter
+tau_sa = (4*norm(S.F_sa))/pi*Bolt.D;
 tau_sp = (4*norm(S.F_sp))/pi*Bolt.D;
 tau_ia = (4*norm(S.F_ia))/pi*Bolt.D;
 tau_ip = (4*norm(S.F_ip))/pi*Bolt.D;
 
 %Safety Factor
-SF_shearsa = tau_sa/Bolt.E; %NEED to define bolt mod in bolt object
-SF_shearsp = tau_sp/Bolt.E; 
-SF_shearia = tau_ia/Bolt.E; 
-SF_shearip = tau_ip/Bolt.E; 
+SF.tau_sa = Bolt.E/tau_sa; 
+SF.tau_sp = Bolt.E/tau_sp; 
+SF.tau_ia = Bolt.E/tau_ia; 
+SF.tau_ip = Bolt.E/tau_ip; 
 
 
 %% Bearings
