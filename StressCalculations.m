@@ -17,7 +17,9 @@ syms F_tt F_tn F_scomxlong F_scomylong F_saxlong F_saylong
 syms F_spxlong F_spylong F_sspring1
 % stresses
 syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
-syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2 J_s
+syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2 
+% second moment of area
+syms J_s A_s1 A_s2 A_s3 y_s1 y_s2 y_s3 y_sbar I_s1 I_s2 I_s3 
 % safety factors
 syms SF.sigma_sx SF.sigma_s1y SF.sigma_s2y SF.sigma_s3y SF.sigma_sbend1 SF.sigma_sbend2
 syms SF.sigma_srupture SF.tau_s1 SF.tau_s2 SF.tau_s3
@@ -32,6 +34,19 @@ F_saylong = -S.F_sa(1)*sind(S.theta) + S.F_sa(2)*cosd(S.theta);
 F_spxlong = S.F_sp(1)*cosd(S.theta) + S.F_sp(2)*sind(S.theta);
 F_spylong = -S.F_sp(1)*sind(S.theta) + S.F_sp(2)*cosd(S.theta);
 F_sspring1 = -TorsionalSpring.Torque(3)*0.4*S.L;
+
+% SECOND MOMENT OF AREA
+A_s1 = S.B1*S.H1;
+A_s2 = 0.5*(S.B1 + S.B2)*(S.H2 - S.H1);
+A.s3 = S.B2*(S.H4 - S.H2);
+y_s1 = S.H1/2;
+y_s2 = ((S.H4 - S.H2)*((2*S.B2 + S.B1)/(S.B2 + S.B1)))/3;
+y_s3 = S.H2 + ((S.H4 - S.H2)/2);
+I_s1 = S.B1*(S.H1)^3;
+I_s2 = (S.H2 - S.H1)*(S.B2 - S.B1)*(S.B2^2 + 7*S.B1^2)/48;
+I_s3 = S.B2*(S.H4-S.H2)^3/12;
+y_sbar = (A_s1*y_s1 + A_s2*y_s2 + A_s3*y_s3)/(A_s1 + A_s2 + A_s1);
+J_s = (I_s1 + A_s1*(y_sbar - y_s1)^2) + (I_s2 + A_s2*(y_sbar - y_s2)^2) + (I_s3 + A_s3*(y_sbar - y_s3)^2);
 
 % STRESS CALCULATIONS
 % along x long
@@ -63,7 +78,7 @@ moment_s1 = S.I*S.alpha(3) + (S.B3/2)*F_tt - (S.B3/2 - S.B2/2)*(F_scomylong + F_
 moment_s2 = S.I*S.alpha(3) - (S.L/2)*F_saylong - (S.H4 - S.com(2) - S.H1/2)*F_saxlong - (S.L/2)*F_spylong + (S.H4 - S.com(2) - S.H1/2)*F_spxlong + ((S.L/2)-0.4*S.L)*F_sspring1 - S.com(2)*F_tn;
 
 sigma_sbend1 = -moment_s1*((S.H4-S.H3)/2) / ((S.B3*(S.H4-S.H3)^3)/12);
-%sigma_ibend2 = -moment_s2 * ?y? / ?I?
+sigma_ibend2 = -moment_s2 * y_sbar / J_s;
 
 % shear
 if abs(F_tn + F_scomxlong) > abs(F_saxlong + F_spxlong)
@@ -97,10 +112,12 @@ SF.tau_s3 = S.G/tau_s3;
 % SYMBOLS
 % longitudinal forces
 syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
-syms F_ipxlong F_ipylong F_spring2
+syms F_ipxlong F_ipylong F_ispring2
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 J_i
+% second moment of area
+syms J_i A_i1 A_i2 A_i3 y_i1 y_i2 y_i3 y_ibar I_i1 I_i2 I_i3 
 % safety factors
 syms SF.sigma_ix SF.sigma_i1y SF.sigma_i2y SF.sigma_i3y SF.sigma_ibend1 SF.sigma_ibend2
 syms SF.tau_i1 SF.tau_i2 SF.tau_i3 SF.sigma_irupture 
@@ -114,7 +131,20 @@ F_iaxlong = I.F_ia(1)*cosd(I.theta) + I.F_ia(2)*sind(I.theta);
 F_iaylong = -I.F_ia(1)*sind(I.theta) + I.F_ia(2)*cosd(I.theta);
 F_ipxlong = I.F_ip(1)*cosd(I.theta) + I.F_ip(2)*sind(I.theta);
 F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_isp(2)*cosd(I.theta);
-F_spring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
+F_ispring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
+
+% SECOND MOMENT OF AREA
+A_i1 = I.B1*I.H1;
+A_i2 = 0.5*(I.B1 + I.B2)*(I.H2 - I.H1);
+A.i3 = I.B2*(I.H4 - I.H2);
+y_i1 = I.H1/2;
+y_i2 = ((I.H4 - I.H2)*((2*I.B2 + I.B1)/(I.B2 + I.B1)))/3;
+y_i3 = I.H2 + ((I.H4 - I.H2)/2);
+I_i1 = I.B1*(I.H1)^3;
+I_i2 = (I.H2 - I.H1)*(I.B2 - I.B1)*(I.B2^2 + 7*I.B1^2)/48;
+I_i3 = I.B2*(I.H4-I.H2)^3/12;
+y_ibar = (A_i1*y_i1 + A_i2*y_i2 + A_i3*y_i3)/(A_i1 + A_i2 + A_i1);
+J_i = (I_i1 + A_i1*(y_ibar - y_i1)^2) + (I_i2 + A_i2*(y_ibar - y_i2)^2) + (I_i3 + A_i3*(y_ibar - y_i3)^2);
 
 % STRESS CALCULATIONS
 % along x long
@@ -125,28 +155,28 @@ else
 end
 
 % along y long
-if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_spring2)
+if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_ispring2)
     sigma_i1y = (F_ct + F_icomylong)/(I.B1*I.T);
     sigma_irupture = (F_ct + F_icomylong)/(I.B1*I.T - 2*Bearing.OD*I.T);
 else
-    sigma_i1y = (F_iaylong + F_ipylong + F_spring2)/(I.B1*I.T);
-    sigma_irupture = (F_iaylong + F_ipylong + F_spring2)/(I.B1*I.T - 2*Bearing.OD*I.T);
+    sigma_i1y = (F_iaylong + F_ipylong + F_ispring2)/(I.B1*I.T);
+    sigma_irupture = (F_iaylong + F_ipylong + F_ispring2)/(I.B1*I.T - 2*Bearing.OD*I.T);
 end
 
-if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_spring2)
+if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_ispring2)
     sigma_i2y = F_ct / (I.B2*I.T);
     sigma_i3y = F_ct / (I.B3*I.T);
 else
-    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (I.B2*I.T);
-    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (I.B3*I.T);
+    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_ispring2) / (I.B2*I.T);
+    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_ispring2) / (I.B3*I.T);
 end
 
 % bending
-moment_i1 = I.I*I.alpha(3) + (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
-moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_spring2 + I.com(2)*F_cn;
+moment_i1 = I.I*I.alpha(3) + (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_ispring2);
+moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_ispring2 + I.com(2)*F_cn;
 
 sigma_ibend1 = -moment_i1*((I.H4-I.H3)/2) / ((I.B3*(I.H4-I.H3)^3)/12);
-sigma_ibend2 = %idk what y and I is for this shape
+sigma_ibend2 = -moment_i2 * y_ibar / J_i;
 
 % shear
 if abs(F_cn + F_icomxlong) > abs(F_iaxlong + F_ipxlong)
@@ -255,7 +285,7 @@ F_psxlong = P.F_sp(1)*sind(P.theta) - P.F_sp(2)*cosd(P.theta);
 F_psylong = P.F_sp(1)*cosd(P.theta) + P.F_sp(2)*sind(P.theta);
 F_pixlong = P.F_ip(1)*sind(P.theta) - P.F_ip(2)*cosd(P.theta);
 F_piylong = P.F_ip(1)*cosd(P.theta) + P.F_ip(2)*sind(P.theta);
-F_pspring2 = -1*F_spring2; %F_pspring2
+F_pspring2 = -1*F_ispring2;
 
 % STRESS CALCULATIONS
 % along y long and rupture
