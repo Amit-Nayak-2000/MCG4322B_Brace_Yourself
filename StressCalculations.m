@@ -11,16 +11,18 @@ g = 9.81;
 
 %% Superior Link
 
-% Symbols
+% SYMBOLS
 % longitudinal forces
 syms F_tt F_tn F_scomxlong F_scomylong F_saxlong F_saylong
 syms F_spxlong F_spylong F_sspring1
-
 % stresses
 syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
 syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2
+% safety factors
+syms SF_sigma_sx SF_sigma_s1y SF_sigma_s2y SF_sigma_s3y SF_sigma_sbend1 SF_sigma_sbend2
+syms SF_sigma_srupture SF_tau_s1 SF_tau_s2 SF_tau_s3
 
-% longitudinal force calculations
+% LONGITUDINAL FORCE CALCULATIONS
 F_tt = -S.F_t(1)*sind(S.theta) + S.F_t(2)*cosd(S.theta);
 F_tn = S.F_t(1)*cosd(S.theta) + S.F_t(2)*sind(S.theta);
 F_scomxlong = S.m*S.a(1)*cosd(S.theta) + S.m*S.a(2)*sind(S.theta) - S.m*g*sind(S.theta); 
@@ -31,7 +33,7 @@ F_spxlong = S.F_sp(1)*cosd(S.theta) + S.F_sp(2)*sind(S.theta);
 F_spylong = -S.F_sp(1)*sind(S.theta) + S.F_sp(2)*cosd(S.theta);
 F_sspring1 = -TorsionalSpring.Torque(3)*0.4*S.L;
 
-% stress calculations
+% STRESS CALCULATIONS
 % along x long
 if abs(F_tn) > abs(F_scomxlong + F_saxlong + F_spxlong)
     sigma_sx = F_tn/((S.H4-S.H3)*S.T);
@@ -78,8 +80,17 @@ else
     tau_s3 = (F_scomxlong + F_saxlong + F_spxlong)/(S.B3*S.T);
 end
 
-% Safety Factors
-
+% SAFETY FACTOR CALCULATIONS
+SF_sigma_sx = sigma_sx/S.E;
+SF_sigma_s1y = sigma_s1y/S.E;
+SF_sigma_s2y = sigma_s2y/S.E;
+SF_sigma_s3y = sigma_s3y/S.E;
+SF_sigma_sbend1 = sigma_sbend1/S.E;
+SF_sigma_sbend2 = sigma_sbend2/S.E;
+SF_sigma_srupture = sigma_srupture/S.E;
+SF_tau_s1 = tau_s1/S.G;
+SF_tau_s2 = tau_s2/S.G;
+SF_tau_s3 = tau_s3/S.G;
 
 %% Inferior Link
 
@@ -89,8 +100,9 @@ syms F_ipxlong F_ipylong F_spring2
 
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
-syms tau_i1 tau_i2 tau_i3 sigma_irupture
-syms moment_i1 moment_i2 shearforce_i1 shearforce_i2 shearforce_i3
+syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 
+syms SF_ix SF_i1y SF_i2y SF_i3y SF_ibend1 SF_ibend2 SF_ishear1 SF_ishear2 SF_ishear3 SF_irupture
+
 
 % longitudinal force calculations
 F_ct = -I.F_c(1)*sind(I.theta) + I.F_c(2)*cosd(I.theta);
@@ -130,41 +142,38 @@ else
 end
 
 % bending
-moment_i1 = (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
-% add I*alpha
-moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_spring2;
-% add F_cn (+)
+moment_i1 = Inferior.I*Inferior.alpha(3) + (Inferior.B3/2)*F_ct - (Inferior.B3/2 - Inferior.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
+moment_i2 = Inferior.I*Inferior.alpha(3) - (Inferior.L/2)*F_iaylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_iaxlong + (Inferior.L/2)*F_ipylong - (Inferior.H4 - Inferior.com(2) - Inferior.H1/2)*F_ipxlong + ((Inferior.L/2)-0.4*Inferior.L)*F_spring2 + Inferior.com(2)*F_cn;
 
-sigma_ibend1 = -moment_i1*((I.H4-I.H3)/2) / ((I.B3*(I.H4-I.H3)^3)/12);
+sigma_ibend1 = -moment_i1*((Inferior.H4-Inferior.H3)/2) / ((Inferior.B3*(Inferior.H4-Inferior.H3)^3)/12);
 sigma_ibend2 = %idk what y and I is for this shape
 
 % shear
-shearforce_i1 = F_iaxlong + F_ipxlong; 
-shearforce_i2 = F_icomxlong;
-shearforce_i3 = F_cn;
-% slight confusion, i think im supposed to keep adding...
-tau_i1 = shear_i1/(I.B1*I.T); %should i use B1 here or should we use 
-tau_i2 = shear_i2/(I.B2*I.T);
-tau_i3 = shear_i3/(I.B3*I.T);
-
-% shear
 if abs(F_cn + F_icomxlong) > abs(F_iaxlong + F_ipxlong)
-    tau_i1 = (F_cn + F_icomxlong)/(I.B1*I.T);
+    tau_i1 = (F_cn + F_icomxlong)/(Inferior.B1*Inferior.T);
 else
-    tau_i1 = (F_iaxlong + F_ipxlong)/(I.B1*I.T);
+    tau_i1 = (F_iaxlong + F_ipxlong)/(Inferior.B1*Inferior.T);
 end
 
 if abs(F_cn) > abs(F_scomxlong + F_saxlong + F_spxlong)
-    tau_i2 = (F_tn)/(S.B2*S.T);
-    tau_i3 = (F_tn)/(S.B3*S.T);
+    tau_i2 = (F_tn)/(Superior.B2*Superior.T);
+    tau_i3 = (F_tn)/(Superior.B3*Superior.T);
 else
-    tau_i2 = (F_scomxlong + F_saxlong + F_spxlong)/(S.B2*S.T);
-    tau_i3 = (F_scomxlong + F_saxlong + F_spxlong)/(S.B3*S.T);
+    tau_i2 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B2*Superior.T);
+    tau_i3 = (F_scomxlong + F_saxlong + F_spxlong)/(Superior.B3*Superior.T);
 end
 
 % Safety Factors
-
-
+SF_ix = sigma_ix/E;
+SF_i1y = sigma_i1y/E;
+SF_i2y = sigma_i2y/E;
+SF_i3y = sigma_i3y/E;
+SF_ibend1 = sigma_ibend1/E;
+SF_ibend2 = sigma_ibend2/E;
+SF_ishear1 = tau_i1/E;
+SF_ishear2 = tau_i2/E;
+SF_ishear3 = tau_i3/E;
+SF_irupture = sigma_irupture/E;
 
 
 
@@ -298,6 +307,20 @@ end
 
 
 %% Bolts
+syms tau_sa tau_sp tau_ia tau_ip
+syms SF_shearsa SF_shearsp SF_shearia SF_shearip
+
+% Stress Calculations
+tau_sa = (4*norm(Superior.F_sa))/pi*Bolt.d; %NEED to create bolt object, d for diameter
+tau_sp = (4*norm(Superior.F_sp))/pi*Bolt.d;
+tau_ia = (4*norm(Superior.F_ia))/pi*Bolt.d;
+tau_ip = (4*norm(Superior.F_ip))/pi*Bolt.d;
+
+%Safety Factor
+SF_shearsa = tau_sa/Bolt.E; %NEED to define bolt mod in bolt object
+SF_shearsp = tau_sp/Bolt.E; 
+SF_shearia = tau_ia/Bolt.E; 
+SF_shearip = tau_ip/Bolt.E; 
 
 
 
