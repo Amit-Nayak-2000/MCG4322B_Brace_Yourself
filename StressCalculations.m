@@ -368,7 +368,6 @@ SF.tau_sp = Bolt.E/tau_sp;
 SF.tau_ia = Bolt.E/tau_ia; 
 SF.tau_ip = Bolt.E/tau_ip; 
 
-
 %% Bearings
 
 % SYMBOLS
@@ -382,7 +381,6 @@ F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
 
 % SAFETY FACTOR CALCULATION
 SF.sigma_bearing = F_allow/F_bearing; 
-
 
 %% return or modifying object values
 % we will figure this out soon
