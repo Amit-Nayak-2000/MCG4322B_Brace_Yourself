@@ -332,6 +332,7 @@ SF.tau_p1 = P.G/tau_p1;
 SF.tau_p2 = P.G/tau_p2;
 
 %% Velcro
+
 % SYMBOLS
 syms tau_vt tau_vc
 syms SF.tau_vt SF.tau_vc
@@ -370,7 +371,17 @@ SF.tau_ip = Bolt.E/tau_ip;
 
 %% Bearings
 
+% SYMBOLS
+syms F_bearing C_10 L_10 F_allow L 
 
+% BEARING FORCE CALCULATION
+
+
+% ALLOWABLE FORCE CALCULATION
+F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
+
+% SAFETY FACTOR CALCULATION
+SF.sigma_bearing = F_allow/F_bearing; 
 
 
 %% return or modifying object values

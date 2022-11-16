@@ -112,7 +112,7 @@ SF.tau_s3 = S.G/tau_s3;
 % SYMBOLS
 % longitudinal forces
 syms F_ct F_cn F_icomxlong F_icomylong F_iaxlong F_iaylong
-syms F_ipxlong F_ipylong F_pspring2
+syms F_ipxlong F_ipylong F_ispring2
 % stresses
 syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 J_i
@@ -131,7 +131,7 @@ F_iaxlong = I.F_ia(1)*cosd(I.theta) + I.F_ia(2)*sind(I.theta);
 F_iaylong = -I.F_ia(1)*sind(I.theta) + I.F_ia(2)*cosd(I.theta);
 F_ipxlong = I.F_ip(1)*cosd(I.theta) + I.F_ip(2)*sind(I.theta);
 F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_isp(2)*cosd(I.theta);
-F_pspring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
+F_ispring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
 
 % SECOND MOMENT OF AREA
 A_i1 = I.B1*I.H1;
@@ -155,25 +155,25 @@ else
 end
 
 % along y long
-if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_pspring2)
+if abs(F_ct + F_icomylong)>abs(F_iaylong + F_ipylong + F_ispring2)
     sigma_i1y = (F_ct + F_icomylong)/(I.B1*I.T);
     sigma_irupture = (F_ct + F_icomylong)/(I.B1*I.T - 2*Bearing.OD*I.T);
 else
-    sigma_i1y = (F_iaylong + F_ipylong + F_pspring2)/(I.B1*I.T);
-    sigma_irupture = (F_iaylong + F_ipylong + F_pspring2)/(I.B1*I.T - 2*Bearing.OD*I.T);
+    sigma_i1y = (F_iaylong + F_ipylong + F_ispring2)/(I.B1*I.T);
+    sigma_irupture = (F_iaylong + F_ipylong + F_ispring2)/(I.B1*I.T - 2*Bearing.OD*I.T);
 end
 
-if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_pspring2)
+if abs(F_ct)>abs(F_icomylong + F_iaylong + F_ipylong + F_ispring2)
     sigma_i2y = F_ct / (I.B2*I.T);
     sigma_i3y = F_ct / (I.B3*I.T);
 else
-    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (I.B2*I.T);
-    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_spring2) / (I.B3*I.T);
+    sigma_i2y = (F_icomylong + F_iaylong + F_ipylong + F_ispring2) / (I.B2*I.T);
+    sigma_i3y = (F_icomylong + F_iaylong + F_ipylong + F_ispring2) / (I.B3*I.T);
 end
 
 % bending
-moment_i1 = I.I*I.alpha(3) + (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_spring2);
-moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_spring2 + I.com(2)*F_cn;
+moment_i1 = I.I*I.alpha(3) + (I.B3/2)*F_ct - (I.B3/2 - I.B2/2)*(F_icomylong + F_iaylong + F_ipylong + F_ispring2);
+moment_i2 = I.I*I.alpha(3) - (I.L/2)*F_iaylong - (I.H4 - I.com(2) - I.H1/2)*F_iaxlong + (I.L/2)*F_ipylong - (I.H4 - I.com(2) - I.H1/2)*F_ipxlong + ((I.L/2)-0.4*I.L)*F_ispring2 + I.com(2)*F_cn;
 
 sigma_ibend1 = -moment_i1*((I.H4-I.H3)/2) / ((I.B3*(I.H4-I.H3)^3)/12);
 sigma_ibend2 = -moment_i2 * y_ibar / J_i;
@@ -285,7 +285,7 @@ F_psxlong = P.F_sp(1)*sind(P.theta) - P.F_sp(2)*cosd(P.theta);
 F_psylong = P.F_sp(1)*cosd(P.theta) + P.F_sp(2)*sind(P.theta);
 F_pixlong = P.F_ip(1)*sind(P.theta) - P.F_ip(2)*cosd(P.theta);
 F_piylong = P.F_ip(1)*cosd(P.theta) + P.F_ip(2)*sind(P.theta);
-F_pspring2 = -1*F_spring2; %F_pspring2
+F_pspring2 = -1*F_ispring2;
 
 % STRESS CALCULATIONS
 % along y long and rupture
@@ -332,6 +332,7 @@ SF.tau_p1 = P.G/tau_p1;
 SF.tau_p2 = P.G/tau_p2;
 
 %% Velcro
+
 % SYMBOLS
 syms tau_vt tau_vc
 syms SF.tau_vt SF.tau_vc
@@ -370,7 +371,16 @@ SF.tau_ip = Bolt.E/tau_ip;
 
 %% Bearings
 
+% SYMBOLS
+syms F_bearing C_10 L_10 F_allow L 
 
+% BEARING FORCE CALCULATION
+
+% ALLOWABLE FORCE CALCULATION
+F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
+
+% SAFETY FACTOR CALCULATION
+SF.bearing = F_allow/F_bearing; %add this to the safetr
 
 
 %% return or modifying object values

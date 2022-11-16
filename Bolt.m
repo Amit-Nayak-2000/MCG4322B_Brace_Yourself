@@ -11,7 +11,15 @@ classdef Bolt < handle
         %Physical Properties
         E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
         SU = 505e6; %Ultimate Tensile Strength of 304 stainless steel (Pa)
-        SY = 215e6; %Yield Strength of 304 stainless steel (Pa)
-        
+        SY = 215e6; %Yield Strength of 304 stainless steel (Pa) 
+    end
+    
+    methods
+        %Method to intialize length and diameter of bolt. 
+        function obj = initBolt(obj, length, diameter)
+            obj.L = length; 
+            obj.D = diameter;
+        end
+         
     end
 end
