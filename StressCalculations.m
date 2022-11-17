@@ -370,22 +370,16 @@ SF.tau_ip = Bolt.E/tau_ip;
 %% Bearings
 
 % SYMBOLS
-syms F_bearing C_10 L_10 F_allow L 
-
-% BEARING FORCE CALCULATION
-
+syms C_10 L_10 F_allow L 
 
 % ALLOWABLE FORCE CALCULATION
 F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
 
 % SAFETY FACTOR CALCULATION
-SF.sigma_bearing = F_allow/F_bearing; 
-
-%% return or modifying object values
-% we will figure this out soon
-
-
-
+SF.sigma_bearingsa = F_allow/norm(S.F_sa);
+SF.sigma_bearingsp = F_allow/norm(S.F_sp);
+SF.sigma_bearingia = F_allow/norm(S.F_ia);
+SF.sigma_bearingip = F_allow/norm(S.F_ip);
 
 end
 
