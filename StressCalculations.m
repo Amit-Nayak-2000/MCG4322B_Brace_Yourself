@@ -343,8 +343,8 @@ syms K sigma_spring1 sigma_spring2
 K = (4*TorsionalSpring.C^2 - TorsionalSpring.C - 1) / (4*TorsionalSpring.C*(TorsionalSpring.C-1));
 
 % STRESS CALCULATION
-sigma_spring1 = (K*32*abs(F_sspring1)*TorsionalSpring.d/2) / (pi*TorsionalSpring.d^3); %is r the radius of the wire?
-sigma_spring2 = (K*32*abs(F_ispring2)*TorsionalSpring.d/2) / (pi*TorsionalSpring.d^3); %is r the radius of the wire?
+sigma_spring1 = (K*32*abs(F_sspring1)*0.4*S.L) / (pi*TorsionalSpring.d^3);
+sigma_spring2 = (K*32*abs(F_ispring2)*0.4*I.L) / (pi*TorsionalSpring.d^3);
 
 % SAFETY FACTOR CALCULATIONS
 SF.sigma_spring1 = TorsionalSpring.E/sigma_spring1;
