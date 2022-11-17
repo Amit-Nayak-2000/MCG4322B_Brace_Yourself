@@ -2,6 +2,7 @@ classdef Bolt < handle
     %BOLT
     %Contains essential properties of bolt.
     %Dimensions, Material Properties
+    %ADD Length calc for solidworks param
     
     properties
         %Geometric Properties (m)
@@ -15,9 +16,8 @@ classdef Bolt < handle
     end
     
     methods
-        %Method to intialize length and diameter of bolt. 
-        function obj = initBolt(obj, length, diameter)
-            obj.L = length; 
+        %Method to intialize and diameter of bolt. 
+        function obj = initBolt(obj, diameter)
             obj.D = diameter;
         end
          

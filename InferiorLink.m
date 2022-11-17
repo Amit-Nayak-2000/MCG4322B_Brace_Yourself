@@ -25,6 +25,7 @@ classdef InferiorLink < handle
         E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
         SU = 505e6; %Ultimate Tensile Strength of 304 stainless steel (Pa)
         SY = 215e6; %Yield Strength of 304 stainless steel (Pa)
+        G = 74e9; %Shear modulus of 304 stainless steel (Pa)
         
         
         %Dynamical Properties

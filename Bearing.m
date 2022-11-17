@@ -11,6 +11,8 @@ classdef Bearing < handle
         
         %Physical Properties
         LC %Load capacity of the bearing.
+        C_10 %Catalogue load rating
+        L_10 %Number of rev for 90% reliability
         
     end
     

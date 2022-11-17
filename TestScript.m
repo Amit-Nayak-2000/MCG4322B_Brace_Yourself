@@ -19,11 +19,16 @@ P = PosteriorLink;
 T1 = TorsionalSpring;
 T2 = TorsionalSpring;
 ZF = Z_forces;
+VT = Velcro;
+VC = Velcro;
+Blt = Bolt;
+Brng = Bearing;
+SF = SafetyFactor;
 
 disp("Link and Spring Object Instantiated.");
 
 %Initialize dimensions based on Mass and Height
-Init_System(mass, height, S, In, P, A, T1, T2);
+Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
 
 disp("Link and Spring Objects Initialized.");
 
@@ -55,6 +60,8 @@ disp("Torsional Springs Initialized.");
 Kinetic_Saggital(S,In,P,A, T1, T2);
 Kinetic_Frontal(S,In,P,ZF,frame,mass);
 disp("Kinetics Calculated.");
+
+StressCalculations(S, In, A, P, T1, T2, VT, VC, Blt, Brng, SF)
 
 disp("Frame: " + frame);
 

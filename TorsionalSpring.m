@@ -34,6 +34,7 @@ classdef TorsionalSpring < handle
             obj.D = 5.85E-03;
             obj.Na = obj.Nb + ((obj.l1 + obj.l2)/(3*pi*obj.D));
             obj.d = ((obj.K*64*obj.D*obj.Na)/obj.E)^(0.25);
+            obj.C = obj.D/obj.d;
         end
         
         

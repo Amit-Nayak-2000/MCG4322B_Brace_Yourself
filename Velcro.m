@@ -14,7 +14,7 @@ classdef Velcro < handle
     end
     
     methods
-        %Method to intialize inner diameter and outer diameter of bearing. 
+        %Method to intialize inner diameter and outer diameter of velcro. 
         function obj = initVelcro(obj, length, width)
             obj.L = length; 
             obj.W = width;

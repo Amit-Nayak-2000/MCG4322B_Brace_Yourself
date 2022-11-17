@@ -35,7 +35,7 @@ F_sspring1 = -TS1.Torque(3)*0.4*S.L;
 % SECOND MOMENT OF AREA
 A_s1 = S.B1*S.H1;
 A_s2 = 0.5*(S.B1 + S.B2)*(S.H2 - S.H1);
-A.s3 = S.B2*(S.H4 - S.H2);
+A_s3 = S.B2*(S.H4 - S.H2);
 y_s1 = S.H1/2;
 y_s2 = ((S.H4 - S.H2)*((2*S.B2 + S.B1)/(S.B2 + S.B1)))/3;
 y_s3 = S.H2 + ((S.H4 - S.H2)/2);
@@ -124,13 +124,13 @@ F_icomylong = -I.m*I.a(1)*sind(I.theta) + I.m*I.a(2)*cosd(I.theta) - I.m*g*cosd(
 F_iaxlong = I.F_ia(1)*cosd(I.theta) + I.F_ia(2)*sind(I.theta);
 F_iaylong = -I.F_ia(1)*sind(I.theta) + I.F_ia(2)*cosd(I.theta);
 F_ipxlong = I.F_ip(1)*cosd(I.theta) + I.F_ip(2)*sind(I.theta);
-F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_isp(2)*cosd(I.theta);
+F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_ip(2)*cosd(I.theta);
 F_ispring2 = -TS2.Torque(3)*0.4*I.L;
 
 % SECOND MOMENT OF AREA
 A_i1 = I.B1*I.H1;
 A_i2 = 0.5*(I.B1 + I.B2)*(I.H2 - I.H1);
-A.i3 = I.B2*(I.H4 - I.H2);
+A_i3 = I.B2*(I.H4 - I.H2);
 y_i1 = I.H1/2;
 y_i2 = ((I.H4 - I.H2)*((2*I.B2 + I.B1)/(I.B2 + I.B1)))/3;
 y_i3 = I.H2 + ((I.H4 - I.H2)/2);
@@ -235,7 +235,7 @@ else
 end
 
 % bending
-moment_a = -(A.L/2)*F_asxlong - (A.L/2-0.4*S.L)*F_aspring1 + (A.L/2)*F_aixlong + A.I*alpha(3);
+moment_a = -(A.L/2)*F_asxlong - (A.L/2-0.4*S.L)*F_aspring1 + (A.L/2)*F_aixlong + A.I*A.alpha(3);
 sigma_abend = -moment_a * (A.L/2) / A.I;
 
 % shear
@@ -296,7 +296,7 @@ else
 end
 
 % bending
-moment_p = -(P.L/2)*F_psxlong + (P.L/2-0.4*I.L)*F_pspring2 + (P.L/2)*F_pixlong + P.I*alpha(3);
+moment_p = -(P.L/2)*F_psxlong + (P.L/2-0.4*I.L)*F_pspring2 + (P.L/2)*F_pixlong + P.I*P.alpha(3);
 sigma_pbend = -moment_p * (P.L/2) / P.I;
 
 % shear
@@ -358,8 +358,8 @@ syms tau_sa tau_sp tau_ia tau_ip
 % STRESS CALCULATIONS
 tau_sa = (4*norm(S.F_sa))/pi*Bolt.D;
 tau_sp = (4*norm(S.F_sp))/pi*Bolt.D;
-tau_ia = (4*norm(S.F_ia))/pi*Bolt.D;
-tau_ip = (4*norm(S.F_ip))/pi*Bolt.D;
+tau_ia = (4*norm(I.F_ia))/pi*Bolt.D;
+tau_ip = (4*norm(I.F_ip))/pi*Bolt.D;
 
 % SAFETY FACTOR CALCULATIONS
 SF.tau_sa = Bolt.E/tau_sa; 
@@ -378,8 +378,8 @@ F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
 % SAFETY FACTOR CALCULATION
 SF.sigma_bearingsa = F_allow/norm(S.F_sa);
 SF.sigma_bearingsp = F_allow/norm(S.F_sp);
-SF.sigma_bearingia = F_allow/norm(S.F_ia);
-SF.sigma_bearingip = F_allow/norm(S.F_ip);
+SF.sigma_bearingia = F_allow/norm(I.F_ia);
+SF.sigma_bearingip = F_allow/norm(I.F_ip);
 
 end
 

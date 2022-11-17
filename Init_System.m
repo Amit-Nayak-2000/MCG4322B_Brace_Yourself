@@ -1,4 +1,4 @@
-function [] = Init_System(mass,height,S,In,P,A,T1,T2)
+function [] = Init_System(mass,height,S,In,P,A,T1,T2,VT,VC,Bolt,Bearing)
 %INIT_SYSTEM 
 %Initialize System Objects based on User Params.
 
@@ -52,7 +52,7 @@ A.T = thickness;
 In.T = thickness;
 P.T = thickness;
 
-%Assign bolt hole diameters
+%Assign bolt hole diameters CHANGE THIS
 
 S.bolt_hole_diam=bolt_hole_size;
 In.bolt_hole_diam=bolt_hole_size;
@@ -66,6 +66,26 @@ A = calculate_inertial_props(A);
 In = calculate_inertial_props(In);
 P = calculate_inertial_props(P);
 
+%Velcro
+LVT=pi*thighdiameter;
+WVT=0.2*LVT;
 
+LVC=pi*calfdiameter;
+WVC=0.2*LVC;
+
+VT = initVelcro(VT,LVT,WVT);
+VC = initVelcro(VC,LVC,WVC);
+
+%Bolt
+Bolt_diam=0.003; %[m]
+
+Bolt = initBolt(Bolt,Bolt_diam);
+
+%Bearing
+Bearing_ID = 0.003; %[m]
+Bearing_OD = 0.008; %[m]
+Bearing.C_10=560; %[N]
+
+Bearing=initBearing(Bearing,Bearing_ID,Bearing_OD);
 end
 
