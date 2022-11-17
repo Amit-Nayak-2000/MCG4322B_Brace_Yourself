@@ -61,8 +61,8 @@ classdef PosteriorLink < handle
         %Method to calculate vectors from joints to COM.
         function obj = calculateCOM(obj)
             %negative since theta angle starts at joint IP.
-            obj.rsp = [-0.5*obj.L*cosd(obj.theta); -0.5*obj.L*sind(obj.theta); 0];
-            obj.rip = -obj.rsp;
+            obj.rip = [0.5*obj.L*cosd(obj.theta); 0.5*obj.L*sind(obj.theta); 0];
+            obj.rsp = -obj.rip;
         end
         
         %method to output dimensions to .txt files.
