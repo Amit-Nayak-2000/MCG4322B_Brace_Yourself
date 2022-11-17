@@ -1,4 +1,4 @@
-function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC, Bolt, Bearing, SF)
+function [] = StressCalculations(S, I, A, P, TS1, TS2, VT, VC, Bolt, Bearing, SF)
 % calculates stresses related to S link
 % inputs: ( , )
 % output: [ , , , , ]
@@ -30,7 +30,7 @@ F_saxlong = S.F_sa(1)*cosd(S.theta) + S.F_sa(2)*sind(S.theta);
 F_saylong = -S.F_sa(1)*sind(S.theta) + S.F_sa(2)*cosd(S.theta);
 F_spxlong = S.F_sp(1)*cosd(S.theta) + S.F_sp(2)*sind(S.theta);
 F_spylong = -S.F_sp(1)*sind(S.theta) + S.F_sp(2)*cosd(S.theta);
-F_sspring1 = -TorsionalSpring.Torque(3)*0.4*S.L;
+F_sspring1 = -TS1.Torque(3)*0.4*S.L;
 
 % SECOND MOMENT OF AREA
 A_s1 = S.B1*S.H1;
@@ -125,7 +125,7 @@ F_iaxlong = I.F_ia(1)*cosd(I.theta) + I.F_ia(2)*sind(I.theta);
 F_iaylong = -I.F_ia(1)*sind(I.theta) + I.F_ia(2)*cosd(I.theta);
 F_ipxlong = I.F_ip(1)*cosd(I.theta) + I.F_ip(2)*sind(I.theta);
 F_ipylong = -I.F_ip(1)*sind(I.theta) + I.F_isp(2)*cosd(I.theta);
-F_ispring2 = -TorsionalSpring.Torque(3)*0.4*I.L;
+F_ispring2 = -TS2.Torque(3)*0.4*I.L;
 
 % SECOND MOMENT OF AREA
 A_i1 = I.B1*I.H1;
@@ -339,16 +339,16 @@ SF.tau_vc = VC.G/tau_vc;
 % SYMBOLS
 syms K sigma_spring1 sigma_spring2
 
-% STRESS CORRETION FACTOR
-K = (4*TorsionalSpring.C^2 - TorsionalSpring.C - 1) / (4*TorsionalSpring.C*(TorsionalSpring.C-1));
+% STRESS CORRECTION FACTOR
+K = (4*TS1.C^2 - TS1.C - 1) / (4*TS1.C*(TS1.C-1));
 
 % STRESS CALCULATION
-sigma_spring1 = (K*32*abs(F_sspring1)*0.4*S.L) / (pi*TorsionalSpring.d^3);
-sigma_spring2 = (K*32*abs(F_ispring2)*0.4*I.L) / (pi*TorsionalSpring.d^3);
+sigma_spring1 = (K*32*abs(F_sspring1)*0.4*S.L) / (pi*TS1.d^3);
+sigma_spring2 = (K*32*abs(F_ispring2)*0.4*I.L) / (pi*TS2.d^3);
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_spring1 = TorsionalSpring.E/sigma_spring1;
-SF.sigma_spring2 = TorsionalSpring.E/sigma_spring2;
+SF.sigma_spring1 = TS1.E/sigma_spring1;
+SF.sigma_spring2 = TS2.E/sigma_spring2;
 
 %% Bolts
 
