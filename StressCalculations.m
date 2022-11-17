@@ -20,9 +20,6 @@ syms sigma_sx sigma_s1y sigma_s2y sigma_s3y sigma_sbend1 sigma_sbend2
 syms tau_s1 tau_s2 tau_s3 sigma_srupture moment_s1 moment_s2 
 % second moment of area
 syms J_s A_s1 A_s2 A_s3 y_s1 y_s2 y_s3 y_sbar I_s1 I_s2 I_s3 
-% safety factors
-syms SF.sigma_sx SF.sigma_s1y SF.sigma_s2y SF.sigma_s3y SF.sigma_sbend1 SF.sigma_sbend2
-syms SF.sigma_srupture SF.tau_s1 SF.tau_s2 SF.tau_s3
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_tt = -S.F_t(1)*sind(S.theta) + S.F_t(2)*cosd(S.theta);
@@ -118,9 +115,6 @@ syms sigma_ix sigma_i1y sigma_i2y sigma_i3y sigma_ibend1 sigma_ibend2
 syms tau_i1 tau_i2 tau_i3 sigma_irupture moment_i1 moment_i2 J_i
 % second moment of area
 syms J_i A_i1 A_i2 A_i3 y_i1 y_i2 y_i3 y_ibar I_i1 I_i2 I_i3 
-% safety factors
-syms SF.sigma_ix SF.sigma_i1y SF.sigma_i2y SF.sigma_i3y SF.sigma_ibend1 SF.sigma_ibend2
-syms SF.tau_i1 SF.tau_i2 SF.tau_i3 SF.sigma_irupture 
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_ct = -I.F_c(1)*sind(I.theta) + I.F_c(2)*cosd(I.theta);
@@ -212,8 +206,6 @@ SF.tau_i3 = I.G/tau_i3;
 syms F_acomxlong F_acomylong F_asxlong F_asylong F_aixlong F_aiylong F_aspring1 moment_a J_a
 % stresses
 syms sigma_a1y sigma_a2y sigma_abend tau_a1 tau_a2 sigma_arupture1 sigma_arupture2
-% safety factors
-syms SF.sigma_a1y SF.sigma_a2y SF.sigma_abend SF.tau_a1 SF.tau_a2 SF.sigma_arupture1 SF.sigma_arupture2
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_acomxlong = -A.m*A.a(1)*sind(A.theta) + A.m*A.a(2)*cosd(A.theta) - A.m*g*cosd(A.theta);
@@ -275,8 +267,6 @@ SF.tau_a2 = A.G/tau_a2;
 syms F_pcomxlong F_pcomylong F_psxlong F_psylong F_pixlong F_piylong F_pspring2 moment_p J_p
 % stresses
 syms sigma_p1y sigma_p2y sigma_pbend tau_p1 tau_p2 sigma_prupture1 sigma_prupture2
-% safety factors
-syms SF.sigma_p1y SF.sigma_p2y SF.sigma_pbend SF.tau_p1 SF.tau_p2 SF.sigma_prupture1 SF.sigma_prupture2
 
 % LONGITUDINAL FORCE CALCULATIONS
 F_pcomxlong = P.m*P.a(1)*sind(P.theta) - P.m*P.a(2)*cosd(P.theta) + P.m*g*cosd(P.theta);
@@ -335,7 +325,6 @@ SF.tau_p2 = P.G/tau_p2;
 
 % SYMBOLS
 syms tau_vt tau_vc
-syms SF.tau_vt SF.tau_vc
 
 % STRESS CALCULATIONS
 tau_vt = F_tn / (VT.L * VT.W);
@@ -349,7 +338,6 @@ SF.tau_vc = VC.G/tau_vc;
 
 % SYMBOLS
 syms K sigma_spring1 sigma_spring2
-syms SF.sigma_spring1 SF.sigma_spring2
 
 % STRESS CORRETION FACTOR
 K = (4*TorsionalSpring.C^2 - TorsionalSpring.C - 1) / (4*TorsionalSpring.C*(TorsionalSpring.C-1));
@@ -366,7 +354,6 @@ SF.sigma_spring2 = TorsionalSpring.E/sigma_spring2;
 
 % SYMBOLS
 syms tau_sa tau_sp tau_ia tau_ip
-syms SF.tau_sa SF.tau_sp SF.tau_ia SF.tau_ip
 
 % STRESS CALCULATIONS
 tau_sa = (4*norm(S.F_sa))/pi*Bolt.D;
