@@ -60,22 +60,22 @@ disp("Frame: " + frame);
 
 
 %Assign file names
-S.file='superior_link.txt';
-In.file='inferior_link.txt';
-A.file='anterior_link.txt';
-P.file='posterior_link.txt';
+% S.file='superior_link.txt';
+% In.file='inferior_link.txt';
+% A.file='anterior_link.txt';
+% P.file='posterior_link.txt';
 
-S.outputDimensions();
-In.outputDimensions();
-A.outputDimensions();
-P.outputDimensions();
+% S.outputDimensions();
+% In.outputDimensions();
+% A.outputDimensions();
+% P.outputDimensions();
 
 
 
-setupPartFiles(S,"S")
-setupPartFiles(In,"In")
-setupPartFiles(A,"A")
-setupPartFiles(P,"P")
+% setupPartFiles(S,"S")
+% setupPartFiles(In,"In")
+% setupPartFiles(A,"A")
+% setupPartFiles(P,"P")
 
 
 

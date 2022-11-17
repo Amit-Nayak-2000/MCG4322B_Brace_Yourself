@@ -106,15 +106,15 @@ classdef SuperiorLink < handle
             obj.com = [comx; comy; 0];
             
             %rsa & rsp calculations
-            ry = obj.H4 - Ycom - (obj.H1 / 2); % y component
-            rxa = (obj.B2 / 2) + (obj.L / 2) - Xcom; % x component to joint SA.
-            rxp = abs((obj.B2 / 2) - (obj.L / 2) - Xcom); % x component to joint SP, need abs val since signs are handled below.
+            ry = abs(abs(obj.H4) - abs(Ycom) - abs(obj.H1 / 2)); % y component
+            rxa = abs(abs(obj.B2 / 2) + abs(obj.L / 2) - abs(Xcom)); % x component to joint SA.
+            rxp = abs(abs(obj.B2 / 2) - abs(obj.L / 2) - abs(Xcom)); % x component to joint SP, need abs val since signs are handled below.
             
             obj.rsa = [ry*sind(obj.theta) + rxa*cosd(obj.theta); -ry*cosd(obj.theta) + rxa*sind(obj.theta); 0];
             obj.rsp = [ry*sind(obj.theta) - rxp*cosd(obj.theta); -ry*cosd(obj.theta) - rxp*sind(obj.theta); 0];
             
             %rst calculation
-            obj.rst = [-Ycom*sind(obj.theta) + (obj.B3 - Xcom)*cosd(obj.theta); Ycom*cosd(obj.theta) + (obj.B3 - Xcom)*sind(obj.theta); 0];
+            obj.rst = [-abs(Ycom)*sind(obj.theta) + abs(obj.B3 - Xcom)*cosd(obj.theta); abs(Ycom)*cosd(obj.theta) + abs(obj.B3 - Xcom)*sind(obj.theta); 0];
             
             
             
