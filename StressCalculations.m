@@ -1,4 +1,4 @@
-function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC, Bolt, Bearing)
+function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC, Bolt, Bearing, SF)
 % calculates stresses related to S link
 % inputs: ( , )
 % output: [ , , , , ]
@@ -347,8 +347,20 @@ SF.tau_vc = VC.G/tau_vc;
 
 %% Springs
 
+% SYMBOLS
+syms K sigma_spring1 sigma_spring2
+syms SF.sigma_spring1 SF.sigma_spring2
 
+% STRESS CORRETION FACTOR
+K = (4*TorsionalSpring.C^2 - TorsionalSpring.C - 1) / (4*TorsionalSpring.C*(TorsionalSpring.C-1));
 
+% STRESS CALCULATION
+sigma_spring1 = (K*32*abs(F_sspring1)*TorsionalSpring.D/2) / (pi*TorsionalSpring.D^3); %is mean diameter D the wire diameter? also is r the radius of the wire?
+sigma_spring2 = (K*32*abs(F_ispring2)*TorsionalSpring.D/2) / (pi*TorsionalSpring.D^3); %is mean diameter D the wire diameter? also is r the radius of the wire?
+
+% SAFETY FACTOR CALCULATIONS
+SF.sigma_spring1 = TorsionalSpring.E/sigma_spring1;
+SF.sigma_spring2 = TorsionalSpring.E/sigma_spring2;
 
 %% Bolts
 

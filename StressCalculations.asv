@@ -1,4 +1,4 @@
-function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC, Bolt, Bearing)
+function [] = StressCalculations(S, I, A, P, TorsionalSpring, VT, VC, Bolt, Bearing, SF)
 % calculates stresses related to S link
 % inputs: ( , )
 % output: [ , , , , ]
@@ -347,6 +347,14 @@ SF.tau_vc = VC.G/tau_vc;
 
 %% Springs
 
+% SYMBOLS
+syms K sigma_spring1 sigma_spring2
+
+% STRESS CALCULATION
+% stress concentration factor
+K = (4*TorsionalSpring.C^2 - TorsionalSpring.C - 1) / (4*TorsionalSpring.C*(TorsionalSpring.C-1));
+sigma_spring1 = (K*32*abs(F_sspring1)*TorsionalSpring.D/2) / (pi*TorsionalSpring.D^3); %is mean diameter D the wire diameter?
+sigma_spring2 = (K*32*abs(F_ispring2)*TorsionalSpring.D/2) / (pi*TorsionalSpring.D^3); %is mean diameter D the wire diameter?
 
 
 
@@ -368,7 +376,6 @@ SF.tau_sp = Bolt.E/tau_sp;
 SF.tau_ia = Bolt.E/tau_ia; 
 SF.tau_ip = Bolt.E/tau_ip; 
 
-
 %% Bearings
 
 % SYMBOLS
@@ -376,12 +383,12 @@ syms F_bearing C_10 L_10 F_allow L
 
 % BEARING FORCE CALCULATION
 
+
 % ALLOWABLE FORCE CALCULATION
 F_allow = (C_10*(L_10)^(1/3))/L^(1/3);
 
 % SAFETY FACTOR CALCULATION
-SF.bearing = F_allow/F_bearing; %add this to the safetr
-
+SF.sigma_bearing = F_allow/F_bearing; 
 
 %% return or modifying object values
 % we will figure this out soon
