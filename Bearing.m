@@ -14,4 +14,13 @@ classdef Bearing < handle
         
     end
     
+    methods
+        %Method to intialize inner diameter and outer diameter of bearing. 
+        function obj = initBearing(obj, innerdiameter, outerdiameter)
+            obj.ID = innerdiameter; 
+            obj.OD = outerdiameter;
+        end
+         
+    end
+    
 end

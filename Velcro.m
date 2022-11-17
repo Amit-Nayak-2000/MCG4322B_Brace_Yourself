@@ -12,4 +12,13 @@ classdef Velcro < handle
         G = 96526.6 % Shear modulus of velcro (Pa)
         
     end
+    
+    methods
+        %Method to intialize inner diameter and outer diameter of bearing. 
+        function obj = initVelcro(obj, length, width)
+            obj.L = length; 
+            obj.W = width;
+        end
+         
+    end
 end
