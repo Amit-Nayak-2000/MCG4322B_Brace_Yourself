@@ -33,12 +33,6 @@ T2 = initSpring(T2, mass, In, P);
 %boolean to check if safety factors are satisfied
 safetyfactorsatisfied = 0;
 
-disp("Initial VC W: ");
-disp(VC.W);
-
-disp("Initial VC T: ");
-disp(VT.W);
-
 %Parametrization Loop
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
@@ -46,24 +40,10 @@ while (safetyfactorsatisfied == 0)
     
     safetyfactorsatisfied = 1;
     
-    
-    %Calf Velcro Parametrization
     if(SF.SF_VC > 3)
-        VC.W = 0.5*VC.W;
-        safetyfactorsatisfied = 0;
+        VC.W = 0.9*VC.W;
     elseif(SF.SF_VC < 2)
-        VC.W = 1.5*VC.W;
-        safetyfactorsatisfied = 0;
-    end
-    
-    %Thigh Velcro Parametrization
-    if(SF.SF_VT > 3)
-        VT.W = 0.5*VT.W;
-        safetyfactorsatisfied = 0;
-    elseif(SF.SF_VT < 2)
-        VT.W = 1.5*VT.W;
-        safetyfactorsatisfied = 0;
-    end
+        VC.W = 1.
     
     
         
@@ -84,15 +64,6 @@ while (safetyfactorsatisfied == 0)
    
     
 end
-
-disp("Final VC W: ");
-disp(VC.W);
-
-disp("Final VC T: ");
-disp(VT.W);
-
-
-
 
 %Output final safety factors to log file here...
 
