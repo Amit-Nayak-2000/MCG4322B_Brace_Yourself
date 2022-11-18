@@ -61,7 +61,7 @@ Kinetic_Saggital(S,In,P,A, T1, T2);
 Kinetic_Frontal(S,In,P,ZF,frame,mass);
 disp("Kinetics Calculated.");
 
-StressCalculations(S, In, A, P, T1, T2, VT, VC, Blt, Brng, SF)
+StressCalculations(S, In, A, P, T1, T2, VT, VC, Blt, Brng, SF);
 
 disp("Frame: " + frame);
 

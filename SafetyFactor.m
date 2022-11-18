@@ -65,6 +65,26 @@ classdef SafetyFactor < handle
         sigma_bearingia
         sigma_bearingip
         
+        %critical safety factors of each object 
+        %This is the minimum safety factor of all safety factors of each
+        %object (critical method of failure). 
+        SF_sup
+        SF_ant
+        SF_pos
+        SF_inf
+        SF_VT
+        SF_VC
+        SF_TS1
+        SF_TS2
+        SF_BoltSA
+        SF_BoltSP
+        SF_BoltIA
+        SF_BoltIP
+        SF_BrngSA
+        SF_BrngSP
+        SF_BrngIA
+        SF_BrngIP
+        
     end
     
     methods

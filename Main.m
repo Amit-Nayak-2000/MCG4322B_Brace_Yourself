@@ -16,9 +16,14 @@ P = PosteriorLink;
 T1 = TorsionalSpring;
 T2 = TorsionalSpring;
 ZF = Z_forces;
+VT = Velcro;
+VC = Velcro;
+Blt = Bolt;
+Brng = Bearing;
+SF = SafetyFactor;
 
 %Initialize dimensions based on Mass and Height
-Init_System(mass, height, S, In, P, A, T1, T2);
+Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
 %Initialize Torsional Springs:
 GetInitKinematics(S, In, A, P, T1, T2);
 T1 = initSpring(T1, mass, S, A);
@@ -31,7 +36,7 @@ safetyfactorsatisfied = 0;
 %Parametrization Loop
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
-%     GaitLoop(S,In,P,A,thighlength,calflength,T1,T2);
+    GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass);
     
     %assume safety factors satisfied, if found not satisfied it is set back
     %to 0.

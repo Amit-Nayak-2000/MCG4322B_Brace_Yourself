@@ -14,12 +14,12 @@ classdef PosteriorLink < handle
         
         %Physical Properties
         m % Mass (kg)
-        rho = 8000; %Density of 304 stainless steel (kg/m^3)
+        rho = 2700; %Density of Aluminium 6061-T6 (kg/m^3)
         I % Moment of inertia (kg m^2)
-        E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
-        SU = 505e6; %Ultimate Tensile Strength of 304 stainless steel (Pa)
-        SY = 215e6; %Yield Strength of 304 stainless steel (Pa)
-        G = 74e9; %Shear modulus of 304 stainless steel (Pa)
+        E = 68.9e9; % Elastic modulus of Aluminium 6061-T6 (Pa)
+        SU = 310e6; %Ultimate Tensile Strength of Aluminium 6061-T6 (Pa)
+        SY = 276e6; %Yield Strength of Aluminium 6061-T6 (Pa)
+        G = 26e9; %Shear modulus of Aluminium 6061-T6 (Pa)
         
         
         %Dynamical Properties

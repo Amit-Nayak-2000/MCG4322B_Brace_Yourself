@@ -390,5 +390,40 @@ SF.sigma_bearingsp = Bearing.C_10 / C_sp;
 SF.sigma_bearingia = Bearing.C_10 / C_ia;
 SF.sigma_bearingip = Bearing.C_10 / C_ip;
 
+%% Obtain the minimum safety factor (critical) from all safety factors for each obj.
+Superiorarr = [abs(SF.sigma_sx), abs(SF.sigma_s1y), abs(SF.sigma_s2y), abs(SF.sigma_s3y), abs(SF.sigma_sbend1), abs(SF.sigma_sbend2), abs(SF.sigma_srupture), abs(SF.tau_s1), abs(SF.tau_s2), abs(SF.tau_s3)];
+
+SF.SF_sup = min(Superiorarr);
+
+Inferiorarr = [abs(SF.sigma_ix), abs(SF.sigma_i1y), abs(SF.sigma_i2y), abs(SF.sigma_i3y), abs(SF.sigma_ibend1), abs(SF.sigma_ibend2), abs(SF.sigma_irupture), abs(SF.tau_i1), abs(SF.tau_i2), abs(SF.tau_i3)];
+
+SF.SF_inf = min(Inferiorarr);
+
+Anteriorarr = [abs(SF.sigma_a1y), abs(SF.sigma_a2y), abs(SF.sigma_abend), abs(SF.sigma_arupture1), abs(SF.sigma_arupture2), abs(SF.tau_a1), abs(SF.tau_a2)];
+
+SF.SF_ant = min(Anteriorarr);
+
+Posteriorarr = [abs(SF.sigma_p1y), abs(SF.sigma_p2y), abs(SF.sigma_pbend), abs(SF.sigma_prupture1), abs(SF.sigma_prupture2), abs(SF.tau_p1), abs(SF.tau_p2)];
+
+SF.SF_pos = min(Posteriorarr);
+    
+%Individual Safety Factors (only 1 SF per object)
+SF.SF_VT = abs(SF.tau_vt);
+SF.SF_VC = abs(SF.tau_vc);
+
+SF.SF_TS1 = abs(SF.sigma_spring1);
+SF.SF_TS2 = abs(SF.sigma_spring2);
+
+SF.SF_BoltSA = abs(SF.tau_sa);
+SF.SF_BoltSP = abs(SF.tau_sp);
+SF.SF_BoltIA = abs(SF.tau_ia);
+SF.SF_BoltIP = abs(SF.tau_ip);
+SF.SF_BrngSA = abs(SF.sigma_bearingsa);
+SF.SF_BrngSP = abs(SF.sigma_bearingsp);
+SF.SF_BrngIA = abs(SF.sigma_bearingia);
+SF.SF_BrngIP = abs(SF.sigma_bearingip);
+
+
+
 end
 

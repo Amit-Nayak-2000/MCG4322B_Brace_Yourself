@@ -1,12 +1,12 @@
-function [] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2)
+function [] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass)
 
 
 %Parse Winters Data
 WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
 kinematicsdata = WinterData{3};
 
-startframe = 28; %HCR
-endframe = 96; %Just Before next HCR
+startframe = 29; %HCR %originally 28
+endframe = 29; %Just Before next HCR %originally 96
 
 SFarray = zeros(1 ,endframe - startframe + 1);
 
@@ -29,6 +29,10 @@ for i=startframe:endframe
 
     %calculate forces
     Kinetic_Saggital(S,In,P,A,T1,T2);
+    %this needs to work with our chosen frames...
+    Kinetic_Frontal(S,In,P,ZF,i,mass);
+    
+    StressCalculations(S, In, A, P, T1, T2, VT, VC, Blt, Brng, SF);
 
     %calculate safety factors and store in an array
     SFarray(dataindex) = i; %this is just a placeholder, will be doing this once I get the SF.
