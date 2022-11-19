@@ -25,6 +25,7 @@ classdef InferiorLink < handle
         E = 68.9e9; % Elastic modulus of Aluminium 1100 (Pa)
         SU = 89.6e6; %Ultimate Tensile Strength of Aluminium 1100 (Pa)
         SY = 34.5e6; %Yield Strength of Aluminium 1100 (Pa)
+        SSY = 0.55*34.5e6; %Shear Yield Strength of Aluminium 1100-0 (Pa)
         G = 26e9; %Shear modulus of Aluminium 1100 (Pa)
         
         

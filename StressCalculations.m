@@ -93,16 +93,17 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_sx = S.E/sigma_sx;
-SF.sigma_s1y = S.E/sigma_s1y;
-SF.sigma_s2y = S.E/sigma_s2y;
-SF.sigma_s3y = S.E/sigma_s3y;
-SF.sigma_sbend1 = S.E/sigma_sbend1;
-SF.sigma_sbend2 = S.E/sigma_sbend2;
-SF.sigma_srupture = S.E/sigma_srupture;
-SF.tau_s1 = S.G/tau_s1;
-SF.tau_s2 = S.G/tau_s2;
-SF.tau_s3 = S.G/tau_s3;
+%changed the numerators
+SF.sigma_sx = S.SY/sigma_sx;
+SF.sigma_s1y = S.SY/sigma_s1y;
+SF.sigma_s2y = S.SY/sigma_s2y;
+SF.sigma_s3y = S.SY/sigma_s3y;
+SF.sigma_sbend1 = S.SY/sigma_sbend1;
+SF.sigma_sbend2 = S.SY/sigma_sbend2;
+SF.sigma_srupture = S.SY/sigma_srupture;
+SF.tau_s1 = S.SSY/tau_s1;
+SF.tau_s2 = S.SSY/tau_s2;
+SF.tau_s3 = S.SSY/tau_s3;
 
 %% Inferior Link
 
@@ -188,16 +189,16 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_ix = I.E/sigma_ix;
-SF.sigma_i1y = I.E/sigma_i1y;
-SF.sigma_i2y = I.E/sigma_i2y;
-SF.sigma_i3y = I.E/sigma_i3y;
-SF.sigma_ibend1 = I.E/sigma_ibend1;
-SF.sigma_ibend2 = I.E/sigma_ibend2;
-SF.sigma_irupture = I.E/sigma_irupture;
-SF.tau_i1 = I.G/tau_i1;
-SF.tau_i2 = I.G/tau_i2;
-SF.tau_i3 = I.G/tau_i3;
+SF.sigma_ix = I.SY/sigma_ix;
+SF.sigma_i1y = I.SY/sigma_i1y;
+SF.sigma_i2y = I.SY/sigma_i2y;
+SF.sigma_i3y = I.SY/sigma_i3y;
+SF.sigma_ibend1 = I.SY/sigma_ibend1;
+SF.sigma_ibend2 = I.SY/sigma_ibend2;
+SF.sigma_irupture = I.SY/sigma_irupture;
+SF.tau_i1 = I.SSY/tau_i1;
+SF.tau_i2 = I.SSY/tau_i2;
+SF.tau_i3 = I.SSY/tau_i3;
 
 %% Anterior Link
 
@@ -252,13 +253,13 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_a1y = A.E/sigma_a1y;
-SF.sigma_a2y = A.E/sigma_a2y;
-SF.sigma_abend = A.E/sigma_abend;
-SF.sigma_arupture1 = A.E/sigma_arupture1;
-SF.sigma_arupture2 = A.E/sigma_arupture2;
-SF.tau_a1 = A.G/tau_a1;
-SF.tau_a2 = A.G/tau_a2;
+SF.sigma_a1y = A.SY/sigma_a1y;
+SF.sigma_a2y = A.SY/sigma_a2y;
+SF.sigma_abend = A.SY/sigma_abend;
+SF.sigma_arupture1 = A.SY/sigma_arupture1;
+SF.sigma_arupture2 = A.SY/sigma_arupture2;
+SF.tau_a1 = A.SSY/tau_a1;
+SF.tau_a2 = A.SSY/tau_a2;
 
 %% Posterior Link
 
@@ -313,13 +314,13 @@ else
 end
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_p1y = P.E/sigma_p1y;
-SF.sigma_p2y = P.E/sigma_p2y;
-SF.sigma_pbend = P.E/sigma_pbend;
-SF.sigma_prupture1 = P.E/sigma_prupture1;
-SF.sigma_prupture2 = P.E/sigma_prupture2;
-SF.tau_p1 = P.G/tau_p1;
-SF.tau_p2 = P.G/tau_p2;
+SF.sigma_p1y = P.SY/sigma_p1y;
+SF.sigma_p2y = P.SY/sigma_p2y;
+SF.sigma_pbend = P.SY/sigma_pbend;
+SF.sigma_prupture1 = P.SY/sigma_prupture1;
+SF.sigma_prupture2 = P.SY/sigma_prupture2;
+SF.tau_p1 = P.SSY/tau_p1;
+SF.tau_p2 = P.SSY/tau_p2;
 
 %% Velcro
 
@@ -347,8 +348,8 @@ sigma_spring1 = (K*32*abs(F_sspring1)*0.4*S.L) / (pi*TS1.d^3);
 sigma_spring2 = (K*32*abs(F_ispring2)*0.4*I.L) / (pi*TS2.d^3);
 
 % SAFETY FACTOR CALCULATIONS
-SF.sigma_spring1 = TS1.E/sigma_spring1;
-SF.sigma_spring2 = TS2.E/sigma_spring2;
+SF.sigma_spring1 = TS1.SY/sigma_spring1;
+SF.sigma_spring2 = TS2.SY/sigma_spring2;
 
 %% Bolts
 
@@ -362,10 +363,10 @@ tau_ia = (4*norm(I.F_ia))/pi*Bolt.D;
 tau_ip = (4*norm(I.F_ip))/pi*Bolt.D;
 
 % SAFETY FACTOR CALCULATIONS
-SF.tau_sa = Bolt.E/tau_sa; 
-SF.tau_sp = Bolt.E/tau_sp; 
-SF.tau_ia = Bolt.E/tau_ia; 
-SF.tau_ip = Bolt.E/tau_ip; 
+SF.tau_sa = Bolt.SY/tau_sa; 
+SF.tau_sp = Bolt.SY/tau_sp; 
+SF.tau_ia = Bolt.SY/tau_ia; 
+SF.tau_ip = Bolt.SY/tau_ip; 
 
 %% Bearings
 

@@ -210,10 +210,10 @@ while (safetyfactorsatisfied == 0)
             VC.W = 1.25*VC.W;
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, VCIndex+27);
-            MinVC = SF.SF_VC;
+            MinVC = SF.SF_VT;
         else
             %Inferior Min SF is satisfied.
-            VCsatisfied = 1;
+            VTsatisfied = 1;
         end
     end
       
