@@ -1,32 +1,17 @@
-function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass)
+function [] = IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, frame)
 
 
 %Parse Winters Data
 WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
 kinematicsdata = WinterData{3};
 
-startframe = 28; %HCR %originally 28
-endframe = 96; %Just Before next HCR %originally 96
-
-%Arrays to store critical safety factors at each frame in gait cycle. 
-%Links
-SupSFArr = zeros(1 ,endframe - startframe + 1);
-AntSFArr = zeros(1 ,endframe - startframe + 1);
-PosSFArr = zeros(1 ,endframe - startframe + 1);
-InfSFArr = zeros(1 ,endframe - startframe + 1);
-
-%Springs
-T1SFArr = zeros(1 ,endframe - startframe + 1);
-T2SFArr = zeros(1 ,endframe - startframe + 1);
-
-%Straps
-VtSFArr = zeros(1 ,endframe - startframe + 1);
-VcSFArr = zeros(1 ,endframe - startframe + 1);
+startframe = frame; %HCR %originally 28
+endframe = frame; %Just Before next HCR %originally 96
 
 %Loop through the gait cycle
 for i=startframe:endframe
     %index to store safety factor in arrays
-    dataindex = i - startframe + 1;
+%     dataindex = i - startframe + 1;
 
     %Obtain biological kinematics of calf and thigh.
     kincalf = [kinematicsdata(i,16), kinematicsdata(i,17), kinematicsdata(i,18), 0, 0, 0; 
@@ -45,26 +30,11 @@ for i=startframe:endframe
     %this needs to work with our chosen frames...
     Kinetic_Frontal(S,In,P,ZF,i,mass);
     
+    %updates SF obj
     StressCalculations(S, In, A, P, T1, T2, VT, VC, Blt, Brng, SF);
-    
-    SupSFArr(dataindex) = SF.SF_sup;
-    AntSFArr(dataindex) = SF.SF_ant;
-    PosSFArr(dataindex) = SF.SF_pos;
-    InfSFArr(dataindex) = SF.SF_inf;
-    
-    T1SFArr(dataindex) = SF.SF_TS1;
-    T2SFArr(dataindex) = SF.SF_TS2;
-    
-    VtSFArr(dataindex) = SF.SF_VT;
-    VcSFArr(dataindex) = SF.SF_VC;
-    
-    
 
-%     %calculate safety factors and store in an array
-    disp(i);
     
 end
-
 
 end
 

@@ -16,12 +16,12 @@ classdef AnteriorLink < handle
         
         %Physical Properties
         m % Mass (kg)
-        rho = 2700; %Density of Aluminium 6061-T6 (kg/m^3)
+        rho = 2710; %Density of Aluminium 1100 (kg/m^3)
         I % Moment of inertia (kg m^2)
-        E = 68.9e9; % Elastic modulus of Aluminium 6061-T6 (Pa)
-        SU = 310e6; %Ultimate Tensile Strength of Aluminium 6061-T6 (Pa)
-        SY = 276e6; %Yield Strength of Aluminium 6061-T6 (Pa)
-        G = 26e9; %Shear modulus of Aluminium 6061-T6 (Pa)
+        E = 68.9e9; % Elastic modulus of Aluminium 1100 (Pa)
+        SU = 89.6e6; %Ultimate Tensile Strength of Aluminium 1100 (Pa)
+        SY = 34.5e6; %Yield Strength of Aluminium 1100 (Pa)
+        G = 26e9; %Shear modulus of Aluminium 1100 (Pa)
         
         
         %Dynamical Properties
