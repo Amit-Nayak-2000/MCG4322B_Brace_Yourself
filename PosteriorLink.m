@@ -11,16 +11,22 @@ classdef PosteriorLink < handle
         B %Base of link
         T %Thickness
         bolt_hole_diam
+        bearing_hole_diam = 0.008;
+        bearing_depth = 0.0034;
+        springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
+        springarmholemaxd
+        springarmholemind
+        armholeheadheight
         
         %Physical Properties
         m % Mass (kg)
-        rho = 2710; %Density of Aluminium 1100 (kg/m^3)
+        rho = 2705; %Density of Aluminium 1060-O (kg/m^3)
         I % Moment of inertia (kg m^2)
-        E = 68.9e9; % Elastic modulus of Aluminium 1100 (Pa)
-        SU = 89.6e6; %Ultimate Tensile Strength of Aluminium 1100 (Pa)
-        SY = 34.5e6; %Yield Strength of Aluminium 1100 (Pa)
-        SSY = 0.55*34.5e6; %Shear Yield Strength of Aluminium 1100-0 (Pa)
-        G = 26e9; %Shear modulus of Aluminium 1100 (Pa)
+        E = 68.9e9; % Elastic modulus of Aluminium 1060-O (Pa)
+        SU = 55e6; %Ultimate Tensile Strength of Aluminium 1060-O (Pa)
+        SY = 17e6; %Yield Strength of Aluminium 1060-O (Pa)
+        SSY = 0.55*17e6; %Shear Yield Strength of Aluminium 1060-O (Pa)
+        G = 26e9; %Shear modulus of Aluminium 1060-O (Pa)
         
         
         %Dynamical Properties
@@ -74,6 +80,13 @@ classdef PosteriorLink < handle
             fprintf(fileID,'"L"=%.6f\n',obj.L);
             fprintf(fileID,'"H"=%.6f\n',obj.H);
             fprintf(fileID,'"T"=%.6f\n',obj.T);
+            fprintf(fileID,'"bolt_hole_diameter"=%.6f\n', obj.bolt_hole_diam);
+            fprintf(fileID,'"bearing_hole_diameter"=%.6f\n', obj.bearing_hole_diam);
+            fprintf(fileID,'"bearing_depth"=%.6f\n', obj.bearing_depth);
+            fprintf(fileID,'"spring_arm_hole_pos"=%.6f\n', obj.springarmholepos);
+            fprintf(fileID,'"spring_arm_hole_max_diam"=%.6f\n', obj.springarmholemaxd);
+            fprintf(fileID,'"spring_arm_hole_min_diam"=%.6f\n', obj.springarmholemind);
+            fprintf(fileID,'"arm_hole_head_height"=%.6f\n', obj.armholeheadheight);
             fclose(fileID); 
         end
         

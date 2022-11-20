@@ -23,11 +23,17 @@ In = InferiorLink;
 P = PosteriorLink;
 T1 = TorsionalSpring;
 T2 = TorsionalSpring;
+ZF = Z_forces;
+VT = Velcro;
+VC = Velcro;
+Blt = Bolt;
+Brng = Bearing;
+SF = SafetyFactor;
 
 
 
 %Initialize dimensions based on Mass and Height
-Init_System(mass, height, S, In, P, A, T1, T2);
+Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
 
 %Initialize Torsional Springs:
 GetInitKinematics(S,In,A,P, T1, T2)
@@ -52,19 +58,31 @@ percentage = zeros(1, endframe - startframe + 1);
 
 g = [0; -9.81; 0];
 
+correctiverip = [0; 0; 0];
+
 for i=startframe:endframe
     
 dataindex = i - startframe + 1;
 
-%Obtain biological kinematics of calf and thigh.
-kincalf = [kinematicsdata(i,16), kinematicsdata(i,17), kinematicsdata(i,18), 0, 0, 0; 
-           kinematicsdata(i,19), kinematicsdata(i,20), kinematicsdata(i,21), 0, 0, 0;
-           0, 0, 0, kinematicsdata(i,13), kinematicsdata(i,14), kinematicsdata(i,15);];
-       
-kinthigh = [kinematicsdata(i,26), kinematicsdata(i,27), kinematicsdata(i,28), 0, 0, 0; 
-           kinematicsdata(i,29), kinematicsdata(i,30), kinematicsdata(i,31), 0, 0, 0;
-           0, 0, 0, kinematicsdata(i,23), kinematicsdata(i,24), kinematicsdata(i,25);];
-       
+if(i == 29)
+    %Obtain biological kinematics of calf and thigh.
+    kincalf = [kinematicsdata(i+1,16), kinematicsdata(i+1,17), kinematicsdata(i+1,18), 0, 0, 0; 
+               kinematicsdata(i+1,19), kinematicsdata(i+1,20), kinematicsdata(i+1,21), 0, 0, 0;
+               0, 0, 0, kinematicsdata(i+1,13), kinematicsdata(i+1,14), kinematicsdata(i+1,15);];
+
+    kinthigh = [kinematicsdata(i+1,26), kinematicsdata(i+1,27), kinematicsdata(i+1,28), 0, 0, 0; 
+               kinematicsdata(i+1,29), kinematicsdata(i+1,30), kinematicsdata(i+1,31), 0, 0, 0;
+               0, 0, 0, kinematicsdata(i+1,23), kinematicsdata(i+1,24), kinematicsdata(i+1,25);];
+else
+    %Obtain biological kinematics of calf and thigh.
+    kincalf = [kinematicsdata(i,16), kinematicsdata(i,17), kinematicsdata(i,18), 0, 0, 0; 
+               kinematicsdata(i,19), kinematicsdata(i,20), kinematicsdata(i,21), 0, 0, 0;
+               0, 0, 0, kinematicsdata(i,13), kinematicsdata(i,14), kinematicsdata(i,15);];
+
+    kinthigh = [kinematicsdata(i,26), kinematicsdata(i,27), kinematicsdata(i,28), 0, 0, 0; 
+               kinematicsdata(i,29), kinematicsdata(i,30), kinematicsdata(i,31), 0, 0, 0;
+               0, 0, 0, kinematicsdata(i,23), kinematicsdata(i,24), kinematicsdata(i,25);];
+end
 %calculate kinematics
 Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2);
 
@@ -80,10 +98,6 @@ NonDimFactor = (56.7 + BraceMass) / 56.7;
 TorqueOnCalf(dataindex) =  -2*(In.H4 + In.offset)*In.F_cn;
 totalPE(dataindex) = 2*(T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2);
 
-
-%this is essentially bio torque - torque from calf.
-% Tknee = Icalf*calfalpha - [0;0;TorqueOnCalf(dataindex)] - cross(rcom, Mcalf*calfacel) - cross(rcom, Mcalf*g) - cross(rankle, Fankle) - Tankle;
-% newkneemoment(dataindex) = Tknee(3); %fix this
 
 newkneemoment(dataindex) = NonDimFactor*biokneemoment(dataindex) - TorqueOnCalf(dataindex);
 

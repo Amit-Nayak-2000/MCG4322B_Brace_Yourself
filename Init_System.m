@@ -22,7 +22,7 @@ S.H1 = 0.2*S.H4;
 S.B1 = 0.83*S.H1; 
 S.B2 = S.B1 / 2; 
 S.B3 = thighdiameter / 2;
-S.L = 0.8*S.B1;
+S.L = 0.7*S.B1;
 
 %Inferior Link
 In.H4 = 0.3*calflength;
@@ -33,17 +33,17 @@ In.H1 = 0.2*In.H4;
 In.B1 = 1.34133*S.B1; 
 In.B2 = In.B1 / 2; 
 In.B3 = calfdiameter / 2;
-In.L = 0.8*In.B1;
+In.L = 0.7*In.B1;
 
 %Posterior Link
 P.B = 0.35*S.B1;
 P.H = 2.1319*S.B1;
-P.L = 0.8*P.H;
+P.L = 0.7*P.H;
 
 %Anterior Link
 A.B = 0.35*S.B1;
 A.H = 2.69155*S.B1;
-A.L = 0.8*A.H;
+A.L = 0.7*A.H;
 
 thickness = 0.5/100; 
 
@@ -85,7 +85,7 @@ Bolt = initBolt(Bolt,Bolt_diam);
 Bearing_ID = 0.003; %[m]
 Bearing_OD = 0.008; %[m]
 Bearing.C_10 = 560; %[N]
-Bearing.L = 1e6;
+Bearing.L = 1e5;
 
 Bearing=initBearing(Bearing,Bearing_ID,Bearing_OD);
 end

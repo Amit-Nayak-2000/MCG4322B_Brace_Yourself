@@ -35,7 +35,7 @@ disp("Link and Spring Objects Initialized.");
 %Parse Winters Data
 WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
 kinematicsdata = WinterData{3};
-frame = 37; 
+frame = 30; 
 
 %Obtain biological kinematics of calf and thigh.
 kincalf = [kinematicsdata(frame,16), kinematicsdata(frame,17), kinematicsdata(frame,18), 0, 0, 0; 
