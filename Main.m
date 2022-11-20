@@ -37,7 +37,7 @@ safetyfactorsatisfied = 0;
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
     disp("Computing Initial Calculations.");
-    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass);
+    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass);
     
     %assume SF satisfied, then check. If SF not satsified, then toggle to 0
     safetyfactorsatisfied = 1;
@@ -49,11 +49,17 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinSup, SupIndex] = min(SupSFArr);
     while(SuperiorSatisfied == 0)
-        if(MinSup > 3)
+        if(MinSup > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
             %decrease thickness of link.
-            S.T = 0.75*S.T;
+            if(S.T > 0.0039)
+                S.T = 0.9*S.T;
+            else
+                S.B2 = 0.9*S.B2;
+            end
+            %recalculate inertial properties
+%             S = calculate_inertial_props(S);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, SupIndex+27);
             MinSup = SF.SF_sup;
@@ -61,7 +67,9 @@ while (safetyfactorsatisfied == 0)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
             %increase thickness of link.
-            S.T = 1.5*S.T;
+            S.B2 = 1.2*S.B2;
+            %recalculate inertial properties
+%             S = calculate_inertial_props(S);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, SupIndex+27);
             MinSup = SF.SF_sup;
@@ -79,11 +87,18 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinInf, InfIndex] = min(InfSFArr);
     while(InferiorSatisfied == 0)
-        if(MinInf > 3)
+        if(MinInf > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
             %decrease thickness of link.
-            In.T = 0.75*In.T;
+            %decrease thickness of link.
+            if(In.T > 0.0039)
+                In.T = 0.9*In.T;
+            else
+                In.B2 = 0.9*In.B2;
+            end
+            %recalculate inertial properties
+%             In = calculate_inertial_props(In);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, InfIndex+27);
             MinInf = SF.SF_inf;
@@ -91,7 +106,9 @@ while (safetyfactorsatisfied == 0)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
             %increase thickness of link.
-            In.T = 1.5*In.T;
+            In.B2 = 1.2*In.B2;
+            %recalculate inertial properties
+%             In = calculate_inertial_props(In);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, InfIndex+27);
             MinInf = SF.SF_inf;
@@ -108,19 +125,23 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinAnt, AntIndex] = min(AntSFArr);
     while(AnteriorSatisfied == 0)
-        if(MinAnt > 3)
+        if(MinAnt > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
-            %decrease thickness of link.
-            A.T = 0.75*A.T;
+            %decrease width of link.
+            A.B = 0.75*A.B;
+            %recalculate inertial properties
+%             A = calculate_inertial_props(A);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27);
             MinAnt = SF.SF_ant;
         elseif(MinAnt < 2)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
-            %increase thickness of link.
-            A.T = 1.5*A.T;
+            %increase width of link.
+            A.B = 1.5*A.B;
+            %recalculate inertial properties
+%             A = calculate_inertial_props(A);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27);
             MinAnt = SF.SF_ant;
@@ -137,19 +158,23 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinPos, PosIndex] = min(PosSFArr);
     while(PosteriorSatisfied == 0)
-        if(MinPos > 3)
+        if(MinPos > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
-            %decrease thickness of link.
-            P.T = 0.75*P.T;
+            %decrease width of link.
+            P.B = 0.75*P.B;
+            %recalculate inertial properties
+%             P = calculate_inertial_props(P);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27);
             MinPos = SF.SF_pos;
         elseif(MinPos < 2)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
-            %increase thickness of link.
-            P.T = 1.5*P.T;
+            %increase width of link.
+            P.B = 1.5*P.B;
+            %recalculate inertial properties
+%             P = calculate_inertial_props(P);
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27);
             MinPos = SF.SF_pos;
@@ -166,11 +191,11 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinVT, VTIndex] = min(VtSFArr);
     while(VTsatisfied == 0)
-        if(MinVT > 3)
+        if(MinVT > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
             %decrease thickness of link.
-            VT.W = 0.75*VT.W;
+            VT.W = 0.85*VT.W;
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, VTIndex+27);
             MinVT = SF.SF_VT;
@@ -178,7 +203,7 @@ while (safetyfactorsatisfied == 0)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
             %increase thickness of link.
-            VT.W = 1.25*VT.W;
+            VT.W = 1.15*VT.W;
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, VTIndex+27);
             MinVT = SF.SF_VT;
@@ -195,11 +220,11 @@ while (safetyfactorsatisfied == 0)
     %obtain minimum SF & index thru gait cycle.
     [MinVC, VCIndex] = min(VcSFArr);
     while(VCsatisfied == 0)
-        if(MinVC > 3)
+        if(MinVC > 4)
             %Flag to recheck with entire gait cycle after has been optimized. 
             safetyfactorsatisfied = 0;
             %decrease thickness of link.
-            VC.W = 0.75*VC.W;
+            VC.W = 0.85*VC.W;
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, VCIndex+27);
             MinVC = SF.SF_VC;
@@ -207,7 +232,7 @@ while (safetyfactorsatisfied == 0)
             %Flag to recheck with entire gait cycle after has been optimized.
             safetyfactorsatisfied = 0;
             %increase thickness of link.
-            VC.W = 1.25*VC.W;
+            VC.W = 1.15*VC.W;
             %update SF for critical frame
             IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, VCIndex+27);
             MinVC = SF.SF_VC;
@@ -216,7 +241,92 @@ while (safetyfactorsatisfied == 0)
             VCsatisfied = 1;
         end
     end
-      
+          
+    %% TS1 Parametrization
+    disp("Optimizing Torsional Spring 1.");
+    %Flag if calf velcro is satisfied WRT Safety Factor Range.
+    T1satisfied = 0;
+    %obtain minimum SF & index thru gait cycle.
+    [MinT1, T1Index] = min(T1SFArr);
+    while(T1satisfied == 0)
+        if(MinT1 > 4)
+            %Design Constraint
+            if(T1.Nb < 2)
+                break;
+            end
+            %Flag to recheck with entire gait cycle after has been optimized. 
+            safetyfactorsatisfied = 0;
+            %decrement Nb if possible.
+            T1.Nb = T1.Nb - 1;
+            %update Spring
+            T1 = updateSpring(T1);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, T1Index+27);
+            MinT1 = SF.SF_TS1;
+        elseif(MinT1 < 2)
+            %Flag to recheck with entire gait cycle after has been optimized.
+            safetyfactorsatisfied = 0;
+            %increment Nb.
+            T1.Nb = T1.Nb + 1;
+            %update Spring
+            T1 = updateSpring(T1);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, T1Index+27);
+            MinT1 = SF.SF_TS1;
+        else
+            %Inferior Min SF is satisfied.
+            T1satisfied = 1;
+        end
+    end
+    
+
+    %% TS2 Parametrization
+    disp("Optimizing Torsional Spring 2.");
+    %Flag if calf velcro is satisfied WRT Safety Factor Range.
+    T2satisfied = 0;
+    %obtain minimum SF & index thru gait cycle.
+    [MinT2, T2Index] = min(T2SFArr);
+    while(T2satisfied == 0)
+        if(MinT2 > 4)
+            %Design Constraint
+            if(T2.Nb < 2)
+                break;
+            end
+            %Flag to recheck with entire gait cycle after has been optimized. 
+            safetyfactorsatisfied = 0;
+            %decrement Nb if possible.
+            T2.Nb = T2.Nb - 1;
+            %update Spring
+            T2 = updateSpring(T2);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, T2Index+27);
+            MinT2 = SF.SF_TS2;
+        elseif(MinT2 < 2)
+            %Flag to recheck with entire gait cycle after has been optimized.
+            safetyfactorsatisfied = 0;
+            %increment Nb.
+            T2.Nb = T2.Nb + 1;
+            %update Spring
+            T2 = updateSpring(T2);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, T2Index+27);
+            MinT2 = SF.SF_TS2;
+        else
+            %Inferior Min SF is satisfied.
+            T2satisfied = 1;
+        end
+    end
+    
+   %% Obtain Bolt and Bearing SF
+   MinBoltIA = min(BLIASFArr);
+   MinBoltIP = min(BLIPSFArr);
+   MinBoltSP = min(BLSPSFArr);
+   MinBoltSA = min(BLSASFArr);
+   MinBrngSP = min(BNSPSFArr);
+   MinBrngSA = min(BNSASFArr);
+   MinBrngIA = min(BNIASFArr);
+   MinBrngIP = min(BNIPSFArr);
+   
 end
 
 %Output final safety factors to log file here...

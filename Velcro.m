@@ -9,7 +9,7 @@ classdef Velcro < handle
         W %Width of velcro      
         
         %Physical Properties
-        G = 96526.6 % Shear modulus of velcro (Pa)
+        G = 96526.6 % Shear strength of velcro (Pa)
         
     end
     

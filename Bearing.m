@@ -23,6 +23,21 @@ classdef Bearing < handle
             obj.ID = innerdiameter; 
             obj.OD = outerdiameter;
         end
+        
+        %method to output dimensions to .txt files.
+        function outputDimensions(obj)
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/ball_bearing.txt','w');
+            fprintf(fileID,'"width"=%.6f\n', 0.003);
+            fprintf(fileID,'"OD"=%.6f\n', 0.008);
+            fprintf(fileID,'"ID"=%.6f\n', 0.003);
+            fprintf(fileID,'"race_thickness"=%.6f\n', 0.00075);
+            fprintf(fileID,'"D_ball"=%.6f\n', 0.0015);
+            fprintf(fileID,'"num_balls"=%.6f\n', 10);
+            fprintf(fileID,'"track_depth"=%.6f\n', 0.00025);
+            
+            
+            fclose(fileID); 
+        end
          
     end
     
