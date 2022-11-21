@@ -104,7 +104,7 @@ SF.sigma_srupture = S.SY/sigma_srupture;
 SF.tau_s1 = S.SSY/tau_s1;
 SF.tau_s2 = S.SSY/tau_s2;
 SF.tau_s3 = S.SSY/tau_s3;
-SF.buckling_s = -1*((pi^2*S.E*S.B2*S.T^3)/(12*(S.H3-S.H2)^2)) / sigma_s2y;
+SF.buckling_s = -1*((pi^2*S.E*S.B2*S.T^3)/(12*(S.H3-S.H2)^2)) / ((sigma_s1y)*S.B2*S.T);
 
 %% Inferior Link
 
@@ -200,7 +200,7 @@ SF.sigma_irupture = I.SY/sigma_irupture;
 SF.tau_i1 = I.SSY/tau_i1;
 SF.tau_i2 = I.SSY/tau_i2;
 SF.tau_i3 = I.SSY/tau_i3;
-SF.buckling_i = -1*((pi^2*I.E*I.B2*I.T^3)/(12*(I.H3-I.H2)^2)) / sigma_i2y;
+SF.buckling_i = -1*((pi^2*I.E*I.B2*I.T^3)/(12*(I.H3-I.H2)^2)) / ((sigma_i1y)*I.B2*I.T);
 
 %% Anterior Link
 
@@ -262,7 +262,7 @@ SF.sigma_arupture1 = A.SY/sigma_arupture1;
 SF.sigma_arupture2 = A.SY/sigma_arupture2;
 SF.tau_a1 = A.SSY/tau_a1;
 SF.tau_a2 = A.SSY/tau_a2;
-SF.buckling_a = -1*((pi^2*A.E*A.B*A.T^3)/(12*A.L^2)) / (sigma_a1y);
+SF.buckling_a = -1*((pi^2*A.E*A.B*A.T^3)/(12*A.L^2)) / ((sigma_a1y)*A.B*A.T);
 
 %% Posterior Link
 
@@ -324,7 +324,7 @@ SF.sigma_prupture1 = P.SY/sigma_prupture1;
 SF.sigma_prupture2 = P.SY/sigma_prupture2;
 SF.tau_p1 = P.SSY/tau_p1;
 SF.tau_p2 = P.SSY/tau_p2;
-SF.buckling_p = -1*((pi^2*P.E*P.B*P.T^3)/(12*P.L^2)) / (sigma_p1y);
+SF.buckling_p = -1*((pi^2*P.E*P.B*P.T^3)/(12*P.L^2)) / ((sigma_p1y)*P.B*P.T);
 
 %% Velcro
 
