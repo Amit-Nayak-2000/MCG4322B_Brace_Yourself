@@ -14,9 +14,9 @@ classdef PosteriorLink < handle
         bearing_hole_diam = 0.008;
         bearing_depth = 0.0034;
         springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
-        springarmholemaxd
-        springarmholemind
-        armholeheadheight
+        springarmholemaxd = 0.006;
+        springarmholemind = 0.0034;
+        armholeheadheight = 0.00165;
         
         %Physical Properties
         m % Mass (kg)

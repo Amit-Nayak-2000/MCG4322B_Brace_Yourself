@@ -1,4 +1,4 @@
-function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf,thighlength, calflength, T1, T2)
+function [] = Kinematic_Modelling(Superior,Inferior,Posterior,Anterior,KinThigh,KinCalf,thighlength, calflength, T1, T2, verticaloffset)
 %KINEMATIC_MODELLING 
 %
 %Inverse kinematics will be used to get angular positions, velocities, and
@@ -24,23 +24,42 @@ Inferior.alpha(3) = KinCalf(3,6);
 %For the vectors in the inverse kinematics: 1 is superior, 2 is anterior, 3
 %is inferior, 4 is posterior.
 
+syms SpL SW ST SA AL AT IL IW IT IA PL PT  
+
+%assign values to symbolics
+SpL = Superior.L;
+AL = Anterior.L;
+IL = Inferior.L;
+PL = Posterior.L;
+ST = Superior.theta;
+IT = Inferior.theta;
+IW = Inferior.omega(3);
+SW = Superior.omega(3);
+IA = Inferior.alpha(3);
+SA = Superior.alpha(3);
+
+
 %Position:
 %r1 + r2 + r3 + r4 = 0
 %theta_a is anterior theta
 %theta_p is posterior theta
-syms theta_a theta_p
-r1 = [Superior.L*cosd(Superior.theta); Superior.L*sind(Superior.theta)];
-r2 = [Anterior.L*cosd(theta_a); Anterior.L*sind(theta_a)];
-r3 = [Inferior.L*cosd(Inferior.theta); Inferior.L*sind(Inferior.theta)];
-r4 = [Posterior.L*cosd(theta_p); Posterior.L*sind(theta_p)];
-
-positioneqn = r1 + r2 + r3 + r4 == 0;
-thetas = solve(positioneqn, [theta_a theta_p]);
+% syms theta_a theta_p
+% r1 = [Superior.L*cosd(Superior.theta); Superior.L*sind(Superior.theta)];
+% r2 = [Anterior.L*cosd(theta_a); Anterior.L*sind(theta_a)];
+% r3 = [Inferior.L*cosd(Inferior.theta); Inferior.L*sind(Inferior.theta)];
+% r4 = [Posterior.L*cosd(theta_p); Posterior.L*sind(theta_p)];
+% 
+% positioneqn = r1 + r2 + r3 + r4 == 0;
+% thetas = solve(positioneqn, [theta_a theta_p]);
 %assign theta_a to Anterior.theta and theta_p to Posterior.theta
-pt1 = double(thetas.theta_a(1,1));
-pt2 = double(thetas.theta_a(2,1));
-pt3 = double(thetas.theta_p(1,1));
-pt4 = double(thetas.theta_p(2,1));
+% pt1 = double(thetas.theta_a(1,1));
+pt1 = -(360*atan((4*(AL*IL*tan((pi*IT)/360) + IL*PL*tan((pi*IT)/360) + AL*SpL*tan((pi*ST)/360) + PL*SpL*tan((pi*ST)/360) + AL*IL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360) + IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)))/(AL^2 + IL^2 - PL^2 + SpL^2 + AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*AL*IL - 2*AL*SpL + 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2 - 2*AL*IL*tan((pi*ST)/360)^2 - 2*AL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 + 2*AL*SpL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)) - (4*IL*PL*tan((pi*IT)/360) - ((IL^2 - AL^2 - PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))*(AL^2 - IL^2 + PL^2 - SpL^2 + AL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL - 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2 + 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)))^(1/2) + 4*PL*SpL*tan((pi*ST)/360) + 4*IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + 4*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360))/(AL^2 + IL^2 - PL^2 + SpL^2 + AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*AL*IL - 2*AL*SpL + 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2 - 2*AL*IL*tan((pi*ST)/360)^2 - 2*AL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 + 2*AL*SpL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))))/pi;
+% pt2 = double(thetas.theta_a(2,1));
+pt2 = (360*atan((((IL^2 - AL^2 - PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))*(AL^2 - IL^2 + PL^2 - SpL^2 + AL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL - 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2 + 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)))^(1/2) + 4*IL*PL*tan((pi*IT)/360) + 4*PL*SpL*tan((pi*ST)/360) + 4*IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + 4*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360))/(AL^2 + IL^2 - PL^2 + SpL^2 + AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*AL*IL - 2*AL*SpL + 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2 - 2*AL*IL*tan((pi*ST)/360)^2 - 2*AL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 + 2*AL*SpL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)) - (4*(AL*IL*tan((pi*IT)/360) + IL*PL*tan((pi*IT)/360) + AL*SpL*tan((pi*ST)/360) + PL*SpL*tan((pi*ST)/360) + AL*IL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360) + IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)))/(AL^2 + IL^2 - PL^2 + SpL^2 + AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*AL*IL - 2*AL*SpL + 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2 - 2*AL*IL*tan((pi*ST)/360)^2 - 2*AL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 + 2*AL*SpL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*IL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))))/pi;
+% pt3 = double(thetas.theta_p(1,1));
+pt3 = -(360*atan((4*IL*PL*tan((pi*IT)/360) - ((IL^2 - AL^2 - PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))*(AL^2 - IL^2 + PL^2 - SpL^2 + AL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL - 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2 + 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)))^(1/2) + 4*PL*SpL*tan((pi*ST)/360) + 4*IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + 4*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360))/(IL^2 - AL^2 - 2*PL*SpL + PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*IL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*PL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*PL*tan((pi*ST)/360)^2 - 2*PL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*PL*SpL*tan((pi*ST)/360)^2 + 2*IL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))))/pi;
+% pt4 = double(thetas.theta_p(2,1));
+pt4 = -(360*atan((((IL^2 - AL^2 - PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 - PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))*(AL^2 - IL^2 + PL^2 - SpL^2 + AL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*IT)/360)^2 + AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 - IL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*ST)/360)^2 + 2*AL*PL - 2*IL*SpL + AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2 + 2*AL*PL*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2 + 2*IL*SpL*tan((pi*ST)/360)^2 + 2*AL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 - 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360)))^(1/2) + 4*IL*PL*tan((pi*IT)/360) + 4*PL*SpL*tan((pi*ST)/360) + 4*IL*PL*tan((pi*IT)/360)*tan((pi*ST)/360)^2 + 4*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360))/(IL^2 - AL^2 - 2*PL*SpL + PL^2 + SpL^2 - AL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*IT)/360)^2 - AL^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2 + IL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2 + PL^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*ST)/360)^2 - 2*IL*PL + 2*IL*SpL - AL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + IL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + PL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + SpL^2*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*PL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*IT)/360)^2 - 2*IL*PL*tan((pi*ST)/360)^2 - 2*PL*SpL*tan((pi*IT)/360)^2 - 2*IL*SpL*tan((pi*ST)/360)^2 + 2*PL*SpL*tan((pi*ST)/360)^2 + 2*IL*PL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*IL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 2*PL*SpL*tan((pi*IT)/360)^2*tan((pi*ST)/360)^2 + 8*IL*SpL*tan((pi*IT)/360)*tan((pi*ST)/360))))/pi;
 
 %anterior originally 2, posterior originally 4
 Anterior.theta = pt2; 
@@ -54,47 +73,58 @@ end
     
 %Velocity
 %d/dt(r1 + r2 + r3 + r4) = 0
-syms w_a w_p;
-%w_a is omega anterior, w_p is omega posterior
-v1 = [-Superior.L*Superior.omega(3)*sind(Superior.theta); Superior.L*Superior.omega(3)*cosd(Superior.theta)];
-v2 = [-Anterior.L*w_a*sind(Anterior.theta); Anterior.L*w_a*cosd(Anterior.theta)];
-v3 = [-Inferior.L*Inferior.omega(3)*sind(Inferior.theta); Inferior.L*Inferior.omega(3)*cosd(Inferior.theta)];
-v4 = [-Posterior.L*w_p*sind(Posterior.theta); Posterior.L*w_p*cosd(Posterior.theta)];
-
-velocityeqn = v1 + v2 + v3 + v4 == 0;
-[omega_soln_1, omega_soln_2] = solve(velocityeqn, [w_a w_p]);
+% syms w_a w_p;
+% syms Superior.theta
+% %w_a is omega anterior, w_p is omega posterior
+% v1 = [-Superior.L*Superior.omega(3)*sind(Superior.theta); Superior.L*Superior.omega(3)*cosd(Superior.theta)];
+% v2 = [-Anterior.L*w_a*sind(Anterior.theta); Anterior.L*w_a*cosd(Anterior.theta)];
+% v3 = [-Inferior.L*Inferior.omega(3)*sind(Inferior.theta); Inferior.L*Inferior.omega(3)*cosd(Inferior.theta)];
+% v4 = [-Posterior.L*w_p*sind(Posterior.theta); Posterior.L*w_p*cosd(Posterior.theta)];
+% 
+% velocityeqn = v1 + v2 + v3 + v4 == 0;
+% [omega_soln_1, omega_soln_2] = solve(velocityeqn, [w_a w_p]);
+[T1.theta, T2.theta] = GetSpringAngles(Superior, Anterior, Inferior, Posterior);
+PT = Posterior.theta;
+AT = Anterior.theta;
 
 %assign w_a to Anterior.omega and w_p to Posterior.omega
-Anterior.omega(3) = double(omega_soln_1);
-Posterior.omega(3) = double(omega_soln_2);
+% Anterior.omega(3) = subs(omega_soln_1);
+Anterior.omega(3) = -(IL*IW*cos((pi*IT)/180)*sin((pi*PT)/180) - IL*IW*cos((pi*PT)/180)*sin((pi*IT)/180) - SW*SpL*cos((pi*PT)/180)*sin((pi*ST)/180) + SW*SpL*cos((pi*ST)/180)*sin((pi*PT)/180))/(AL*(cos((pi*AT)/180)*sin((pi*PT)/180) - cos((pi*PT)/180)*sin((pi*AT)/180)));
+% Posterior.omega(3) = double(omega_soln_2);
+Posterior.omega(3) = -(IL*IW*cos((pi*AT)/180)*sin((pi*IT)/180) - IL*IW*cos((pi*IT)/180)*sin((pi*AT)/180) + SW*SpL*cos((pi*AT)/180)*sin((pi*ST)/180) - SW*SpL*sin((pi*AT)/180)*cos((pi*ST)/180))/(PL*(cos((pi*AT)/180)*sin((pi*PT)/180) - cos((pi*PT)/180)*sin((pi*AT)/180)));
+
+w_a = Anterior.omega(3);
+w_p = Posterior.omega(3);
 
 %Acceleration
 %d^2/dt^2(r1 + r2 + r3 + r4) = 0
-syms a_a a_p;
-%a_a is Anterior.alpha a_p is Posterior.alpha
-a1 = [-Superior.L*Superior.alpha(3)*sind(Superior.theta) - Superior.L*(Superior.omega(3)^2)*cosd(Superior.theta); 
-    Superior.L*Superior.alpha(3)*cosd(Superior.theta) - Superior.L*(Superior.omega(3)^2)*sind(Superior.theta)];
-
-a2 = [-Anterior.L*a_a*sind(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*cosd(Anterior.theta); 
-    Anterior.L*a_a*cosd(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*sind(Anterior.theta)];
-
-a3 = [-Inferior.L*Inferior.alpha(3)*sind(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*cosd(Inferior.theta); 
-    Inferior.L*Inferior.alpha(3)*cosd(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*sind(Inferior.theta)];
-
-a4 = [-Posterior.L*a_p*sind(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*cosd(Posterior.theta); 
-    Posterior.L*a_p*cosd(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*sind(Posterior.theta)];
-
-acceleqn = a1 + a2 + a3 + a4 == 0;
-[alpha_soln_1, alpha_soln_2] = solve(acceleqn, [a_a a_p]);
+% syms a_a a_p;
+% %a_a is Anterior.alpha a_p is Posterior.alpha
+% a1 = [-Superior.L*Superior.alpha(3)*sind(Superior.theta) - Superior.L*(Superior.omega(3)^2)*cosd(Superior.theta); 
+%     Superior.L*Superior.alpha(3)*cosd(Superior.theta) - Superior.L*(Superior.omega(3)^2)*sind(Superior.theta)];
+% 
+% a2 = [-Anterior.L*a_a*sind(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*cosd(Anterior.theta); 
+%     Anterior.L*a_a*cosd(Anterior.theta) - Anterior.L*(Anterior.omega(3)^2)*sind(Anterior.theta)];
+% 
+% a3 = [-Inferior.L*Inferior.alpha(3)*sind(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*cosd(Inferior.theta); 
+%     Inferior.L*Inferior.alpha(3)*cosd(Inferior.theta) - Inferior.L*(Inferior.omega(3)^2)*sind(Inferior.theta)];
+% 
+% a4 = [-Posterior.L*a_p*sind(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*cosd(Posterior.theta); 
+%     Posterior.L*a_p*cosd(Posterior.theta) - Posterior.L*(Posterior.omega(3)^2)*sind(Posterior.theta)];
+% 
+% acceleqn = a1 + a2 + a3 + a4 == 0;
+% [alpha_soln_1, alpha_soln_2] = solve(acceleqn, [a_a a_p]);
 
 %assign a_a to Anterior.alpha and a_p to Posterior.alpha
-Anterior.alpha(3) = double(alpha_soln_1);
-Posterior.alpha(3) = double(alpha_soln_2);
+%Anterior.alpha(3) = subs(alpha_soln_1);
+Anterior.alpha(3) = (PL*w_p^2*cos((pi*PT)/180)^2 + PL*w_p^2*sin((pi*PT)/180)^2 + IL*IW^2*cos((pi*IT)/180)*cos((pi*PT)/180) + AL*w_a^2*cos((pi*AT)/180)*cos((pi*PT)/180) + SW^2*SpL*cos((pi*PT)/180)*cos((pi*ST)/180) + IL*IW^2*sin((pi*IT)/180)*sin((pi*PT)/180) + AL*w_a^2*sin((pi*AT)/180)*sin((pi*PT)/180) + SW^2*SpL*sin((pi*PT)/180)*sin((pi*ST)/180) - IA*IL*cos((pi*IT)/180)*sin((pi*PT)/180) + IA*IL*cos((pi*PT)/180)*sin((pi*IT)/180) + SA*SpL*cos((pi*PT)/180)*sin((pi*ST)/180) - SA*SpL*cos((pi*ST)/180)*sin((pi*PT)/180))/(AL*(cos((pi*AT)/180)*sin((pi*PT)/180) - cos((pi*PT)/180)*sin((pi*AT)/180)));
+% Posterior.alpha(3) = double(alpha_soln_2);
+Posterior.alpha(3) = -(AL*w_a^2*cos((pi*AT)/180)^2 + AL*w_a^2*sin((pi*AT)/180)^2 + IL*IW^2*cos((pi*AT)/180)*cos((pi*IT)/180) + SW^2*SpL*cos((pi*AT)/180)*cos((pi*ST)/180) + IL*IW^2*sin((pi*AT)/180)*sin((pi*IT)/180) + PL*w_p^2*cos((pi*AT)/180)*cos((pi*PT)/180) + SW^2*SpL*sin((pi*AT)/180)*sin((pi*ST)/180) + PL*w_p^2*sin((pi*AT)/180)*sin((pi*PT)/180) + IA*IL*cos((pi*AT)/180)*sin((pi*IT)/180) - IA*IL*cos((pi*IT)/180)*sin((pi*AT)/180) + SA*SpL*cos((pi*AT)/180)*sin((pi*ST)/180) - SA*SpL*sin((pi*AT)/180)*cos((pi*ST)/180))/(PL*(cos((pi*AT)/180)*sin((pi*PT)/180) - cos((pi*PT)/180)*sin((pi*AT)/180)));
 
 %% End of inverse kinematics
 %% Start of forward kinematics
 %Now that thetas for each link are computed, can calculate individual COMs and Position Vectors.
-verticaloffset = GetInitKinematics(Superior, Inferior, Anterior, Posterior, T1, T2);
+% verticaloffset = GetInitKinematics(Superior, Inferior, Anterior, Posterior, T1, T2);
 Superior = calculateCOM(Superior, thighlength);
 Anterior = calculateCOM(Anterior);
 Inferior = calculateCOM(Inferior, calflength, verticaloffset);

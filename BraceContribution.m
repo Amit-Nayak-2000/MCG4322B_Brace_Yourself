@@ -15,7 +15,7 @@ Kcalf = 0.528*calflength;
 Icalf = Mcalf*Kcalf^2;
 %distance to com of Calf from proximal joint
 distcom = 0.433*calflength;
-
+%magic num = 0.18833
 %Instantiate Objects
 S = SuperiorLink;
 A = AnteriorLink;
@@ -36,7 +36,7 @@ SF = SafetyFactor;
 Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
 
 %Initialize Torsional Springs:
-GetInitKinematics(S,In,A,P, T1, T2)
+verticaloffset = GetInitKinematics(S,In,A,P, T1, T2);
 T1 = initSpring(T1, mass, S, A);
 T2 = initSpring(T2, mass, In, P);
 
@@ -50,6 +50,7 @@ startframe = 28; %HCR
 endframe = 96; %Just Before HCR
 TorqueOnCalf = zeros(1 ,endframe - startframe + 1);
 totalPE = zeros(1 ,endframe - startframe + 1);
+totalKE = zeros(1, endframe - startframe + 1);
 framess = zeros(1 ,endframe - startframe + 1);
 %bio knee moment is col 15 in Winter's Data
 biokneemoment = zeros(1, endframe - startframe + 1);
@@ -84,7 +85,7 @@ else
                0, 0, 0, kinematicsdata(i,23), kinematicsdata(i,24), kinematicsdata(i,25);];
 end
 %calculate kinematics
-Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2);
+Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2, verticaloffset);
 
 %bio knee moment is col 15 in Winter's Data
 biokneemoment(dataindex) = rxnforcedata(i, 15);
@@ -97,6 +98,7 @@ NonDimFactor = (56.7 + BraceMass) / 56.7;
 %multiplied by 2 since both sides of the knee
 TorqueOnCalf(dataindex) =  -2*(In.H4 + In.offset)*In.F_cn;
 totalPE(dataindex) = 2*(T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2);
+% totalKE(dataindex) = 
 
 
 newkneemoment(dataindex) = NonDimFactor*biokneemoment(dataindex) - TorqueOnCalf(dataindex);
