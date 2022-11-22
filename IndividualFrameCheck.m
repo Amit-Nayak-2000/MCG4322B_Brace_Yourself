@@ -1,4 +1,4 @@
-function [] = IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, frame)
+function [] = IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, frame, verticaloffset)
 
 
 %Parse Winters Data
@@ -34,7 +34,7 @@ for i=startframe:endframe
     end
     
     %calculate kinematics
-    Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2);
+    Kinematic_Modelling(S,In,P,A,kinthigh,kincalf, thighlength, calflength, T1, T2, verticaloffset);
 
     %calculate forces
     Kinetic_Saggital(S,In,P,A,T1,T2);

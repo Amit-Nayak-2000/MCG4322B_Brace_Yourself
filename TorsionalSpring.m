@@ -30,7 +30,7 @@ classdef TorsionalSpring < handle
         %Method to intialize spring rate and lengths. 
         %called after GetInitKinematics
         function obj = initSpring(obj, mass, mainlink, sublink)
-            obj.K = 2*0.0022*mass; %this is different 
+            obj.K = 5*0.0022*mass; %this is different 
             obj.l1 = 0.4*mainlink.L;
             obj.l2 = 0.4*mainlink.L;
             obj.beta = 180 - obj.theta0;
