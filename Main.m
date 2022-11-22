@@ -21,6 +21,11 @@ VC = Velcro;
 Blt = Bolt;
 Brng = Bearing;
 SF = SafetyFactor;
+Stoff1 = washerstandoff;
+Stoff2 = washerstandoff;
+Wash = washerstandoff;
+N1 = Fastener;
+N2 = Fastener;
 
 %Initialize dimensions based on Mass and Height
 Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
@@ -330,4 +335,58 @@ while (safetyfactorsatisfied == 0)
 end
 
 %Output final safety factors to log file here...
-%Output solidworks dimensions here...
+
+%%
+%Output solidworks dimensions 
+
+%Anterior link
+A.springarmholepos = 0.5*S.L;
+A.outputDimensions(A);
+
+%Posterior Link
+P.springarmholepos = 0.5*In.L;
+P.outputDimensions(P);
+
+%Superior Link
+S.springarmholepos = 0.4*S.L;
+S.H_holes = 0.5*(S.B1-S.L);
+S.outputDimensions(S);
+
+%Inferior Link
+In.springarmholepos = 0.4*In.L;
+In.H_holes = 0.5*(In.B1-In.L);
+In.outputDimensions(In);
+
+%Springs
+T1.L_arm=S.springarmholepos-0.5*T1.loop_diam*cosd(45);
+T1.height=T1.d*T1.Nb*1.1; %maybe come back and change this
+T1.outputDimensions(T1,1);
+
+T2.L_arm=In.springarmholepos-0.5*T2.loop_diam*cosd(45);
+T2.height=T2.d*T2.Nb*1.1; %maybe come back and change this
+T2.outputDimensions(T2,2);
+
+%standoff and washer
+Stoff1.ID=0.0032;
+Stoff1.OD=0.0045;
+Stoff1.H=T1.height;
+Stoff1.outputDimensions(Stoff1, 1);
+
+Stoff2.ID=0.0032;
+Stoff2.OD=0.0045;
+Stoff2.H=2*T1.d; %maybe come back and change this
+Stoff2.outputDimensions(Stoff2, 2);
+
+wash.ID=0.0032;
+wash.OD=0.006;
+wash.H=0.0006;
+wash.outputDimensions(wash, 3);
+
+%Bearing
+Brng.outputDimensions(Brng);
+
+%Nut
+
+
+%Bolt
+
