@@ -56,6 +56,8 @@ classdef SafetyFactor < handle
         % Springs
         sigma_spring1
         sigma_spring2
+        fatigue_spring1
+        fatigue_spring2
         
         % Bolts
         tau_sa 
@@ -93,7 +95,7 @@ classdef SafetyFactor < handle
     
     methods
         %Method to intialize inner diameter and outer diameter of bearing. 
-        function obj = initBearing(obj, SC_sigma_sx, SC_sigma_s1y, SC_sigma_s2y, SC_sigma_s3y, SC_sigma_sbend1, SC_sigma_sbend2, SC_sigma_srupture, SC_tau_s1, SC_tau_s2, SC_tau_s3, SC_buckling_s, SC_sigma_ix, SC_sigma_i1y, SC_sigma_i2y, SC_sigma_i3y, SC_sigma_ibend1, SC_sigma_ibend2, SC_sigma_irupture, SC_tau_i1, SC_tau_i2, SC_tau_i3, SC_buckling_i, SC_sigma_a1y, SC_sigma_a2y, SC_sigma_abend, SC_sigma_arupture1, SC_sigma_arupture2, SC_tau_a1, SC_tau_a2, SC_buckling_a, SC_sigma_p1y, SC_sigma_p2y, SC_sigma_pbend, SC_sigma_prupture1, SC_sigma_prupture2, SC_tau_p1, SC_tau_p2, SC_buckling_p, SC_tau_vt, SC_tau_vc, SC_sigma_spring1, SC_sigma_spring2, SC_tau_sa, SC_tau_sp, SC_tau_ia, SC_tau_ip, SC_sigma_bearingsa, SC_sigma_bearingsp, SC_sigma_bearingia, SC_sigma_bearingip)
+        function obj = initBearing(obj, SC_sigma_sx, SC_sigma_s1y, SC_sigma_s2y, SC_sigma_s3y, SC_sigma_sbend1, SC_sigma_sbend2, SC_sigma_srupture, SC_tau_s1, SC_tau_s2, SC_tau_s3, SC_buckling_s, SC_sigma_ix, SC_sigma_i1y, SC_sigma_i2y, SC_sigma_i3y, SC_sigma_ibend1, SC_sigma_ibend2, SC_sigma_irupture, SC_tau_i1, SC_tau_i2, SC_tau_i3, SC_buckling_i, SC_sigma_a1y, SC_sigma_a2y, SC_sigma_abend, SC_sigma_arupture1, SC_sigma_arupture2, SC_tau_a1, SC_tau_a2, SC_buckling_a, SC_sigma_p1y, SC_sigma_p2y, SC_sigma_pbend, SC_sigma_prupture1, SC_sigma_prupture2, SC_tau_p1, SC_tau_p2, SC_buckling_p, SC_tau_vt, SC_tau_vc, SC_sigma_spring1, SC_sigma_spring2, SC_fatigue_spring1, SC_fatigue_spring2, SC_tau_sa, SC_tau_sp, SC_tau_ia, SC_tau_ip, SC_sigma_bearingsa, SC_sigma_bearingsp, SC_sigma_bearingia, SC_sigma_bearingip)
             sigma_sx = SC_sigma_sx
             sigma_s1y = SC_sigma_s1y;
             sigma_s2y = SC_sigma_s2y;
@@ -141,6 +143,8 @@ classdef SafetyFactor < handle
             
             sigma_spring1 = SC_sigma_spring1;
             sigma_spring2 = SC_sigma_spring2;
+            fatigue_spring1 = SC_fatigue_spring1;
+            fatigue_spring2 = SC_fatigue_spring2;
             
             tau_sa = SC_tau_sa;
             tau_sp = SC_tau_sp;

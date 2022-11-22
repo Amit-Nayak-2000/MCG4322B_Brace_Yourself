@@ -342,7 +342,7 @@ SF.tau_vc = VC.G/tau_vc;
 %% Springs
 
 % SYMBOLS
-syms K sigma_spring1 sigma_spring2
+syms K sigma_spring1 sigma_spring2 sr_spring1 sr_spring2
 
 % STRESS CORRECTION FACTOR
 K = (4*TS1.C^2 - TS1.C - 1) / (4*TS1.C*(TS1.C-1));
@@ -350,10 +350,14 @@ K = (4*TS1.C^2 - TS1.C - 1) / (4*TS1.C*(TS1.C-1));
 % STRESS CALCULATION
 sigma_spring1 = (K*32*abs(F_sspring1)*0.4*S.L) / (pi*TS1.d^3);
 sigma_spring2 = (K*32*abs(F_ispring2)*0.4*I.L) / (pi*TS2.d^3);
+sr_spring1 = (0.5*0.60*TS1.SU) / (1-(0.5*0.6)^2); % change 0.6 (shot-peened) to 0.5 (not shot-peened) if necessary
+sr_spring2 = (0.5*0.60*TS2.SU) / (1-(0.5*0.6)^2); % change 0.6 (shot-peened) to 0.5 (not shot-peened) if necessary
 
 % SAFETY FACTOR CALCULATIONS
 SF.sigma_spring1 = TS1.SY/sigma_spring1;
 SF.sigma_spring2 = TS2.SY/sigma_spring2;
+SF.fatigue_spring1 = sr_spring1/sigma_spring1;
+SF.fatigue_spring2 = sr_spring2/sigma_spring2;
 
 %% Bolts
 
