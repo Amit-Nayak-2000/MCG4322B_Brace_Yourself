@@ -1,4 +1,4 @@
-classdef washerstandoff
+classdef washerstandoff < handle
     %washer/standoff object
     properties
         ID

@@ -17,9 +17,9 @@ classdef InferiorLink < handle
         T %Thickness
         bolt_hole_diam
         springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
-        springarmholemaxd
-        springarmholemind
-        armholeheadheight
+        springarmholemaxd =0.006;
+        springarmholemind=0.0034;
+        armholeheadheight=0.00165;
         H_holes
         
         
