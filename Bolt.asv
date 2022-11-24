@@ -69,7 +69,7 @@ classdef Bolt < handle
                 fclose(fileID); 
                 
             else
-                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/IP_bolt.txt','w');
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/SP_bolt.txt','w');
                 fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
                 fprintf(fileID,'"L_head"=%.6f\n', 0.002);
                 fprintf(fileID,'"L"=%.6f\n',obj.L);
@@ -77,6 +77,7 @@ classdef Bolt < handle
                 fprintf(fileID,'"diam_thread"=%.6f\n',obj.D);
                 fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
                 fclose(fileID); 
+
                 
             end
             

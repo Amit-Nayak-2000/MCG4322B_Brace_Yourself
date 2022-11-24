@@ -40,6 +40,7 @@ classdef AnteriorLink < handle
         %Vector from inferior joint (IA) to centre of mass
         ria = [0;0;0]; 
         theta %Angle with respect to horizontal-x (deg) 
+        theta0 %initial theta at 0 degrees flexion
         %omega and alpha initially set to 0, but will have values in k.
         omega  = [0;0;0]; %Angular Velocity (rad/s)
         alpha  = [0;0;0]; %Angular acceleration (rad/s^2)

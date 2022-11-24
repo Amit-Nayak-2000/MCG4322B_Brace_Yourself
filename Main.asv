@@ -363,11 +363,11 @@ In.outputDimensions();
 %Springs
 T1.L_arm=S.springarmholepos-0.5*T1.loop_diam*cosd(45);
 T1.height=T1.d*T1.Nb*1.1; %maybe come back and change this
-T1.outputDimensions(1);
+T1.outputDimensions(T1,1);
 
 T2.L_arm=In.springarmholepos-0.5*T2.loop_diam*cosd(45);
 T2.height=T2.d*T2.Nb*1.1; %maybe come back and change this
-T2.outputDimensions(2);
+T2.outputDimensions(T2,2);
 
 %standoff and washer
 if(S.T>=In.T && T1.height>=T2.height)
@@ -389,27 +389,26 @@ end
     
 Stoff1.ID=0.0032;
 Stoff1.OD=0.0045;
-Stoff1.outputDimensions(1);
+Stoff1.outputDimensions(Stoff1, 1);
 
 Stoff2.ID=0.0032;
 Stoff2.OD=0.0045;
-Stoff2.outputDimensions(2);
+Stoff2.outputDimensions(Stoff2, 2);
 
 Stoff3.ID=0.0032;
 Stoff3.OD=0.0045;
 Stoff3.H=2*T1.d; %maybe come back and change this
-Stoff3.outputDimensions(3);
+Stoff3.outputDimensions(Stoff3, 3);
 
-Wash.ID=0.0032;
-Wash.OD=0.006;
-Wash.H=0.0006;
-Wash.outputDimensions(4);
+wash.ID=0.0032;
+wash.OD=0.006;
+wash.H=0.0006;
+wash.outputDimensions(wash, 3);
 
 %Bearing
 Brng.outputDimensions();
 
 %Housing 
-
 %Housing base
 Hbase.stop_width = 0.005;
 Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.gap;
@@ -422,9 +421,9 @@ Hbase.t1 = 0.005;
 Hbase.t2 = A.T+P.T+S.T+2*Stoff1.H+0.0065;
 
 if(Stoff1<=Stoff2)
-    Hbase.t3 = P.T+Stoff1.H-0.001;
+    Hbase.t3 = P.T+Stoff1-0.001;
 else
-    Hbase.t3 = P.T+Stoff2.H-0.001;
+    Hbase.t3 = P.T+Stoff2-0.001;
 end
 
 Hbase.b1_x=Hbase.stop_width+Hbase.gap+0.5*A.B+S.L;
@@ -446,21 +445,18 @@ Hcover.superior_stop_angle=Hbase.superior_stop_angle;
 Hcover.t1=Hbase.t1;
 
 if(Stoff1<=Stoff2)
-    Hcover.t2 = A.T+Stoff1.H+0.0065-0.001;
+    Hcover.t2 = A.T+Stoff1+0.0065-0.001;
 else
-    Hcover.t2 = A.T+Stoff2.H+0.0065-0.001;
+    Hcover.t2 = A.T+Stoff2+0.0065-0.001;
 end
 
 Hcover.cover_holes_diam=0.0024;
 
 Hcover.outputDimensions(2);
-
 %Nut
-%Link-spring nut
 N1.thread_height=0.0018;
 N1.ouputDimensions(1);
 
-%interlink nut
 N2.height=0.004;
 N2.thread_height=0.00333;
 N2.outputDimensions(2);
@@ -470,25 +466,21 @@ Blt.D=0.003;
 
 %Link-Spring bolt
 if(A.T>P.T)
-    Blt.L=(ceil((A.T+Wash.H+N1.thread_height)*1000)+1)/1000;
+    Blt.L=(ceil((A.T+wash.H+N1.thread_height)*1000)+1)/1000;
 else
-    Blt.L=(ceil((P.T+Wash.H+N1.thread_height)*1000)+1)/1000;
+    Blt.L=(ceil((P.T+wash.H+N1.thread_height)*1000)+1)/1000;
 end
 
 Blt.outputDimensions(1);
 
 %SA bolt
 Blt.L=(ceil((A.T+Stoff1.H+S.T+N2.height)*1000)+1)/1000;
-Blt.outputDimensions(2);
 
 %SP bolt
 Blt.L=(ceil((P.T+Stoff1.H+S.T+Hbase.t1)*1000))/1000;
-Blt.outputDimensions(3);
 
 %IA bolt
 Blt.L=(ceil((A.T+Stoff2.H+In.T+N2.height)*1000)+1)/1000;
-Blt.outputDimensions(4);
 
 %IP bolt
 Blt.L=(ceil((P.T+Stoff2.H+In.T+Hbase.t1)*1000))/1000;
-Blt.outputDimensions(5);
