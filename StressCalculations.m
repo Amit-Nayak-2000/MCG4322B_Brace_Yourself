@@ -401,18 +401,30 @@ SF.sigma_bearingip = Bearing.C_10 / C_ip;
 
 %% Obtain the minimum safety factor (critical) from all safety factors for each obj.
 Superiorarr = [abs(SF.sigma_sx), abs(SF.sigma_s1y), abs(SF.sigma_s2y), abs(SF.sigma_s3y), abs(SF.sigma_sbend1), abs(SF.sigma_sbend2), abs(SF.sigma_srupture), abs(SF.tau_s1), abs(SF.tau_s2), abs(SF.tau_s3)];
+if(SF.buckling_s > 0)
+    Superiorarr(end + 1) = SF.buckling_s;
+end
 
 SF.SF_sup = min(Superiorarr);
 
 Inferiorarr = [abs(SF.sigma_ix), abs(SF.sigma_i1y), abs(SF.sigma_i2y), abs(SF.sigma_i3y), abs(SF.sigma_ibend1), abs(SF.sigma_ibend2), abs(SF.sigma_irupture), abs(SF.tau_i1), abs(SF.tau_i2), abs(SF.tau_i3)];
+if(SF.buckling_i > 0)
+    Inferiorarr(end + 1) = SF.buckling_i;
+end
 
 SF.SF_inf = min(Inferiorarr);
 
 Anteriorarr = [abs(SF.sigma_a1y), abs(SF.sigma_a2y), abs(SF.sigma_abend), abs(SF.sigma_arupture1), abs(SF.sigma_arupture2), abs(SF.tau_a1), abs(SF.tau_a2)];
+if(SF.buckling_a > 0)
+    Anteriorarr(end + 1) = SF.buckling_a;
+end
 
 SF.SF_ant = min(Anteriorarr);
 
 Posteriorarr = [abs(SF.sigma_p1y), abs(SF.sigma_p2y), abs(SF.sigma_pbend), abs(SF.sigma_prupture1), abs(SF.sigma_prupture2), abs(SF.tau_p1), abs(SF.tau_p2)];
+if(SF.buckling_p > 0)
+    Posteriorarr(end + 1) = SF.buckling_p;
+end
 
 SF.SF_pos = min(Posteriorarr);
     
@@ -420,8 +432,8 @@ SF.SF_pos = min(Posteriorarr);
 SF.SF_VT = abs(SF.tau_vt);
 SF.SF_VC = abs(SF.tau_vc);
 
-SF.SF_TS1 = abs(SF.sigma_spring1);
-SF.SF_TS2 = abs(SF.sigma_spring2);
+SF.SF_TS1 = min([abs(SF.sigma_spring1), abs(SF.fatigue_spring1)]);
+SF.SF_TS2 = min([abs(SF.sigma_spring2), abs(SF.fatigue_spring2)]);
 
 SF.SF_BoltSA = abs(SF.tau_sa);
 SF.SF_BoltSP = abs(SF.tau_sp);

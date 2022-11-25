@@ -389,10 +389,14 @@ end
     
 Stoff1.ID=0.0032;
 Stoff1.OD=0.0045;
+Stoff1.H=T1.height;
+
 Stoff1.outputDimensions(1);
 
 Stoff2.ID=0.0032;
 Stoff2.OD=0.0045;
+Stoff2.H=2*T1.d; %maybe come back and change this
+
 Stoff2.outputDimensions(2);
 
 Stoff3.ID=0.0032;
