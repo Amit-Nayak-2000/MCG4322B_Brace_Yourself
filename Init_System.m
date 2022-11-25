@@ -32,7 +32,7 @@ In.H1 = 0.2*In.H4;
 
 In.B1 = 1.34133*S.B1; 
 In.B2 = In.B1 / 2; 
-In.B3 = calfdiameter / 2;
+In.B3 = S.B3;
 In.L = 0.7*In.B1;
 
 %Posterior Link

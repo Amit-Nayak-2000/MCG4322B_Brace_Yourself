@@ -12,7 +12,7 @@ classdef Housing
         t1
         t2
         t3
-        bolt_hole_size=0.0034;
+        bolt_hole_size=0.003;
         b1_x
         b1_y
         bolt_dist
@@ -26,7 +26,7 @@ classdef Housing
     end
     
     methods
-        function outputDimensions = method1(obj,type)
+        function outputDimensions(obj,type)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
             if(type == 1)
@@ -50,7 +50,7 @@ classdef Housing
                 fprintf(fileID,'"pitch"=%.6f\n', obj.pitch);
                 fprintf(fileID,'"cover_holes_diam"=%.6f\n', obj.cover_holes_diam);
                 fprintf(fileID,'"cover_holes_depth"=%.6f\n', obj.cover_holes_depth);
-                fprintf(fileID,'"cover_holes_pitch"=%.6f\n', obj.cover_holes_pitch);
+                fprintf(fileID,'"cover_hole_pitch"=%.6f\n', obj.cover_hole_pitch);
                 fclose(fileID); 
                 
             else
@@ -66,7 +66,7 @@ classdef Housing
                 fprintf(fileID,'"t2"=%.6f\n', obj.t2);
                 fprintf(fileID,'"cover_holes_diam"=%.6f\n', obj.cover_holes_diam);
                 fprintf(fileID,'"cover_holes_depth"=%.6f\n', obj.cover_holes_depth);
-                fprintf(fileID,'"cover_holes_pitch"=%.6f\n', obj.cover_holes_pitch);
+                fprintf(fileID,'"cover_hole_pitch"=%.6f\n', obj.cover_hole_pitch);
                 fclose(fileID); 
             end
             

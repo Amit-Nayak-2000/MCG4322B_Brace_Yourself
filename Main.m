@@ -412,14 +412,14 @@ Brng.outputDimensions();
 
 %Housing base
 Hbase.stop_width = 0.005;
-Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.gap;
-Hbase.width = A.H+2*Hbase.stop_width+Hbase.gap;
+Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.gap+Hbase.stop_width;
+Hbase.width = A.H+2*Hbase.stop_width+Hbase.gap+0.001;
 %Hbase.width = Hbase.height + 2*Hbase.stop_width;
-Hbase.inf_stop_x = Hbase.stop_width+A.H*abs(cosd(A.theta0))-0.5*(A.H-A.L)-In.L-0.5*(In.B1-In.L)+Hbase.gap-0.0005;
+Hbase.inf_stop_x = Hbase.stop_width+A.L*abs(cosd(A.theta0))+0.5*(A.B)-In.L-0.5*(In.B1-In.L)+Hbase.gap-0.0005;
 Hbase.superior_stop_x = Hbase.stop_width+Hbase.gap+0.5*A.B-0.5*(S.B1-S.L);
 Hbase.superior_stop_angle = 180-atand((S.H2-S.H1)/(0.5*(S.B1-S.B2)));
 Hbase.t1 = 0.005;
-Hbase.t2 = A.T+P.T+S.T+2*Stoff1.H+0.0065;
+Hbase.t2 = A.T+P.T+S.T+2*Stoff1.H+0.0035;
 
 if(Stoff1<=Stoff2)
     Hbase.t3 = P.T+Stoff1.H-0.001;
@@ -430,7 +430,7 @@ end
 Hbase.b1_x=Hbase.stop_width+Hbase.gap+0.5*A.B+S.L;
 Hbase.b1_y=S.H1-S.H_holes+0.0015;
 Hbase.bolt_dist=P.L;
-Hbase.theta_p_init=P.theta0;
+Hbase.theta_p_init=180-P.theta0;
 Hbase.bolt_hole_depth=Hbase.t1;
 Hbase.cover_holes_diam=0.002;
 
@@ -446,9 +446,9 @@ Hcover.superior_stop_angle=Hbase.superior_stop_angle;
 Hcover.t1=Hbase.t1;
 
 if(Stoff1<=Stoff2)
-    Hcover.t2 = A.T+Stoff1.H+0.0065-0.001;
+    Hcover.t2 = A.T+Stoff1.H+0.0035-0.001;
 else
-    Hcover.t2 = A.T+Stoff2.H+0.0065-0.001;
+    Hcover.t2 = A.T+Stoff2.H+0.0035-0.001;
 end
 
 Hcover.cover_holes_diam=0.0024;
@@ -458,7 +458,7 @@ Hcover.outputDimensions(2);
 %Nut
 %Link-spring nut
 N1.thread_height=0.0018;
-N1.ouputDimensions(1);
+N1.outputDimensions(1);
 
 %interlink nut
 N2.height=0.004;
@@ -492,3 +492,19 @@ Blt.outputDimensions(4);
 %IP bolt
 Blt.L=(ceil((P.T+Stoff2.H+In.T+Hbase.t1)*1000))/1000;
 Blt.outputDimensions(5);
+
+%Velcro
+%Thigh Velcro
+VT.Loop_D=0.008;
+VT.t=0.001;
+VT.fold_back_L=0.5*VT.L;
+
+VT.outputDimensions(1);
+
+%Calf Velcro
+VC.Loop_D=0.008;
+VC.t=0.001;
+VC.fold_back_L=0.5*VC.L;
+
+VC.outputDimensions(2);
+

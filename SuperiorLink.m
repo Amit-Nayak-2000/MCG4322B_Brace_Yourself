@@ -203,7 +203,7 @@ classdef SuperiorLink < handle
         
         %method to output dimensions to .txt files.
         function outputDimensions(obj)
-            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/SuperiorLink.txt','w');
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/superior_link.txt','w');
             fprintf(fileID,'"B1"=%.6f\n',obj.B1);
             fprintf(fileID,'"B2"=%.6f\n',obj.B2);
             fprintf(fileID,'"B3"=%.6f\n',obj.B3);
