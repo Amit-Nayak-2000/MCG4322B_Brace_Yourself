@@ -23,9 +23,12 @@ Brng = Bearing;
 SF = SafetyFactor;
 Stoff1 = washerstandoff;
 Stoff2 = washerstandoff;
+Stoff3 = washerstandoff;
 Wash = washerstandoff;
 N1 = Fastener;
 N2 = Fastener;
+Hbase = Housing;
+Hcover = Housing;
 
 %Initialize dimensions based on Mass and Height
 Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
@@ -367,27 +370,145 @@ T2.height=T2.d*T2.Nb*1.1; %maybe come back and change this
 T2.outputDimensions(2);
 
 %standoff and washer
+if(S.T>=In.T && T1.height>=T2.height)
+    Stoff1.H=T1.height;
+    Stoff2.H=T1.height+0.5*(S.T-In.T);
+    
+elseif(S.T<In.T && T1.height>=T2.height)
+    Stoff1.H=T1.height+0.5*(In.T-S.T);
+    Stoff2.H=T1.height;
+
+elseif(S.T>=In.T && T1.height<T2.height)
+    Stoff1.H=T2.height;
+    Stoff2.H=T2.height+0.5*(S.T-In.T);
+    
+else
+    Stoff1.H=T2.height+0.5*(In.T-S.T);
+    Stoff2.H=T2.height;
+end
+    
 Stoff1.ID=0.0032;
 Stoff1.OD=0.0045;
 Stoff1.H=T1.height;
+
 Stoff1.outputDimensions(1);
 
 Stoff2.ID=0.0032;
 Stoff2.OD=0.0045;
 Stoff2.H=2*T1.d; %maybe come back and change this
+
 Stoff2.outputDimensions(2);
 
-%ROHAN FIX THIS PLS
-% wash.ID=0.0032;
-% wash.OD=0.006;
-% wash.H=0.0006;
-% wash.outputDimensions(3);
+Stoff3.ID=0.0032;
+Stoff3.OD=0.0045;
+Stoff3.H=2*T1.d; %maybe come back and change this
+Stoff3.outputDimensions(3);
+
+Wash.ID=0.0032;
+Wash.OD=0.006;
+Wash.H=0.0006;
+Wash.outputDimensions(4);
 
 %Bearing
 Brng.outputDimensions();
 
-%Nut
+%Housing 
 
+%Housing base
+Hbase.stop_width = 0.005;
+Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.gap+Hbase.stop_width;
+Hbase.width = A.H+2*Hbase.stop_width+Hbase.gap+0.001;
+%Hbase.width = Hbase.height + 2*Hbase.stop_width;
+Hbase.inf_stop_x = Hbase.stop_width+A.L*abs(cosd(A.theta0))+0.5*(A.B)-In.L-0.5*(In.B1-In.L)+Hbase.gap-0.0005;
+Hbase.superior_stop_x = Hbase.stop_width+Hbase.gap+0.5*A.B-0.5*(S.B1-S.L);
+Hbase.superior_stop_angle = 180-atand((S.H2-S.H1)/(0.5*(S.B1-S.B2)));
+Hbase.t1 = 0.005;
+Hbase.t2 = A.T+P.T+S.T+2*Stoff1.H+0.0035;
+
+if(Stoff1<=Stoff2)
+    Hbase.t3 = P.T+Stoff1.H-0.001;
+else
+    Hbase.t3 = P.T+Stoff2.H-0.001;
+end
+
+Hbase.b1_x=Hbase.stop_width+Hbase.gap+0.5*A.B+S.L;
+Hbase.b1_y=S.H1-S.H_holes+0.0015;
+Hbase.bolt_dist=P.L;
+Hbase.theta_p_init=180-P.theta0;
+Hbase.bolt_hole_depth=Hbase.t1;
+Hbase.cover_holes_diam=0.002;
+
+Hbase.outputDimensions(1);
+
+%Housing cover
+Hcover.stop_width=Hbase.stop_width;
+Hcover.height=Hbase.height;
+Hcover.width=Hbase.width;
+Hcover.inf_stop_x=Hbase.inf_stop_x;
+Hcover.superior_stop_x=Hbase.superior_stop_x;
+Hcover.superior_stop_angle=Hbase.superior_stop_angle;
+Hcover.t1=Hbase.t1;
+
+if(Stoff1<=Stoff2)
+    Hcover.t2 = A.T+Stoff1.H+0.0035-0.001;
+else
+    Hcover.t2 = A.T+Stoff2.H+0.0035-0.001;
+end
+
+Hcover.cover_holes_diam=0.0024;
+
+Hcover.outputDimensions(2);
+
+%Nut
+%Link-spring nut
+N1.thread_height=0.0018;
+N1.outputDimensions(1);
+
+%interlink nut
+N2.height=0.004;
+N2.thread_height=0.00333;
+N2.outputDimensions(2);
 
 %Bolt
+Blt.D=0.003;
+
+%Link-Spring bolt
+if(A.T>P.T)
+    Blt.L=(ceil((A.T+Wash.H+N1.thread_height)*1000)+1)/1000;
+else
+    Blt.L=(ceil((P.T+Wash.H+N1.thread_height)*1000)+1)/1000;
+end
+
+Blt.outputDimensions(1);
+
+%SA bolt
+Blt.L=(ceil((A.T+Stoff1.H+S.T+N2.height)*1000)+1)/1000;
+Blt.outputDimensions(2);
+
+%SP bolt
+Blt.L=(ceil((P.T+Stoff1.H+S.T+Hbase.t1)*1000))/1000;
+Blt.outputDimensions(3);
+
+%IA bolt
+Blt.L=(ceil((A.T+Stoff2.H+In.T+N2.height)*1000)+1)/1000;
+Blt.outputDimensions(4);
+
+%IP bolt
+Blt.L=(ceil((P.T+Stoff2.H+In.T+Hbase.t1)*1000))/1000;
+Blt.outputDimensions(5);
+
+%Velcro
+%Thigh Velcro
+VT.Loop_D=0.008;
+VT.t=0.001;
+VT.fold_back_L=0.5*VT.L;
+
+VT.outputDimensions(1);
+
+%Calf Velcro
+VC.Loop_D=0.008;
+VC.t=0.001;
+VC.fold_back_L=0.5*VC.L;
+
+VC.outputDimensions(2);
 

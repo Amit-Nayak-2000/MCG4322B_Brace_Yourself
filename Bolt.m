@@ -38,7 +38,7 @@ classdef Bolt < handle
                 
                 
             elseif(type == 2)
-                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/inferior_inter_link_bolt.txt','w');
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/SA_bolt.txt','w');
                 fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
                 fprintf(fileID,'"L_head"=%.6f\n', 0.002);
                 fprintf(fileID,'"L"=%.6f\n',obj.L);
@@ -48,8 +48,8 @@ classdef Bolt < handle
                 fclose(fileID); 
                 
             
-            else
-                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/superior_inter_link_bolt.txt','w');
+            elseif(type == 3)
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/SP_bolt.txt','w');
                 fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
                 fprintf(fileID,'"L_head"=%.6f\n', 0.002);
                 fprintf(fileID,'"L"=%.6f\n',obj.L);
@@ -58,6 +58,25 @@ classdef Bolt < handle
                 fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
                 fclose(fileID); 
                 
+            elseif(type == 4)
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/IA_bolt.txt','w');
+                fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
+                fprintf(fileID,'"L_head"=%.6f\n', 0.002);
+                fprintf(fileID,'"L"=%.6f\n',obj.L);
+                fprintf(fileID,'"L_thread"=%.6f\n',obj.L_thread);
+                fprintf(fileID,'"diam_thread"=%.6f\n',obj.D);
+                fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
+                fclose(fileID); 
+                
+            else
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/IP_bolt.txt','w');
+                fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
+                fprintf(fileID,'"L_head"=%.6f\n', 0.002);
+                fprintf(fileID,'"L"=%.6f\n',obj.L);
+                fprintf(fileID,'"L_thread"=%.6f\n',obj.L_thread);
+                fprintf(fileID,'"diam_thread"=%.6f\n',obj.D);
+                fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
+                fclose(fileID); 
                 
             end
             

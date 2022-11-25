@@ -200,7 +200,7 @@ classdef InferiorLink < handle
         
         %Method to output dimesions to .txt files.
         function outputDimensions(obj)
-            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/InferiorLink.txt','w');
+            fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/inferior_link.txt','w');
             fprintf(fileID,'"B1"=%.6f\n',obj.B1);
             fprintf(fileID,'"B2"=%.6f\n',obj.B2);
             fprintf(fileID,'"B3"=%.6f\n',obj.B3);
