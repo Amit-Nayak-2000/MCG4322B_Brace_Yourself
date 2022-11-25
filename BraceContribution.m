@@ -1,6 +1,6 @@
 %User provided parameters
 mass = 56.7; %kilograms
-height = 1.73; %metres
+height = 2; %metres
 thighdiameter = 0.1; %metres
 calfdiameter = 0.08; %metres
 
@@ -33,7 +33,7 @@ SF = SafetyFactor;
 
 
 %Initialize dimensions based on Mass and Height
-Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng);
+Init_System(mass, height, S, In, P, A, T1, T2,VT,VC,Blt,Brng, thighdiameter, calfdiameter);
 
 %Initialize Torsional Springs:
 verticaloffset = GetInitKinematics(S,In,A,P, T1, T2);

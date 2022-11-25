@@ -1,9 +1,10 @@
-function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
+function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
 
 
 %Parse Winters Data
 WinterData = Parse_Winter_Data("Winter_Appendix_data_fixed.xlsx");
 kinematicsdata = WinterData{3};
+rxnforcedata = WinterData{5};
 
 startframe = 28; %HCR %originally 28
 endframe = 96; %Just Before next HCR %originally 96
@@ -34,6 +35,18 @@ BNSPSFArr = zeros(1 ,endframe - startframe + 1);
 BNSASFArr = zeros(1 ,endframe - startframe + 1); 
 BNIASFArr = zeros(1 ,endframe - startframe + 1); 
 BNIPSFArr = zeros(1 ,endframe - startframe + 1);
+
+%Contribution Arrays
+percentage = zeros(1, endframe - startframe + 1);
+biokneemoment = zeros(1, endframe - startframe + 1);
+TorqueOnCalf = zeros(1, endframe - startframe + 1);
+totalPE = zeros(1, endframe - startframe + 1);
+newkneemoment = zeros(1, endframe - startframe + 1);
+ICRx = zeros(1, endframe - startframe + 1);
+ICRy = zeros(1, endframe - startframe + 1);
+% OA_KAM = zeros(1, endframe - startframe + 1);
+% percentagegait = zeros(1, endframe - startframe + 1);
+syms Da Dp;
 
 %Loop through the gait cycle
 for i=startframe:endframe
@@ -93,10 +106,32 @@ for i=startframe:endframe
     BNIASFArr(dataindex) = SF.SF_BrngIA;
     BNIPSFArr(dataindex) = SF.SF_BrngIP;
     
-    
+    %% Saggital Brace Contribution Calculations
+    %bio knee moment is col 15 in Winter's Data
+    biokneemoment(dataindex) = rxnforcedata(i, 15);
+    BraceMass = 2*(S.m + A.m + In.m + P.m);
+    NonDimFactor = (56.7 + BraceMass) / 56.7;
 
-%     %calculate safety factors and store in an array
-    disp(i);
+    %multiplied by 2 since both sides of the knee
+    TorqueOnCalf(dataindex) =  -2*(In.H4 + In.offset)*In.F_cn;
+    totalPE(dataindex) = 2*(T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2);
+    
+    newkneemoment(dataindex) = NonDimFactor*biokneemoment(dataindex) - TorqueOnCalf(dataindex);
+    
+    
+    percentage(dataindex) = ((i - startframe + 1)/(endframe - startframe + 1)) * 100;
+    disp(percentage(dataindex) + "% of gait cycle completed.");
+    
+    
+    %% ICR Calculations
+    
+    ICR1 = Da*cosd(A.theta) + Dp*cosd(P.theta)+S.L*cosd(S.theta) == 0;
+    ICR2 = Da*sind(A.theta) + Dp*sind(P.theta)+S.L*sind(S.theta) == 0;
+
+    ICRsoln = solve([ICR1, ICR2], [Da, Dp]);
+
+    ICRx(i) = double(ICRsoln.Da*cosd(A.theta));
+    ICRy(i) = double(ICRsoln.Da*sind(A.theta));
     
 end
 

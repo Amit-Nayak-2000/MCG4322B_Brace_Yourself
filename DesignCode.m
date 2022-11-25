@@ -1,8 +1,9 @@
-%User provided parameters (WILL BE FROM GUI)
-mass = 56.7; %kilograms
-height = 1.73; %metres
-thighdiameter = 0.1; %metres
-calfdiameter = 0.08; %metres
+function [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors] = DesignCode(mass,height,thighdiameter,calfdiameter)
+%Design Code
+%Inputs: User mass, height, thigh and calf diameter
+%Outputs: Safety Factors of all components, Moment Contribution in Saggital Plane,
+%Brace Offloading Contribution in Frontal Plane
+
 
 %Thigh/Calf Length from Winters Segment Model
 thighlength = (0.530 - 0.285)*height;
@@ -45,7 +46,7 @@ safetyfactorsatisfied = 0;
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
     disp("Computing Initial Calculations.");
-    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
+    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
     
     %assume SF satisfied, then iterate thru each object.
     safetyfactorsatisfied = 1;
@@ -99,7 +100,7 @@ while (safetyfactorsatisfied == 0)
             if(In.T > 0.0039)
                 In.T = 0.9*In.T;
             else
-                In.B2 = 0.75*In.B2;
+                In.B2 = 0.9*In.B2;
             end
             %recalculate inertial properties
             In = calculate_inertial_props(In);
@@ -338,6 +339,9 @@ while (safetyfactorsatisfied == 0)
 end
 
 %Output final safety factors to log file here...
+Parts = ["Superior Link" "Inferior Link" "Anterior Link" "Posterior Link" "Velcro Thigh" "Velcro Calf" "Torsional Spring 1" "Torsional Spring 2"];
+SafetyFactors = [MinSup MinInf MinAnt MinPos MinVT MinVC MinT1 MinT2];
+% SFDict = dictionary(Parts,SafetyFactors);
 
 %%
 %Output solidworks dimensions 
@@ -511,4 +515,7 @@ VC.t=0.001;
 VC.fold_back_L=0.5*VC.L;
 
 VC.outputDimensions(2);
+
+
+end
 

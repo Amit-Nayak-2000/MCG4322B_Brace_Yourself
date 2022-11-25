@@ -1,13 +1,13 @@
-function [] = Init_System(mass,height,S,In,P,A,T1,T2,VT,VC,Bolt,Bearing)
+function [] = Init_System(mass,height,S,In,P,A,T1,T2,VT,VC,Bolt,Bearing, thighdiameter, calfdiameter)
 %INIT_SYSTEM 
 %Initialize System Objects based on User Params.
 
 %Mass, height, thigh diameter and calf diameter are user inputs to the GUI.
 %Thigh/Calf Length from Winters Segment Model
 thighlength = (0.530 - 0.285)*height;
-thighdiameter = 0.1;
+% thighdiameter = 0.1;
 calflength = (0.285 - 0.0039)*height;
-calfdiameter = 0.08;
+% calfdiameter = 0.08;
 bolt_hole_size = 0.0034;
 
 %Assign Dimensions to Objects
@@ -32,7 +32,8 @@ In.H1 = 0.2*In.H4;
 
 In.B1 = 1.34133*S.B1; 
 In.B2 = In.B1 / 2; 
-In.B3 = S.B3;
+% In.B3 = S.B3; %Temporarily changing this
+In.B3 = calfdiameter / 2;
 In.L = 0.7*In.B1;
 
 %Posterior Link
