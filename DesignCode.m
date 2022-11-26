@@ -111,7 +111,8 @@ while (safetyfactorsatisfied == 0)
             %Flag to recheck with entire gait cycle after has been optimized.
 %             safetyfactorsatisfied = 0;
             %increase thickness of link.
-            In.B2 = 1.2*In.B2;
+            In.B2 = 1.15*In.B2;
+            In.T = 1.15*In.T;
             %recalculate inertial properties
             In = calculate_inertial_props(In);
             %update SF for critical frame
