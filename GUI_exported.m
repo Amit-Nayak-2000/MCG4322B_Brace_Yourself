@@ -139,26 +139,30 @@ classdef GUI_exported < matlab.apps.AppBase
 
         % Button pushed function: BUILDButton
         function BUILDButtonPushed(app, event)
-            height = app.EditField_h.Value; %Saves latest value from text box to the variable height
-            weight = app.EditField_w.Value; %Saves latest value from text box to the variable weight
-            calfD = app.EditField_c.Value / pi; %Saves latest value from text box to the variable calfCircumference and converts to diameter
-            thighD = app.EditField_t.Value / pi; %Saves latest value from text box to the variable thighCircumference and converts to diameter
+            height = app.EditField_h.Value / 100; % Saves latest value from text box to the variable height and converts cm to m
+            weight = app.EditField_w.Value; % Saves latest value from text box to the variable weight and converts cm to m
+            calfD = (app.EditField_c.Value / pi) / 100; % Saves latest value from calf circumference text box to the variable calfD, converts to diameter and converts cm to m
+            thighD = (app.EditField_t.Value / pi) / 100; % Saves latest value from thigh circumference text box to the variable thighCD, converts to diameter and converts cm to m
+            calfDmin = (27/pi)/100; 
+            calfDmax = (61/pi)/100;
+            thighDmin = (33/pi)/100;
+            thighDmax = (81/pi)/100;
 
-            if (height < 100) || (height > 200) || (weight < 36) || (weight > 100) || (calfC < 27) || (calfC > 61) || (thighC < 33) || (thighC > 81) %If statement to verify all three inputs are within specified ranges
+            if (height < 1) || (height > 2) || (weight < 36) || (weight > 115) || (calfD < calfDmin) || (calfD > calfDmax) || (thighD < thighDmin) || (thighD > thighDmax) %If statement to verify all three inputs are within specified ranges
                 app.TextArea.Value = 'Invalid Entry. Please ensure inputs are within the specified ranges.';
-%             else %If all inputs are within specified ranges, proceed to else statement
-                %Main(height, weight, calfC, thighC); %Calls the design code function using input arguments from the GUI
-%             
-%                 %Store contents of Log file in output panel, and display
-%                 %location of equations text file.
-%                 log_file = 'H:\jmart231\group123\group123\Log\group123_LOG.TXT'; %Sets the string path to find log file equal to the variable log_file for easy reference
-%                 solidworks_file = 'H:\jmart231\group123\group123\SolidWorks\Equations\cylinder.txt'
-%                 fid = fopen(log_file,'r'); %Open the log file for reading
-%                 S = char(fread(fid)'); %Read the log file into a string
-%                 fclose(fid); %Close log file once finished
-%             
-%                 app.TextArea.Value = S; %Sets the value in the output log text box equal to the string from the log file
-%                 app.EditField.Value = solidworks_file; %Displays the file path at the bottom of the GUI
+            else % If all inputs are within specified ranges, proceed to else statement
+                DesignCode(weight, height, thighD, calfD); % Calls the design code function using input arguments from the GUI
+            
+                % Store contents of Log file in output panel, and display
+                % location of equations text file.
+                log_file = 'C:\Users\lynne\Documents\GitHub\MCG4322B_Brace_Yourself\SOLIDWORKSTestDir\Log'; % CHANGE THISnSets the string path to find log file equal to the variable log_file for easy reference
+                % solidworks_file = 'H:\jmart231\group123\group123\SolidWorks\Equations\cylinder.txt'
+                fid = fopen(log_file,'r'); % Open the log file for reading
+                S = char(fread(fid)'); % Read the log file into a string
+                fclose(fid); %Close log file once finished
+            
+                app.TextArea.Value = S; %Sets the value in the output log text box equal to the string from the log file
+                % app.EditField.Value = solidworks_file; %Displays the file path at the bottom of the GUI
             end
         end
 
@@ -173,9 +177,6 @@ classdef GUI_exported < matlab.apps.AppBase
 
         % Create UIFigure and components
         function createComponents(app)
-
-            % Get the file path for locating images
-            pathToMLAPP = fileparts(mfilename('fullpath'));
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
@@ -240,13 +241,12 @@ classdef GUI_exported < matlab.apps.AppBase
             % Create Image2
             app.Image2 = uiimage(app.AboutUsTab);
             app.Image2.Position = [1 31 393 292];
-            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Slide64.jpg');
+            app.Image2.ImageSource = '/Users/ellafossum/Documents/GitHub/MCG4322B_Brace_Yourself/Slide64.jpg';
 
             % Create Image
             app.Image = uiimage(app.UIFigure);
             app.Image.ScaleMethod = 'fill';
-            app.Image.Position = [18 326 166 84];
-            app.Image.ImageSource = fullfile(pathToMLAPP, 'IMG_2979.png');
+            app.Image.Position = [18 326 360 84];
 
             % Create PleaseenterusermeasurementsPanel
             app.PleaseenterusermeasurementsPanel = uipanel(app.UIFigure);
