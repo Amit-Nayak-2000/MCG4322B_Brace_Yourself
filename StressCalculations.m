@@ -383,21 +383,21 @@ syms L_10sa L_10sp L_10ia L_10ip C_sa C_sp C_ia C_ip
 
 
 % ALLOWABLE FORCE CALCULATION
-L_10sa = (Bearing.C_10 / norm(S.F_sa))^3;
-L_10sp = (Bearing.C_10 / norm(S.F_sp))^3;
-L_10ia = (Bearing.C_10 / norm(I.F_ia))^3;
-L_10ip = (Bearing.C_10 / norm(I.F_ip))^3;
-
-C_sa = norm(S.F_sa) * (Bearing.L / L_10sa)^(1/3);
-C_sp = norm(S.F_sp) * (Bearing.L / L_10sp)^(1/3);
-C_ia = norm(I.F_ia) * (Bearing.L / L_10ia)^(1/3);
-C_ip = norm(I.F_ip) * (Bearing.L / L_10ip)^(1/3);
-
-% SAFETY FACTOR CALCULATION
-SF.sigma_bearingsa = Bearing.C_10 / C_sa;
-SF.sigma_bearingsp = Bearing.C_10 / C_sp;
-SF.sigma_bearingia = Bearing.C_10 / C_ia;
-SF.sigma_bearingip = Bearing.C_10 / C_ip;
+% L_10sa = (Bearing.C_10 / norm(S.F_sa))^3;
+% L_10sp = (Bearing.C_10 / norm(S.F_sp))^3;
+% L_10ia = (Bearing.C_10 / norm(I.F_ia))^3;
+% L_10ip = (Bearing.C_10 / norm(I.F_ip))^3;
+% 
+% C_sa = norm(S.F_sa) * (Bearing.L / L_10sa)^(1/3);
+% C_sp = norm(S.F_sp) * (Bearing.L / L_10sp)^(1/3);
+% C_ia = norm(I.F_ia) * (Bearing.L / L_10ia)^(1/3);
+% C_ip = norm(I.F_ip) * (Bearing.L / L_10ip)^(1/3);
+% 
+% % SAFETY FACTOR CALCULATION
+% SF.sigma_bearingsa = Bearing.C_10 / C_sa;
+% SF.sigma_bearingsp = Bearing.C_10 / C_sp;
+% SF.sigma_bearingia = Bearing.C_10 / C_ia;
+% SF.sigma_bearingip = Bearing.C_10 / C_ip;
 
 %% Obtain the minimum safety factor (critical) from all safety factors for each obj.
 Superiorarr = [abs(SF.sigma_sx), abs(SF.sigma_s1y), abs(SF.sigma_s2y), abs(SF.sigma_s3y), abs(SF.sigma_sbend1), abs(SF.sigma_sbend2), abs(SF.sigma_srupture), abs(SF.tau_s1), abs(SF.tau_s2), abs(SF.tau_s3)];
@@ -439,10 +439,10 @@ SF.SF_BoltSA = abs(SF.tau_sa);
 SF.SF_BoltSP = abs(SF.tau_sp);
 SF.SF_BoltIA = abs(SF.tau_ia);
 SF.SF_BoltIP = abs(SF.tau_ip);
-SF.SF_BrngSA = abs(SF.sigma_bearingsa);
-SF.SF_BrngSP = abs(SF.sigma_bearingsp);
-SF.SF_BrngIA = abs(SF.sigma_bearingia);
-SF.SF_BrngIP = abs(SF.sigma_bearingip);
+% SF.SF_BrngSA = abs(SF.sigma_bearingsa);
+% SF.SF_BrngSP = abs(SF.sigma_bearingsp);
+% SF.SF_BrngIA = abs(SF.sigma_bearingia);
+% SF.SF_BrngIP = abs(SF.sigma_bearingip);
 
 
 

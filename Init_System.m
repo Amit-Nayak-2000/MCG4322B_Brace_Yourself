@@ -84,9 +84,9 @@ Bolt = initBolt(Bolt,Bolt_diam);
 
 %Bearing
 Bearing_ID = 0.003; %[m]
-Bearing_OD = 0.008; %[m]
-Bearing.C_10 = 560; %[N]
-Bearing.L = 1e5;
+Bearing_OD = 0.010; %[m]
+Bearing.C_10 = 630; %[N]
+Bearing.L_10 = 90; %million revolutions
 
 Bearing=initBearing(Bearing,Bearing_ID,Bearing_OD);
 end

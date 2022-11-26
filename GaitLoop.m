@@ -1,4 +1,4 @@
-function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
+function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
 
 
 %Parse Winters Data
@@ -31,10 +31,15 @@ BLIASFArr = zeros(1 ,endframe - startframe + 1);
 BLIPSFArr = zeros(1 ,endframe - startframe + 1); 
 
 %Bearings
-BNSPSFArr = zeros(1 ,endframe - startframe + 1); 
-BNSASFArr = zeros(1 ,endframe - startframe + 1); 
-BNIASFArr = zeros(1 ,endframe - startframe + 1); 
-BNIPSFArr = zeros(1 ,endframe - startframe + 1);
+BNSPFArr = zeros(1 ,endframe - startframe + 1); 
+BNSAFArr = zeros(1 ,endframe - startframe + 1); 
+BNIAFArr = zeros(1 ,endframe - startframe + 1); 
+BNIPFArr = zeros(1 ,endframe - startframe + 1);
+
+BNthetaSP = zeros(1 ,endframe - startframe + 1); 
+BNthetaSA = zeros(1 ,endframe - startframe + 1); 
+BNthetaIA = zeros(1 ,endframe - startframe + 1); 
+BNthetaIP = zeros(1 ,endframe - startframe + 1);
 
 %Contribution Arrays
 percentage = zeros(1, endframe - startframe + 1);
@@ -101,10 +106,12 @@ for i=startframe:endframe
     BLIPSFArr(dataindex) = SF.SF_BoltIP;
 
     %Bearings
-    BNSPSFArr(dataindex) = SF.SF_BrngSP;
-    BNSASFArr(dataindex) = SF.SF_BrngSA;
-    BNIASFArr(dataindex) = SF.SF_BrngIA;
-    BNIPSFArr(dataindex) = SF.SF_BrngIP;
+    BNSPFArr(dataindex) = norm(S.F_sp);
+    BNSAFArr(dataindex) = norm(S.F_sa);
+    BNIAFArr(dataindex) = norm(In.F_ia);
+    BNIPFArr(dataindex) = norm(In.F_ip);
+    
+    [BNthetaSA(dataindex) ,BNthetaIP(dataindex), BNthetaIA(dataindex), BNthetaSP(dataindex)] = GetBearingAngles(S, A, In, P);
     
     %% Saggital Brace Contribution Calculations
     %bio knee moment is col 15 in Winter's Data
@@ -135,6 +142,10 @@ for i=startframe:endframe
     
 end
 
+    BSA = abs(max(BNthetaSA) -  min(BNthetaSA));
+    BIA = abs(max(BNthetaIA) -  min(BNthetaIA));
+    BSP = abs(max(BNthetaSP) -  min(BNthetaSP));
+    BIP = abs(max(BNthetaIP) -  min(BNthetaIP));
 
 end
 

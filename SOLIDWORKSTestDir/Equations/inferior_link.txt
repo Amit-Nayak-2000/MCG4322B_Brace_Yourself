@@ -6,7 +6,7 @@
 "H2"=0.048144
 "H3"=0.126925
 "H4"=0.145891
-"T"=0.003645
+"T"=0.004050
 "bolt_hole_diameter"=0.003400
 "spring_arm_hole_pos"=0.010570
 "spring_arm_hole_max_diam"=0.006000

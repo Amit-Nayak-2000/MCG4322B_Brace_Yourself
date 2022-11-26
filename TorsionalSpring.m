@@ -9,9 +9,9 @@ classdef TorsionalSpring < handle
         C %Spring Index
         d %Coil Diameter (m)
         D %Mean Diameter (m)
-        E = 201e9; % Elastic modulus of SAE 1070 Carbon Steel (Pa)
-        SU = 640e6; %Ultimate Tensile strength of SAE 1070 Carbon Steel (Pa)
-        SY = 495e6; %Yield Strength of SAE 1070 Carbon Steel (Pa)
+        E = 68.9e9; % Elastic modulus of Aluminium 1060-O (Pa)
+        SU = 55e6; %Ultimate Tensile Strength of Aluminium 1060-O (Pa)
+        SY = 17e6; %Yield Strength of Aluminium 1060-O (Pa)
         Nb %body turns
         Na %Active turns
         K %Spring Rate (Nm/deg kg)

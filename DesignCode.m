@@ -46,7 +46,7 @@ safetyfactorsatisfied = 0;
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
     disp("Computing Initial Calculations.");
-    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
+    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr,  BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
     
     %assume SF satisfied, then iterate thru each object.
     safetyfactorsatisfied = 1;
@@ -326,23 +326,54 @@ while (safetyfactorsatisfied == 0)
         end
     end
     
-   %% Obtain Bolt and Bearing SF
-   [MinBoltIA, boltindex] = min(BLIASFArr);
+   %% Obtain Bolt and Bearing Life
+   MinBoltIA = min(BLIASFArr);
    MinBoltIP = min(BLIPSFArr);
    MinBoltSP = min(BLSPSFArr);
    MinBoltSA = min(BLSASFArr);
-   MinBrngSP = min(BNSPSFArr);
-   MinBrngSA = min(BNSASFArr);
-   MinBrngIA = min(BNIASFArr);
-   MinBrngIP = min(BNIPSFArr);
+   
+   % ALLOWABLE FORCE CALCULATION
+    %BTW WE CAN SPEED THIS UP IF WE NEED
+    avgSA = mean(BNSAFArr)*((BSA/2)/90)^(1/3);
+    avgSP = mean(BNSPFArr)*((BSP/2)/90)^(1/3);
+    avgIA = mean(BNIAFArr)*((BIA/2)/90)^(1/3);
+    avgIP = mean(BNIPFArr)*((BIP/2)/90)^(1/3);
+   
+   BearingSALife = Brng.L_10*(Brng.C_10/avgSA)^3;
+   BearingSPLife = Brng.L_10*(Brng.C_10/avgSP)^3;
+   BearingIALife = Brng.L_10*(Brng.C_10/avgIA)^3;
+   BearingIPLife = Brng.L_10*(Brng.C_10/avgIP)^3;
+
    
 end
 
 %Output final safety factors to log file here...
 Parts = ["Superior Link" "Inferior Link" "Anterior Link" "Posterior Link" "Velcro Thigh" "Velcro Calf" "Torsional Spring 1" "Torsional Spring 2"];
 SafetyFactors = [MinSup MinInf MinAnt MinPos MinVT MinVC MinT1 MinT2];
-% SFDict = dictionary(Parts,SafetyFactors);
 
+fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Log/group03_LOG','w');
+fprintf(fileID,'Patient Mass=%.3f\n',mass);
+fprintf(fileID,'Patient Height=%.3f\n',height);
+fprintf(fileID,'Patient Thigh Diameter=%.3f\n',thighdiameter);
+fprintf(fileID,'Patient Calf Diameter=%.3f\n',calfdiameter);
+fprintf(fileID,'Superior Link Safety Factor=%.3f\n', MinSup);
+fprintf(fileID,'Inferior Link Safety Factor=%.3f\n', MinInf);
+fprintf(fileID,'Anterior Link Safety Factor=%.3f\n', MinAnt);
+fprintf(fileID,'Posterior Link Safety Factor=%.3f\n', MinPos);
+fprintf(fileID,'Thigh Velcro Safety Factor=%.3f\n', MinVT);
+fprintf(fileID,'Calf Velcro Safety Factor=%.3f\n', MinVC);
+fprintf(fileID,'Torsional Spring (Superior-Anterior) Safety Factor=%.3f\n', MinT1);
+fprintf(fileID,'Torsional Spring (Inferior-Posterior) Safety Factor=%.3f\n', MinT2);
+fprintf(fileID,'Bearing SA Life (Million Revolutions)=%.3f\n', BearingSALife);
+fprintf(fileID,'Bearing SP Life (Million Revolutions)=%.3f\n', BearingSPLife);
+fprintf(fileID,'Bearing IA Life (Million Revolutions)=%.3f\n', BearingIALife);
+fprintf(fileID,'Bearing IP Life (Million Revolutions)=%.3f\n', BearingIPLife);
+fprintf(fileID,'Bolt SA Safety Factor=%.3f\n', MinBoltSA);
+fprintf(fileID,'Bolt SP Safety Factor=%.3f\n', MinBoltSP);
+fprintf(fileID,'Bolt IA Safety Factor=%.3f\n', MinBoltIA);
+fprintf(fileID,'Bolt IP Safety Factor=%.3f\n', MinBoltIP);
+
+fclose(fileID); 
 %%
 %Output solidworks dimensions 
 

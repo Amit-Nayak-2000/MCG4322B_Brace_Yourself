@@ -45,7 +45,7 @@ safetyfactorsatisfied = 0;
 while (safetyfactorsatisfied == 0)
     %loop thru the gait cycle and obtain safety factors
     disp("Computing Initial Calculations.");
-    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPSFArr, BNSASFArr, BNIASFArr, BNIPSFArr] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
+    [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
     
     %assume SF satisfied, then iterate thru each object.
     safetyfactorsatisfied = 1;
@@ -330,10 +330,38 @@ while (safetyfactorsatisfied == 0)
    MinBoltIP = min(BLIPSFArr);
    MinBoltSP = min(BLSPSFArr);
    MinBoltSA = min(BLSASFArr);
-   MinBrngSP = min(BNSPSFArr);
-   MinBrngSA = min(BNSASFArr);
-   MinBrngIA = min(BNIASFArr);
-   MinBrngIP = min(BNIPSFArr);
+%    MinBrngSP = min(BNSPFArr);
+%    MinBrngSA = min(BNSAFArr);
+%    MinBrngIA = min(BNIAFArr);
+%    MinBrngIP = min(BNIPFArr);
+
+    % ALLOWABLE FORCE CALCULATION
+    %BTW WE CAN SPEED THIS UP IF WE NEED
+    avgSA = mean(BNSAFArr)*((BSA/2)/90)^(1/3);
+    avgSP = mean(BNSPFArr)*((BSP/2)/90)^(1/3);
+    avgIA = mean(BNIAFArr)*((BIA/2)/90)^(1/3);
+    avgIP = mean(BNIPFArr)*((BIP/2)/90)^(1/3);
+    
+    L_10sa = Brng.L / ((Brng.C_10 / avgSA)^3);
+    L_10sp = Brng.L / ((Brng.C_10 / avgSP)^3);
+    L_10ia = Brng.L / ((Brng.C_10 / avgIA)^3);
+    L_10ip = Brng.L / ((Brng.C_10 / avgIP)^3);
+
+    C_sa = avgSA * (Brng.L / L_10sa)^(1/3);
+    C_sp = avgSP * (Brng.L / L_10sp)^(1/3);
+    C_ia = avgIA * (Brng.L / L_10ia)^(1/3);
+    C_ip = avgIP * (Brng.L / L_10ip)^(1/3);
+
+    % SAFETY FACTOR CALCULATION
+    SF.sigma_bearingsa = Brng.C_10 / C_sa;
+    SF.sigma_bearingsp = Brng.C_10 / C_sp;
+    SF.sigma_bearingia = Brng.C_10 / C_ia;
+    SF.sigma_bearingip = Brng.C_10 / C_ip;
+    
+   MinBrngSP = SF.sigma_bearingsp;
+   MinBrngSA = SF.sigma_bearingsa;
+   MinBrngIA = SF.sigma_bearingia;
+   MinBrngIP = SF.sigma_bearingip;
    
 end
 

@@ -56,7 +56,7 @@ framess = zeros(1 ,endframe - startframe + 1);
 biokneemoment = zeros(1, endframe - startframe + 1);
 newkneemoment = zeros(1, endframe - startframe + 1);
 percentage = zeros(1, endframe - startframe + 1);
-
+testarr = zeros(1, endframe - startframe + 1);
 g = [0; -9.81; 0];
 
 correctiverip = [0; 0; 0];
@@ -99,7 +99,7 @@ NonDimFactor = (56.7 + BraceMass) / 56.7;
 TorqueOnCalf(dataindex) =  -2*(In.H4 + In.offset)*In.F_cn;
 totalPE(dataindex) = 2*(T1.K*(T1.theta-T1.theta0)^2 + T2.K*(T2.theta-T2.theta0)^2);
 % totalKE(dataindex) = 
-
+testarr(dataindex) = In.F_ct;
 
 newkneemoment(dataindex) = NonDimFactor*biokneemoment(dataindex) - TorqueOnCalf(dataindex);
 
