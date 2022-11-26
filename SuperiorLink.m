@@ -8,8 +8,8 @@ classdef SuperiorLink < handle
         %Geometric Dimensions of Link
         B1 % For B1 to H4, refer to definition of dimension figure in report.
         B2
-        B3
-        L
+        B3 %Contact point distance
+        L 
         H1
         H2
         H3
@@ -21,7 +21,13 @@ classdef SuperiorLink < handle
         springarmholemind=0.0034;
         armholeheadheight=0.00165;
         H_holes
-        
+        D_strap %Diameter of the metal contact strap
+        clip_hole_D=0.0034;
+        clip_hole_y1
+        clip_hole_dist
+        pad_t1
+        pad_t2
+        unpad_L1
         
         %Physical Properties
         m % Mass (kg)
@@ -219,6 +225,13 @@ classdef SuperiorLink < handle
             fprintf(fileID,'"spring_arm_hole_min_diam"=%.6f\n', obj.springarmholemind);
             fprintf(fileID,'"arm_hole_head_height"=%.6f\n', obj.armholeheadheight);
             fprintf(fileID,'"H_holes"=%.6f\n', obj.H_holes);
+            fprintf(fileID,'"D_strap"=%.6f\n', obj.D_strap);
+            fprintf(fileID,'"clip_hole_D"=%.6f\n', obj.clip_hole_D);
+            fprintf(fileID,'"clip_hole_y1"=%.6f\n', obj.clip_hole_y1);
+            fprintf(fileID,'"clip_hole_dist"=%.6f\n', obj.clip_hole_dist);
+            fprintf(fileID,'"pad_t1"=%.6f\n', obj.pad_t1);
+            fprintf(fileID,'"pad_t2"=%.6f\n', obj.pad_t2);
+            fprintf(fileID,'"unpad_L1"=%.6f\n', obj.unpad_L1);
             fclose(fileID); 
         end
     end

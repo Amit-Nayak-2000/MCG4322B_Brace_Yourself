@@ -18,6 +18,7 @@ T2 = TorsionalSpring;
 ZF = Z_forces;
 VT = Velcro;
 VC = Velcro;
+V_buck = VelcroBuckle;
 Blt = Bolt;
 Brng = Bearing;
 SF = SafetyFactor;
@@ -353,12 +354,20 @@ P.outputDimensions();
 %Superior Link
 S.springarmholepos = 0.4*S.L;
 S.H_holes = 0.5*(S.B1-S.L);
-S.outputDimensions();
+S.pad_t1 = 0.005;
+S.pad_t2 = 2*S.pad_t1;
+S.D_strap = S.B3+2*S.pad_t1;
+%Superior parametirzation is continued later because housing and velcro
+%parameters are needed for some parametrizing equations
 
 %Inferior Link
 In.springarmholepos = 0.4*In.L;
 In.H_holes = 0.5*(In.B1-In.L);
-In.outputDimensions();
+In.pad_t1=S.pad_t1+0.5*(S.B3-In.B3);
+In.pad_t2=2*In.pad_t1;
+In.D_strap=S.D_strap;
+%Superior parametirzation is continued later because housing and velcro
+%parameters are needed for some parametrizing equations
 
 %Springs
 T1.L_arm=S.springarmholepos-0.5*T1.loop_diam*cosd(45);
@@ -371,37 +380,35 @@ T2.outputDimensions(2);
 
 %standoff and washer
 if(S.T>=In.T && T1.height>=T2.height)
-    Stoff1.H=T1.height;
-    Stoff2.H=T1.height+0.5*(S.T-In.T);
+    Stoff1.H=T1.height+2*T2.d;
+    Stoff2.H=T1.height+2*T2.d+0.5*(S.T-In.T);
     
 elseif(S.T<In.T && T1.height>=T2.height)
-    Stoff1.H=T1.height+0.5*(In.T-S.T);
-    Stoff2.H=T1.height;
+    Stoff1.H=T1.height+2*T2.d+0.5*(In.T-S.T);
+    Stoff2.H=T1.height+2*T2.d;
 
 elseif(S.T>=In.T && T1.height<T2.height)
-    Stoff1.H=T2.height;
-    Stoff2.H=T2.height+0.5*(S.T-In.T);
+    Stoff1.H=T2.height+2*T2.d;
+    Stoff2.H=T2.height+2*T2.d+0.5*(S.T-In.T);
     
 else
-    Stoff1.H=T2.height+0.5*(In.T-S.T);
-    Stoff2.H=T2.height;
+    Stoff1.H=T2.height+2*T2.d+0.5*(In.T-S.T);
+    Stoff2.H=T2.height+2*T2.d;
 end
     
 Stoff1.ID=0.0032;
 Stoff1.OD=0.0045;
-Stoff1.H=T1.height;
 
 Stoff1.outputDimensions(1);
 
 Stoff2.ID=0.0032;
 Stoff2.OD=0.0045;
-Stoff2.H=2*T1.d; %maybe come back and change this
 
 Stoff2.outputDimensions(2);
 
 Stoff3.ID=0.0032;
 Stoff3.OD=0.0045;
-Stoff3.H=2*T1.d; %maybe come back and change this
+Stoff3.H=3*T1.d; %maybe come back and change this
 Stoff3.outputDimensions(3);
 
 Wash.ID=0.0032;
@@ -512,3 +519,21 @@ VC.fold_back_L=0.5*VC.L;
 
 VC.outputDimensions(2);
 
+%Velcro Buckle
+V_buck.slot_w=5*max([VT.t,VC.t]);
+V_buck.slot_h=max([VT.W,VC.W])+0.002;
+V_buck.t=0.004;
+V_buck.height=V_buck.slot_h+2*V_buck.t;
+V_buck.outputDimensions();
+
+%Superior link cont'd
+S.clip_hole_y1=0.25*V_buck.slot_h;
+S.clip_hole_dist=0.5*V_buck.slot_h;
+S.unpad_L1=(2/3)*Hbase.width;
+S.outputDimensions();
+
+%Inferior link cont'd
+In.clip_hole_y1=0.25*V_buck.slot_h;
+In.clip_hole_dist=0.5*V_buck.slot_h;
+In.unpad_L1=(2/3)*Hbase.width;
+In.outputDimensions();
