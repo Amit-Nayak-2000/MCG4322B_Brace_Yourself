@@ -1,4 +1,4 @@
-classdef Housing
+classdef Housing < handle
     %HOUSING Summary of this class goes here
     %   Detailed explanation goes here
     
