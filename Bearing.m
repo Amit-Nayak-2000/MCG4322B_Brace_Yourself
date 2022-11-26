@@ -27,8 +27,8 @@ classdef Bearing < handle
         %method to output dimensions to .txt files.
         function outputDimensions(obj)
             fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/ball_bearing.txt','w');
-            fprintf(fileID,'"width"=%.6f\n', 0.003);
-            fprintf(fileID,'"OD"=%.6f\n', 0.008);
+            fprintf(fileID,'"width"=%.6f\n', 0.004);
+            fprintf(fileID,'"OD"=%.6f\n', 0.01);
             fprintf(fileID,'"ID"=%.6f\n', 0.003);
             fprintf(fileID,'"race_thickness"=%.6f\n', 0.00075);
             fprintf(fileID,'"D_ball"=%.6f\n', 0.0015);
