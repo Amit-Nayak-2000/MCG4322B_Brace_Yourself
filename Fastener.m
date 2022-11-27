@@ -1,10 +1,10 @@
 classdef Fastener
-    %F Summary of this class goes here
-    %   Detailed explanation goes here
+    %Fastener Class
+    %Holds dimensions of nuts.
     
     properties
-        height
-        thread_height
+        height %Height of nut.
+        thread_height %Thread height.
     end
     
     methods

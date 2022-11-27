@@ -379,7 +379,7 @@ SF.tau_ip = Bolt.SY/tau_ip;
 %% Bearings
 
 % SYMBOLS
-syms L_10sa L_10sp L_10ia L_10ip C_sa C_sp C_ia C_ip 
+% syms L_10sa L_10sp L_10ia L_10ip C_sa C_sp C_ia C_ip 
 
 
 % ALLOWABLE FORCE CALCULATION
@@ -428,21 +428,20 @@ end
 
 SF.SF_pos = min(Posteriorarr);
     
-%Individual Safety Factors (only 1 SF per object)
+%Individual Safety Factors (for velcro)
 SF.SF_VT = abs(SF.tau_vt);
 SF.SF_VC = abs(SF.tau_vc);
 
+%Obtain Critical Safety Factor for torsional springs
 SF.SF_TS1 = min([abs(SF.sigma_spring1), abs(SF.fatigue_spring1)]);
 SF.SF_TS2 = min([abs(SF.sigma_spring2), abs(SF.fatigue_spring2)]);
 
+%Safety Factors for bolts
 SF.SF_BoltSA = abs(SF.tau_sa);
 SF.SF_BoltSP = abs(SF.tau_sp);
 SF.SF_BoltIA = abs(SF.tau_ia);
 SF.SF_BoltIP = abs(SF.tau_ip);
-% SF.SF_BrngSA = abs(SF.sigma_bearingsa);
-% SF.SF_BrngSP = abs(SF.sigma_bearingsp);
-% SF.SF_BrngIA = abs(SF.sigma_bearingia);
-% SF.SF_BrngIP = abs(SF.sigma_bearingip);
+
 
 
 

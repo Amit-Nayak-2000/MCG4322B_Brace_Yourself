@@ -19,7 +19,7 @@ classdef TorsionalSpring < handle
         l1 %length to standoff/moment arm (Superior/Inferior link) (m)
         l2 %length to standoff/moment arm (Anterior/Posterior link) (m)
         height%MAKE SURE TO CODE THIS LATER
-        loop_diam = 0.005;
+        loop_diam = 0.005; %@ROHAN WAZAAAA?
         L_arm
         
         Torque = [0;0;0]; %(Nm)
@@ -29,30 +29,34 @@ classdef TorsionalSpring < handle
         %Method to intialize spring rate and lengths. 
         %called after GetInitKinematics
         function obj = initSpring(obj, mass, mainlink, sublink)
-            obj.K = 5*0.0022*mass; %this is different 
-            obj.l1 = 0.4*mainlink.L;
+            obj.K = 5*0.0022*mass; %Multiply constant by mass to obtain spring rate per individual.
+            obj.l1 = 0.4*mainlink.L; %Length of Spring Arms
             obj.l2 = 0.4*mainlink.L;
-            obj.beta = 180 - obj.theta0;
-            obj.Nb = 4 + (obj.beta / 360);
-            obj.D = 5.85E-03;
-            obj.Na = obj.Nb + ((obj.l1 + obj.l2)/(3*pi*obj.D));
-            obj.d = ((obj.K*64*obj.D*obj.Na)/obj.E)^(0.25);
-            obj.C = obj.D/obj.d;
+            obj.beta = 180 - obj.theta0; %Beta Angle
+            obj.Nb = 4 + (obj.beta / 360); %Body Coils
+            obj.D = 5.85E-03; %Mean Diameter
+            obj.Na = obj.Nb + ((obj.l1 + obj.l2)/(3*pi*obj.D)); %Number of Active Coils
+            obj.d = ((obj.K*64*obj.D*obj.Na)/obj.E)^(0.25); %Coil Diameter based on other params
+            obj.C = obj.D/obj.d; %Spring Index
         end
         
-        %Method to intialize spring rate and lengths. 
-        %called after GetInitKinematics
+        %Method to update spring during parametrization loop 
         function obj = updateSpring(obj)
+            %Update NA after Nb was modulated
             obj.Na = obj.Nb + ((obj.l1 + obj.l2)/(3*pi*obj.D));
+            %Update coil diameter, K and D are kept constant.
             obj.d = ((obj.K*64*obj.D*obj.Na)/obj.E)^(0.25);
+            %Update Spring index
             obj.C = obj.D/obj.d;
         end
         
         %method to output dimensions to .txt files.
         function outputDimensions(obj, springnum)
             if(springnum == 1)
+                %Superior-Anterior Spring
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/spring_sa.txt','w');
             else
+                %Inferior-Posterior Spring
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/spring_ip.txt','w');
             end
             
