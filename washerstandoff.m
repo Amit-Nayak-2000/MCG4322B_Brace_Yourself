@@ -1,9 +1,9 @@
 classdef washerstandoff < handle
     %washer/standoff object
     properties
-        ID
-        OD
-        H
+        ID %Inner Diameter
+        OD %Outer Diameter
+        H %Height of washer/standoff
     end
     
     methods

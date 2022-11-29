@@ -15,9 +15,9 @@ classdef SuperiorLink < handle
         H3
         H4
         T %Thickness
-        bolt_hole_diam
+        bolt_hole_diam %Diameter of bolt hole
         springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
-        springarmholemaxd =0.006;
+        springarmholemaxd =0.006; %@ROHAN PLS HELP
         springarmholemind=0.0034;
         armholeheadheight=0.00165;
         H_holes

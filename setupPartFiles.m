@@ -1,5 +1,5 @@
 function []=setupPartFiles(part,type)
-
+%NEWPHONE WHODIS
 %change filepath before submitting
 filePath='C:\Users\rohan\University of Ottawa\Amit Nayak - MCG4322B Group 03\Solidworks\Equations';
 

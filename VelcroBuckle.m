@@ -3,9 +3,9 @@ classdef VelcroBuckle < handle
     %   Detailed explanation goes here
     
     properties
-        slot_w
-        slot_h
-        t
+        slot_w %Velcro Slot Width
+        slot_h %Velcro Slot Height
+        t %ROHAN HELP PLS
         height
         hole_D=0.0034;
         attach_w=0.018;
@@ -13,6 +13,7 @@ classdef VelcroBuckle < handle
     
     methods
         
+        %Method to output dimensions of objects.
         function outputDimensions(obj)
             fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/velcro_buckle.txt','w');
                 fprintf(fileID,'"slot_w"=%.6f\n', obj.slot_w);

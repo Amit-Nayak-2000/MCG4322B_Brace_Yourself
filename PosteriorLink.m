@@ -10,11 +10,11 @@ classdef PosteriorLink < handle
         H %Total length of link.
         B %Base of link
         T %Thickness
-        bolt_hole_diam
-        bearing_hole_diam = 0.010;
-        bearing_depth = 0.004;
+        bolt_hole_diam %diameter of bolt hole
+        bearing_hole_diam = 0.010; %diameter of bearing hole
+        bearing_depth = 0.004; %depth of bearing hole
         springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
-        springarmholemaxd = 0.006;
+        springarmholemaxd = 0.006; %@ROHAN HELP PLS
         springarmholemind = 0.0034;
         armholeheadheight = 0.00165;
         

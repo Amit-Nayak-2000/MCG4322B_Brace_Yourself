@@ -4,9 +4,10 @@ function [offset] = GetInitKinematics(Superior,Inferior,Anterior,Posterior, T1, 
 %flexion.
 %Also getting spring angles for when user is standing straight (0
 %deflection point for springs).
-%Same code as first part of Kinematic_Modelling
+
 %Setting Superior and Posterior angles to 0 (standing straight)
 syms theta_a theta_p
+%Loop Closure Equation
 r1 = [Superior.L*cosd(0); Superior.L*sind(0)];
 r2 = [Anterior.L*cosd(theta_a); Anterior.L*sind(theta_a)];
 r3 = [Inferior.L*cosd(0); Inferior.L*sind(0)];
@@ -20,6 +21,7 @@ pt2 = double(thetas.theta_a(2,1));
 pt3 = double(thetas.theta_p(1,1));
 pt4 = double(thetas.theta_p(2,1));
 
+%Initial Angles for Anterior and Posterior Links
 Anterior.theta0 = pt1;
 Posterior.theta0 = pt4;
 
