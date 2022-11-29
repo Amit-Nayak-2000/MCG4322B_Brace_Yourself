@@ -82,5 +82,11 @@ Z_forces.F_kz=double(sol.F_kz);
 %Knee reaction force
 %Z_forces.R_kz=double(sol.R_kz);
 
+
+%% Trying something new
+% Icort = 0.78*((pi*(Inferior.B3 - 2*Inferior.T)^4)/ 64);
+% Itrab = 0.22*((pi*(Inferior.B3 - 2*Inferior.T)^4)/ 64);
+% sigma_b = (OA_KAM * Inferior.E * 0.5*Inferior.B3) / (Inferior.E * (Inferior.T^3 * Inferior.B2 / 12) + Icort*18400E06  + Itrab*500E06);
+%  = sigma_b*Inferior.T*Inferior.B2;
 end
 

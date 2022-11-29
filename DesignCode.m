@@ -118,6 +118,7 @@ while(InferiorSatisfied == 0)
         %Inferior Min SF is satisfied.
         InferiorSatisfied = 1;
     end
+end
     
     %% Anterior Link Parametrization
     disp("Optimizing Anterior Link.");
@@ -195,7 +196,7 @@ while(InferiorSatisfied == 0)
             %Inferior Min SF is satisfied.
             PosteriorSatisfied = 1;
         end
-end
+    end
 
 
 %% Thigh Velcro Parametrization
