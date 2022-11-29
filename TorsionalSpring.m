@@ -20,7 +20,8 @@ classdef TorsionalSpring < handle
         l2 %length to standoff/moment arm (Anterior/Posterior link) (m)
         height%MAKE SURE TO CODE THIS LATER
         loop_diam = 0.005;
-        L_arm
+        L_arm_main
+        L_arm_sub
         
         Torque = [0;0;0]; %(Nm)
     end
@@ -31,9 +32,9 @@ classdef TorsionalSpring < handle
         function obj = initSpring(obj, mass, mainlink, sublink)
             obj.K = 5*0.0022*mass; %this is different 
             obj.l1 = 0.4*mainlink.L;
-            obj.l2 = 0.4*mainlink.L;
+            obj.l2 = 0.4*sublink.L;
             obj.beta = 180 - obj.theta0;
-            obj.Nb = 4 + (obj.beta / 360);
+            obj.Nb = 4 + (obj.beta / 360);  
             obj.D = 5.85E-03;
             obj.Na = obj.Nb + ((obj.l1 + obj.l2)/(3*pi*obj.D));
             obj.d = ((obj.K*64*obj.D*obj.Na)/obj.E)^(0.25);
@@ -61,11 +62,11 @@ classdef TorsionalSpring < handle
             fprintf(fileID,'"Nb"=%.6f\n',obj.Nb);
             
             if(springnum == 1)
-                fprintf(fileID,'"l_s_arm"=%.6f\n',obj.L_arm);
-                fprintf(fileID,'"l_a_arm"=%.6f\n',obj.L_arm);
+                fprintf(fileID,'"l_s_arm"=%.6f\n',obj.L_arm_main);
+                fprintf(fileID,'"l_a_arm"=%.6f\n',obj.L_arm_sub);
             else
-                fprintf(fileID,'"l_i_arm"=%.6f\n',obj.L_arm);
-                fprintf(fileID,'"l_p_arm"=%.6f\n',obj.L_arm);
+                fprintf(fileID,'"l_i_arm"=%.6f\n',obj.L_arm_main);
+                fprintf(fileID,'"l_p_arm"=%.6f\n',obj.L_arm_sub);
             end
             
             fprintf(fileID,'"loop_diam"=%.6f\n',obj.loop_diam);

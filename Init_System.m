@@ -71,7 +71,7 @@ P = calculate_inertial_props(P);
 LVT=pi*thighdiameter;
 WVT=0.2*LVT;
 
-LVC=pi*calfdiameter;
+LVC=pi*thighdiameter;
 WVC=0.2*LVC;
 
 VT = initVelcro(VT,LVT,WVT);
