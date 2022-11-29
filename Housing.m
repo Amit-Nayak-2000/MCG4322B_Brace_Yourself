@@ -23,6 +23,7 @@ classdef Housing < handle
         cover_holes_depth=0.004;
         cover_hole_pitch=0.0004;
         gap=0.0045;
+        pad_t
     end
     
     methods
@@ -51,6 +52,7 @@ classdef Housing < handle
                 fprintf(fileID,'"cover_holes_diam"=%.6f\n', obj.cover_holes_diam);
                 fprintf(fileID,'"cover_holes_depth"=%.6f\n', obj.cover_holes_depth);
                 fprintf(fileID,'"cover_hole_pitch"=%.6f\n', obj.cover_hole_pitch);
+                fprintf(fileID,'"pad_t"=%.6f\n', obj.pad_t);
                 fclose(fileID); 
                 
             else

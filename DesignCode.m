@@ -21,6 +21,7 @@ T2 = TorsionalSpring;
 ZF = Z_forces;
 VT = Velcro;
 VC = Velcro;
+V_buck = VelcroBuckle;
 Blt = Bolt;
 Brng = Bearing;
 SF = SafetyFactor;
@@ -117,65 +118,85 @@ while(InferiorSatisfied == 0)
         %Inferior Min SF is satisfied.
         InferiorSatisfied = 1;
     end
+    
+    %% Anterior Link Parametrization
+    disp("Optimizing Anterior Link.");
+    %Flag if anterior link is satisfied WRT Safety Factor Range.
+    AnteriorSatisfied = 0;
+    %obtain minimum SF & index thru gait cycle.
+    [MinAnt, AntIndex] = min(AntSFArr);
+    while(AnteriorSatisfied == 0)
+        if(MinAnt > 4)
+            %Flag to recheck with entire gait cycle after has been optimized. 
+%             safetyfactorsatisfied = 0;
+            %decrease width of link.
+            A.B = 0.75*A.B;
+            %recalculate inertial properties
+            A = calculate_inertial_props(A);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
+            MinAnt = SF.SF_ant;
+        elseif(MinAnt < 2)
+            %Flag to recheck with entire gait cycle after has been optimized.
+%             safetyfactorsatisfied = 0;
+            %increase width of link.
+            if(A.B<0.6*A.H)
+                A.B = 1.5*A.B;
+            elseif(A.B<0.85*A.H)
+                A.B=1.15*A.B;
+            else
+                A.T = 1.2*A.T;
+            end
+            %recalculate inertial properties
+            A = calculate_inertial_props(A);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
+            MinAnt = SF.SF_ant;
+        else
+            %Inferior Min SF is satisfied.
+            AnteriorSatisfied = 1;
+        end
+    end
+    
+    %% Posterior Link Parametrization
+    disp("Optimizing Posterior Link.");
+    %Flag if posterior link is satisfied WRT Safety Factor Range.
+    PosteriorSatisfied = 0;
+    %obtain minimum SF & index thru gait cycle.
+    [MinPos, PosIndex] = min(PosSFArr);
+    while(PosteriorSatisfied == 0)
+        if(MinPos > 4)
+            %Flag to recheck with entire gait cycle after has been optimized. 
+%             safetyfactorsatisfied = 0;
+            %decrease width of link.
+            P.B = 0.75*P.B;
+            %recalculate inertial properties
+            P = calculate_inertial_props(P);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
+            MinPos = SF.SF_pos;
+        elseif(MinPos < 2)
+            %Flag to recheck with entire gait cycle after has been optimized.
+%             safetyfactorsatisfied = 0;
+            %increase width of link.
+            if(P.B<0.6*P.H)
+                P.B = 1.5*P.B;
+            elseif(P.B<0.85*P.H)
+                P.B=1.15*P.B;
+            else
+                P.T = 1.2*P.T;
+            end
+            %recalculate inertial properties
+            P = calculate_inertial_props(P);
+            %update SF for critical frame
+            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
+            MinPos = SF.SF_pos;
+        else
+            %Inferior Min SF is satisfied.
+            PosteriorSatisfied = 1;
+        end
 end
 
-%% Anterior Link Parametrization
-disp("Optimizing Anterior Link.");
-%Flag if anterior link is satisfied WRT Safety Factor Range.
-AnteriorSatisfied = 0;
-%Obtain Minimum Critical SF of gaitcycle & index of occurance.
-[MinAnt, AntIndex] = min(AntSFArr);
-while(AnteriorSatisfied == 0)
-    if(MinAnt > 4)
-        %decrease width of link.
-        A.B = 0.75*A.B;
-        %recalculate inertial properties
-        A = calculate_inertial_props(A);
-        %update SF for critical frame
-        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
-        MinAnt = SF.SF_ant;
-    elseif(MinAnt < 2)
-        %increase width of link.
-        A.B = 1.5*A.B;
-        %recalculate inertial properties
-        A = calculate_inertial_props(A);
-        %update SF for critical frame
-        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
-        MinAnt = SF.SF_ant;
-    else
-        %Anterior Min SF is satisfied.
-        AnteriorSatisfied = 1;
-    end
-end
-
-%% Posterior Link Parametrization
-disp("Optimizing Posterior Link.");
-%Flag if posterior link is satisfied WRT Safety Factor Range.
-PosteriorSatisfied = 0;
-%Obtain Minimum Critical SF of gaitcycle & index of occurance.
-[MinPos, PosIndex] = min(PosSFArr);
-while(PosteriorSatisfied == 0)
-    if(MinPos > 4)
-        %decrease width of link.
-        P.B = 0.75*P.B;
-        %recalculate inertial properties
-        P = calculate_inertial_props(P);
-        %update SF for critical frame
-        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
-        MinPos = SF.SF_pos;
-    elseif(MinPos < 2)
-        %increase width of link.
-        P.B = 1.5*P.B;
-        %recalculate inertial properties
-        P = calculate_inertial_props(P);
-        %update SF for critical frame
-        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
-        MinPos = SF.SF_pos;
-    else
-        %Posterior Min SF is satisfied.
-        PosteriorSatisfied = 1;
-    end
-end
 
 %% Thigh Velcro Parametrization
 disp("Optimizing Thigh Velcro.");
@@ -356,65 +377,82 @@ fclose(fileID);
 %Output solidworks global vars dimensions (txt files)
 
 %Anterior link
-A.springarmholepos = 0.5*S.L;
+A.springarmholepos = 0.4*A.L;
 A.outputDimensions();
 
 %Posterior Link
-P.springarmholepos = 0.5*In.L;
+P.springarmholepos = 0.4*P.L;
 P.outputDimensions();
 
 %Superior Link
 S.springarmholepos = 0.4*S.L;
 S.H_holes = 0.5*(S.B1-S.L);
-S.outputDimensions();
+S.pad_t1 = 0.005;
+S.pad_t2 = 2*S.pad_t1;
+S.D_strap = S.B3+2*S.pad_t1;
+%Superior parametirzation is continued later because housing and velcro
+%parameters are needed for some parametrizing equations
 
 %Inferior Link
 In.springarmholepos = 0.4*In.L;
 In.H_holes = 0.5*(In.B1-In.L);
-In.outputDimensions();
+In.pad_t1=S.pad_t1+0.5*(S.B3-In.B3);
+In.pad_t2=2*In.pad_t1;
+In.D_strap=S.D_strap+0.5*(S.T-In.T);
+%Superior parametirzation is continued later because housing and velcro
+%parameters are needed for some parametrizing equations
 
 %Springs
-T1.L_arm=S.springarmholepos-0.5*T1.loop_diam*cosd(45);
-T1.height=T1.d*T1.Nb*1.1; %maybe come back and change this
+
+T1.height=T1.d*T1.Nb*1.1;
+T2.height=T2.d*T2.Nb*1.1;
+
+if(T1.height>T2.height)
+    T2.height=T1.height;
+else
+    T1.height=T2.height;
+end
+
+T1.L_arm_main=S.springarmholepos-0.5*T1.loop_diam*cosd(45);
+T1.L_arm_sub=A.springarmholepos-0.5*T1.loop_diam*cosd(45);
 T1.outputDimensions(1);
 
-T2.L_arm=In.springarmholepos-0.5*T2.loop_diam*cosd(45);
-T2.height=T2.d*T2.Nb*1.1; %maybe come back and change this
+T2.L_arm_main=In.springarmholepos-0.5*T2.loop_diam*cosd(45);
+T2.L_arm_sub=P.springarmholepos-0.5*T2.loop_diam*cosd(45);
 T2.outputDimensions(2);
+
 
 %standoff and washer
 if(S.T>=In.T && T1.height>=T2.height)
-    Stoff1.H=T1.height;
-    Stoff2.H=T1.height+0.5*(S.T-In.T);
+    Stoff1.H=T1.height+2*T1.d;
+    Stoff2.H=T1.height+0.5*(S.T-In.T)+2*T1.d;
     
 elseif(S.T<In.T && T1.height>=T2.height)
-    Stoff1.H=T1.height+0.5*(In.T-S.T);
-    Stoff2.H=T1.height;
+    Stoff1.H=T1.height+0.5*(In.T-S.T)+2*T1.d;
+    Stoff2.H=T1.height+2*T1.d;
 
 elseif(S.T>=In.T && T1.height<T2.height)
-    Stoff1.H=T2.height;
-    Stoff2.H=T2.height+0.5*(S.T-In.T);
+    Stoff1.H=T2.height+2*T2.d;
+    Stoff2.H=T2.height+0.5*(S.T-In.T)+2*T2.d;
     
 else
-    Stoff1.H=T2.height+0.5*(In.T-S.T);
-    Stoff2.H=T2.height;
+    Stoff1.H=T2.height+0.5*(In.T-S.T)+2*T2.d;
+    Stoff2.H=T2.height+2*T2.d;
 end
-    
+
 Stoff1.ID=0.0032;
 Stoff1.OD=0.0045;
-Stoff1.H=T1.height;
 
 Stoff1.outputDimensions(1);
 
 Stoff2.ID=0.0032;
 Stoff2.OD=0.0045;
-Stoff2.H=2*T1.d; %maybe come back and change this
 
 Stoff2.outputDimensions(2);
 
 Stoff3.ID=0.0032;
 Stoff3.OD=0.0045;
-Stoff3.H=2*T1.d; %maybe come back and change this
+Stoff3.H=T1.d+0.0005; %maybe come back and change this
 Stoff3.outputDimensions(3);
 
 Wash.ID=0.0032;
@@ -429,8 +467,8 @@ Brng.outputDimensions();
 
 %Housing base
 Hbase.stop_width = 0.005;
-Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.gap+Hbase.stop_width;
-Hbase.width = A.H+2*Hbase.stop_width+Hbase.gap+0.001;
+Hbase.height = S.H1-S.H_holes+A.H*abs(sind(A.theta0))-0.5*(A.H-A.L)+Hbase.stop_width;
+Hbase.width = A.H+2*Hbase.stop_width+Hbase.gap+0.33*A.B;
 %Hbase.width = Hbase.height + 2*Hbase.stop_width;
 Hbase.inf_stop_x = Hbase.stop_width+A.L*abs(cosd(A.theta0))+0.5*(A.B)-In.L-0.5*(In.B1-In.L)+Hbase.gap-0.0005;
 Hbase.superior_stop_x = Hbase.stop_width+Hbase.gap+0.5*A.B-0.5*(S.B1-S.L);
@@ -450,6 +488,7 @@ Hbase.bolt_dist=P.L;
 Hbase.theta_p_init=180-P.theta0;
 Hbase.bolt_hole_depth=Hbase.t1;
 Hbase.cover_holes_diam=0.002;
+Hbase.pad_t=0.005;
 
 Hbase.outputDimensions(1);
 
@@ -496,19 +535,44 @@ Blt.outputDimensions(1);
 
 %SA bolt
 Blt.L=(ceil((A.T+Stoff1.H+S.T+N2.height)*1000)+1)/1000;
+if(Blt.L<0.012)
+    Blt.L_thread=Blt.L;
+else
+    Blt.L_thread=0.012;
+end
 Blt.outputDimensions(2);
 
 %SP bolt
 Blt.L=(ceil((P.T+Stoff1.H+S.T+Hbase.t1)*1000))/1000;
+if(Blt.L<0.012)
+    Blt.L_thread=Blt.L;
+else
+    Blt.L_thread=0.012;
+end
 Blt.outputDimensions(3);
 
 %IA bolt
 Blt.L=(ceil((A.T+Stoff2.H+In.T+N2.height)*1000)+1)/1000;
+if(Blt.L<0.012)
+    Blt.L_thread=Blt.L;
+else
+    Blt.L_thread=0.012;
+end
 Blt.outputDimensions(4);
 
 %IP bolt
 Blt.L=(ceil((P.T+Stoff2.H+In.T+Hbase.t1)*1000))/1000;
+if(Blt.L<0.012)
+    Blt.L_thread=Blt.L;
+else
+    Blt.L_thread=0.012;
+end
 Blt.outputDimensions(5);
+
+%Cover bolt
+Blt.D=0.002;
+Blt.L=(floor((Hbase.bolt_hole_depth+Hcover.t1)*1000))/1000;
+Blt.outputDimensions(6);
 
 %Velcro
 %Thigh Velcro
@@ -532,11 +596,24 @@ V_buck.t=0.004;
 V_buck.height=V_buck.slot_h+2*V_buck.t;
 V_buck.outputDimensions();
 
+
+%Rivet
+Blt.D=0.0032;
+Blt.L=V_buck.t+max([S.T,In.T]);
+Blt.outputDimensions(7);
+
 %Superior link cont'd
 S.clip_hole_y1=0.25*V_buck.slot_h;
 S.clip_hole_dist=0.5*V_buck.slot_h;
 S.unpad_L1=(2/3)*Hbase.width;
 S.outputDimensions();
+
+%Inferior link cont'd
+In.clip_hole_y1=0.25*V_buck.slot_h;
+In.clip_hole_dist=0.5*V_buck.slot_h;
+In.unpad_L1=In.H2;
+In.outputDimensions();
+
 
 %Inferior link cont'd
 In.clip_hole_y1=0.25*V_buck.slot_h;

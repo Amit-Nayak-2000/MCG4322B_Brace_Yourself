@@ -67,7 +67,7 @@ classdef Bolt < handle
                 fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
                 fclose(fileID); 
                 
-            else
+            elseif(type==5)
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/IP_bolt.txt','w');
                 fprintf(fileID,'"diam_head"=%.6f\n', 0.0055);
                 fprintf(fileID,'"L_head"=%.6f\n', 0.002);
@@ -77,6 +77,19 @@ classdef Bolt < handle
                 fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
                 fclose(fileID); 
                 
+            elseif(type==6)
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/cover_bolt.txt','w');
+                fprintf(fileID,'"diam_head"=%.6f\n', 0.0038);
+                fprintf(fileID,'"L_head"=%.6f\n', 0.002);
+                fprintf(fileID,'"L"=%.6f\n',obj.L);
+                fprintf(fileID,'"diam_thread"=%.6f\n',obj.D);
+                fprintf(fileID,'"pitch"=%.6f\n', 0.0005);
+                fclose(fileID);
+            else
+                fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/rivet.txt','w');
+                fprintf(fileID,'"d"=%.6f\n',obj.D);
+                fprintf(fileID,'"L"=%.6f\n', obj.L);
+                fclose(fileID);
             end
             
             

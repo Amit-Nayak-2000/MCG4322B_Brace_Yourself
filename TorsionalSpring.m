@@ -19,8 +19,9 @@ classdef TorsionalSpring < handle
         l1 %length to standoff/moment arm (Superior/Inferior link) (m)
         l2 %length to standoff/moment arm (Anterior/Posterior link) (m)
         height%MAKE SURE TO CODE THIS LATER
-        loop_diam = 0.005; %@ROHAN WAZAAAA?
-        L_arm
+        loop_diam = 0.005;
+        L_arm_main
+        L_arm_sub
         
         Torque = [0;0;0]; %(Nm)
     end
@@ -65,11 +66,11 @@ classdef TorsionalSpring < handle
             fprintf(fileID,'"Nb"=%.6f\n',obj.Nb);
             
             if(springnum == 1)
-                fprintf(fileID,'"l_s_arm"=%.6f\n',obj.L_arm);
-                fprintf(fileID,'"l_a_arm"=%.6f\n',obj.L_arm);
+                fprintf(fileID,'"l_s_arm"=%.6f\n',obj.L_arm_main);
+                fprintf(fileID,'"l_a_arm"=%.6f\n',obj.L_arm_sub);
             else
-                fprintf(fileID,'"l_i_arm"=%.6f\n',obj.L_arm);
-                fprintf(fileID,'"l_p_arm"=%.6f\n',obj.L_arm);
+                fprintf(fileID,'"l_i_arm"=%.6f\n',obj.L_arm_main);
+                fprintf(fileID,'"l_p_arm"=%.6f\n',obj.L_arm_sub);
             end
             
             fprintf(fileID,'"loop_diam"=%.6f\n',obj.loop_diam);
