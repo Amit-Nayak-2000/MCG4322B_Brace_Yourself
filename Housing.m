@@ -1,6 +1,6 @@
 classdef Housing < handle
-    %HOUSING Summary of this class goes here
-    %   Detailed explanation goes here
+    %HOUSING Class
+    %Holds Dimensions of housing for 4-bar Hinge. 
     
     properties
         width
@@ -28,8 +28,8 @@ classdef Housing < handle
     
     methods
         function outputDimensions(obj,type)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
+            %Method to output Housing Dimensions
+            %ROHAN WHAT ARE THE TYPES?
             if(type == 1)
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/housing_base_new.txt','w');
                 

@@ -24,8 +24,8 @@ classdef Velcro < handle
         end
          
         function outputDimensions(obj, type)
-            %type 1 is link spring locknut
-            %type 2 is interlink locknut
+            %type 1 is Thigh Velcro
+            %type 2 is Calf Velcro
             
             if(type == 1)
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/velcro_thigh.txt','w');

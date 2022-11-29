@@ -10,10 +10,10 @@ classdef Bearing < handle
         OD %Outer diameter.
         
         %Physical Properties
-        LC %Load capacity of the bearing.
+        LC %Load capacity of the bearing. %TO BE REMOVED.
         C_10 %Catalogue load rating
-        L_10 %Number of rev for 90% reliability
-        L %Number of rev we want, 1 000 000 rev
+        L_10 %Number of rev for 90% reliability: Initialized to 90E06 revolutions.
+        L %Number of desired revolutions: Initialized to 1,000,000 revolutions.
         
     end
     

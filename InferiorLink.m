@@ -15,9 +15,9 @@ classdef InferiorLink < handle
         H3
         H4
         T %Thickness
-        bolt_hole_diam
-        springarmholepos %MAKE SURE TO DEFINE THIS AFTER LOOP
-        springarmholemaxd =0.006;
+        bolt_hole_diam %Hole Diameter of Bolts
+        springarmholepos %Position of Spring Arm Hole
+        springarmholemaxd =0.006; %ROHAN HELP PLS
         springarmholemind=0.0034;
         armholeheadheight=0.00165;
         H_holes
@@ -70,7 +70,7 @@ classdef InferiorLink < handle
         %file names
         file
 
-        %Force Components for Interface with Calf
+        %Forces for Interface with Calf
         F_cn %normal calf force
         F_ct %tangential calf force
         
@@ -82,6 +82,8 @@ classdef InferiorLink < handle
         function obj = calculateCOM(obj, calflength, vertcomponent)
             obj.offset = vertcomponent;
             %vertcomponent is offset from femoral condyle
+            
+            %COM Calculation:
             A(1) = obj.B1*obj.H1;
             A(2) = 0.5 * (obj.B1 + obj.B2) * (obj.H2 - obj.H1);
             A(3) = obj.B2 * (obj.H3 - obj.H2);
@@ -173,7 +175,7 @@ classdef InferiorLink < handle
             Xcom = Xnum / Xdenom; %sum of X(i)A(i) / sum of A(i)
             Ycom = Ynum / Ydenom; %sum of Y(i)A(i) / sum of A(i)
             
-            %masses of individual objects
+            %masses of individual subdivisions
             M(1) = obj.rho*obj.T*A(1);
             M(2) = obj.rho*obj.T*A(2);
             M(3) = obj.rho*obj.T*A(3);
