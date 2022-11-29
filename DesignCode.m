@@ -81,6 +81,7 @@ while(SuperiorSatisfied == 0)
         %Superior Min SF is satisfied.
         SuperiorSatisfied = 1;
     end
+
 end
 
 
