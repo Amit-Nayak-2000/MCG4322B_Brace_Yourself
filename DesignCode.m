@@ -346,10 +346,36 @@ BearingSPLife = Brng.L_10*(Brng.C_10/avgSP)^3;
 BearingIALife = Brng.L_10*(Brng.C_10/avgIA)^3;
 BearingIPLife = Brng.L_10*(Brng.C_10/avgIP)^3;
 
+%Calculation of Final Brace Mass
+FinalBraceMass = 2*(S.m + In.m + A.m + P.m);
+
 %% OUTPUTS TO GUI/LogFile
 %Array of part names and Safety Factors
 Parts = ["Superior Link" "Inferior Link" "Anterior Link" "Posterior Link" "Velcro Thigh" "Velcro Calf" "Torsional Spring 1" "Torsional Spring 2"];
 SafetyFactors = [MinSup MinInf MinAnt MinPos MinVT MinVC MinT1 MinT2];
+
+%Output String for GUI
+str1 = Parts(1) + ' Safety Factor: ' + num2str(SafetyFactors(1)) + '\n';
+str2 = Parts(2) + ' Safety Factor: ' + num2str(SafetyFactors(2)) + '\n';
+str3 = Parts(3) + ' Safety Factor: ' + num2str(SafetyFactors(3)) + '\n';
+str4 = Parts(4) + ' Safety Factor: ' + num2str(SafetyFactors(4)) + '\n';
+str5 = Parts(5) + ' Safety Factor: ' + num2str(SafetyFactors(5)) + '\n';
+str6 = Parts(6) + ' Safety Factor: ' + num2str(SafetyFactors(6)) + '\n';
+str7 = Parts(7) + ' Safety Factor: ' + num2str(SafetyFactors(7)) + '\n';
+str8 = Parts(8) + ' Safety Factor: ' + num2str(SafetyFactors(8)) + '\n';
+str9 = "Bearing SA Life (Million Revolutions): " + num2str(BearingSALife) + "\n";
+str10 = "Bearing SP Life (Million Revolutions): " + num2str(BearingSPLife) + "\n";
+str11 = "Bearing IA Life (Million Revolutions): " + num2str(BearingIALife) + "\n";
+str12 = "Bearing IP Life (Million Revolutions): " + num2str(BearingIPLife) + "\n";
+str13 = "Bolt SA Life Safety Factor: " + num2str(MinBoltSA) + "\n";
+str14 = "Bolt SP Life Safety Factor: " + num2str(MinBoltSP) + "\n";
+str15 = "Bolt IA Life Safety Factor: " + num2str(MinBoltIA) + "\n";
+str16 = "Bolt IP Life Safety Factor: " + num2str(MinBoltIP) + "\n";
+
+GUI_String = str1 + str2 + str3 + str4 + str5 + str6 + str7 + str8 + str9 + str10 + str11 + str12 + str13 + str14 + str15 + str16;
+GUI_String = compose(GUI_String);
+app.TextArea_sf.Value = GUI_String;
+drawnow;
 
 %Output Patient Data and Safety Factor of Compoments to Log File
 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Log/group03_LOG','w');
@@ -357,6 +383,7 @@ fprintf(fileID,'Patient Mass=%.3f\n',mass);
 fprintf(fileID,'Patient Height=%.3f\n',height);
 fprintf(fileID,'Patient Thigh Diameter=%.3f\n',thighdiameter);
 fprintf(fileID,'Patient Calf Diameter=%.3f\n',calfdiameter);
+fprintf(fileID,'Brace Mass=%.3f\n', FinalBraceMass);
 fprintf(fileID,'Superior Link Safety Factor=%.3f\n', MinSup);
 fprintf(fileID,'Inferior Link Safety Factor=%.3f\n', MinInf);
 fprintf(fileID,'Anterior Link Safety Factor=%.3f\n', MinAnt);

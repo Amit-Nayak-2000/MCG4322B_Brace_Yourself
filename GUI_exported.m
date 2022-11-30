@@ -160,7 +160,9 @@ classdef GUI_exported < matlab.apps.AppBase
                
                 % Calls the design code function using input arguments from the GUI
                 [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors, OA_KAM, new_KAM, healthy_KAM] = DesignCode(weight, height, thighD, calfD, app); 
-                app.TextArea.Value = "Parameterization Complete.";
+                finalstring = "Parametrization Complete! See S.F Tab for detailed safety factors." + '\n' + 'Overall Safety Factor of Brace: ' + num2str(min(SafetyFactors));
+                finalstring = compose(finalstring);
+                app.TextArea.Value = finalstring;
                 drawnow;
                 
                 % Generate plots for ICR, potential energy, frontal plane contribution, moment contribution 
