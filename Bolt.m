@@ -7,7 +7,7 @@ classdef Bolt < handle
         %Geometric Properties (m)
         L %Length of bolt
         D %Diameter of bolt     
-        L_thread %Thread Length @ROHAN
+        L_thread %Threaded portion of the bolt 
         
         %Material Properties
         E = 193e9; % Elastic modulus of 304 stainless steel (Pa)
@@ -23,8 +23,12 @@ classdef Bolt < handle
         
         function outputDimensions(obj, type)
             %type 1 is link spring bolt
-            %type 2 is inferior interlink bolt
-            %type 3 is superior interlink bolt
+            %type 2 is superior-anterior bolt
+            %type 3 is superior-posterior bolt
+            %type 4 is inferior-anterior bolt
+            %type 5 is inferior-posterior bolt
+            %type 6 is housing cover bolts
+            %type 7 is velcro rivet bolts
             
             if(type == 1)
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/link_spring_bolt.txt','w');

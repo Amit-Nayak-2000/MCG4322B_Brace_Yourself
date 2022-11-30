@@ -5,10 +5,10 @@ classdef VelcroBuckle < handle
     properties
         slot_w %Velcro Slot Width
         slot_h %Velcro Slot Height
-        t %ROHAN HELP PLS
-        height
-        hole_D=0.0034;
-        attach_w=0.018;
+        t %thickness
+        height %height of buckle
+        hole_D=0.0034; %diameter of rivet holes
+        attach_w=0.018; %width of attachment portion
     end
     
     methods

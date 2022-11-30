@@ -17,17 +17,17 @@ classdef InferiorLink < handle
         T %Thickness
         bolt_hole_diam %Hole Diameter of Bolts
         springarmholepos %Position of Spring Arm Hole
-        springarmholemaxd =0.006; %ROHAN HELP PLS
-        springarmholemind=0.0034;
-        armholeheadheight=0.00165;
-        H_holes
+        springarmholemaxd =0.006; %head diameter of bolt
+        springarmholemind=0.0034; %threaded portion diameter of bolt
+        armholeheadheight=0.00165; %height of bolt head
+        H_holes % hole position from end of link
         D_strap %Diameter of the metal contact strap
-        clip_hole_D=0.0034;
-        clip_hole_y1
-        clip_hole_dist
-        pad_t1
-        pad_t2
-        unpad_L1
+        clip_hole_D=0.0034; %velcro rivet hole diameter
+        clip_hole_y1 %y distance to rivet hole
+        clip_hole_dist %distance between 2 rivet holes
+        pad_t1 %padding thickness
+        pad_t2 %NOT USED FOR NOW
+        unpad_L1 %portion of link covered by housing (not padded)
         
         %Physical Properties
         m % Mass (kg)

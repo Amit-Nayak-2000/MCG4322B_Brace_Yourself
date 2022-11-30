@@ -8,9 +8,10 @@ classdef washerstandoff < handle
     
     methods
         function outputDimensions(obj, type)
-            %type 1 is link spring standoff
-            %type 2 is interlink standoff
-            %type 3 is link spring washer
+            %type 1 is sueprior interlink standoff
+            %type 2 is inferior interlink standoff
+            %type 3 is link spring standoff
+            %type 4 is link spring washer
             
             if(type == 1)
                 fileID = fopen('../MCG4322B_Brace_Yourself/SOLIDWORKSTestDir/Equations/superior_inter_link_standoff.txt','w');

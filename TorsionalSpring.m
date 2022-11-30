@@ -18,10 +18,10 @@ classdef TorsionalSpring < handle
         theta %Deflection of Spring (deg)
         l1 %length to standoff/moment arm (Superior/Inferior link) (m)
         l2 %length to standoff/moment arm (Anterior/Posterior link) (m)
-        height%MAKE SURE TO CODE THIS LATER
-        loop_diam = 0.005;
-        L_arm_main
-        L_arm_sub
+        height %height of coils
+        loop_diam = 0.005; %mean diameter of attachment loops
+        L_arm_main %main arm length (superior/inferior)
+        L_arm_sub %sub arm length (anterior/posterior)
         
         Torque = [0;0;0]; %(Nm)
     end

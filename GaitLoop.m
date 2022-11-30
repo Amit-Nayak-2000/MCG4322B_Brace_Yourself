@@ -176,12 +176,6 @@ for i=startframe:endframe
     OA_KAM(dataindex) = ZF.OA_KAM;
     new_KAM(dataindex) = ZF.Mk;
     healthy_KAM(dataindex) = ZF.M_targ;
-    
-    if(i==37)
-        disp(ZF.F_cz);
-        disp(ZF.F_tz);
-        disp(ZF.F_kz);
-    end
 
 end
 

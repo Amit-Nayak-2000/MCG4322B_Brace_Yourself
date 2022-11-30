@@ -9,7 +9,7 @@ classdef Fastener
     
     methods
         function outputDimensions(obj, type)
-            %type 1 is link spring locknut
+            %type 1 is link spring nut
             %type 2 is interlink locknut
             
             if(type == 1)

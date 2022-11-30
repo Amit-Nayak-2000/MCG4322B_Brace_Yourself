@@ -15,9 +15,9 @@ classdef AnteriorLink < handle
         bearing_hole_diam = 0.010; %hole diameter of bearing
         bearing_depth = 0.004; %depth of bearing hole
         springarmholepos %Position of spring arm hole
-        springarmholemaxd =0.006; %@rohan help pls
-        springarmholemind=0.0034;
-        armholeheadheight=0.00165;
+        springarmholemaxd =0.006; %Bolt head diameter
+        springarmholemind=0.0034; %Threaded portion diameter
+        armholeheadheight=0.00165; %Height of the bolt head
         
         
         %Physical Properties
