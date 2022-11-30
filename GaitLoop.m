@@ -1,4 +1,4 @@
-function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
+function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
 %Gait Loop Function
 %Loops through the gait cycle for initial calculations of critical safety
 %factors and other data.
@@ -63,8 +63,11 @@ newkneemoment = zeros(1, endframe - startframe + 1);
 %Instantanous centre of rotation
 ICRx = zeros(1, endframe - startframe + 1);
 ICRy = zeros(1, endframe - startframe + 1);
-% OA_KAM = zeros(1, endframe - startframe + 1);
+OA_KAM = zeros(1, endframe - startframe + 1);
+new_KAM = zeros(1, endframe - startframe + 1);
+healthy_KAM = zeros(1, endframe - startframe + 1);
 % percentagegait = zeros(1, endframe - startframe + 1);
+
 syms Da Dp;
 
 %Loop through the gait cycle
@@ -169,6 +172,17 @@ for i=startframe:endframe
     ICRx(dataindex) = double(ICRsoln.Da*cosd(A.theta));
     ICRy(dataindex) = double(ICRsoln.Da*sind(A.theta));
     
+    %% Frontal Calculations Storage
+    OA_KAM(dataindex) = ZF.OA_KAM;
+    new_KAM(dataindex) = ZF.Mk;
+    healthy_KAM(dataindex) = ZF.M_targ;
+    
+    if(i==37)
+        disp(ZF.F_cz);
+        disp(ZF.F_tz);
+        disp(ZF.F_kz);
+    end
+
 end
 
     %Bearing Range of Motion after looping through gait cycle

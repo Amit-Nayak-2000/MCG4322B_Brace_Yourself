@@ -1,4 +1,4 @@
-function [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors] = DesignCode(mass,height,thighdiameter,calfdiameter)
+function [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors, OA_KAM, new_KAM, healthy_KAM] = DesignCode(mass,height,thighdiameter,calfdiameter)
 %Design Code
 %Inputs: User mass, height, thigh and calf diameter
 %Outputs: Safety Factors of all components, Moment Contribution in Saggital Plane,
@@ -47,7 +47,7 @@ T2 = initSpring(T2, mass, In, P);
 %loop through the gait cycle and obtain critical safety factors for each
 %frame.
 disp("Computing Initial Calculations.");
-[SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr,  BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
+[SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr,  BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
 
 
 %% Superior Link Parametrization
