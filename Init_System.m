@@ -65,10 +65,10 @@ In = calculate_inertial_props(In);
 P = calculate_inertial_props(P);
 
 %Velcro Initial Dimensioning
-LVT=pi*thighdiameter;
+LVT=pi*thighdiameter/3;
 WVT=0.2*LVT;
 
-LVC=pi*thighdiameter;
+LVC=pi*thighdiameter/3;
 WVC=0.2*LVC;
 
 VT = initVelcro(VT,LVT,WVT);
