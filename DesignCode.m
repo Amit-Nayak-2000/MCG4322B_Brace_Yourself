@@ -1,4 +1,4 @@
-function [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors, OA_KAM, new_KAM, healthy_KAM] = DesignCode(mass,height,thighdiameter,calfdiameter)
+function [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors, OA_KAM, new_KAM, healthy_KAM] = DesignCode(mass,height,thighdiameter,calfdiameter, app)
 %Design Code
 %Inputs: User mass, height, thigh and calf diameter
 %Outputs: Safety Factors of all components, Moment Contribution in Saggital Plane,
@@ -46,12 +46,14 @@ T2 = initSpring(T2, mass, In, P);
 
 %loop through the gait cycle and obtain critical safety factors for each
 %frame.
-disp("Computing Initial Calculations.");
-[SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr,  BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset);
+app.TextArea.Value = "Computing initial calculations through gait cycle. We thank you for your patience.";
+drawnow;
+[SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr,  BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, verticaloffset, app);
 
 
 %% Superior Link Parametrization
-disp("Optimizing Superior Link.");
+app.TextArea.Value = "Optimizing Superior Link (1/8 components)";
+drawnow;
 %Flag if superior link is satisfied WRT Safety Factor Range.
 SuperiorSatisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.
@@ -87,7 +89,8 @@ end
 
 
 %% Inferior Link Parametrization
-disp("Optimizing Inferior Link.");
+app.TextArea.Value = "Optimizing Inferior Link (2/8 components)";
+drawnow;
 %Flag if inferior link is satisfied WRT Safety Factor Range.
 InferiorSatisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.
@@ -120,87 +123,82 @@ while(InferiorSatisfied == 0)
     end
 end
     
-    %% Anterior Link Parametrization
-    disp("Optimizing Anterior Link.");
-    %Flag if anterior link is satisfied WRT Safety Factor Range.
-    AnteriorSatisfied = 0;
-    %obtain minimum SF & index thru gait cycle.
-    [MinAnt, AntIndex] = min(AntSFArr);
-    while(AnteriorSatisfied == 0)
-        if(MinAnt > 4)
-            %Flag to recheck with entire gait cycle after has been optimized. 
-%             safetyfactorsatisfied = 0;
-            %decrease width of link.
-            A.B = 0.75*A.B;
-            %recalculate inertial properties
-            A = calculate_inertial_props(A);
-            %update SF for critical frame
-            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
-            MinAnt = SF.SF_ant;
-        elseif(MinAnt < 2)
-            %Flag to recheck with entire gait cycle after has been optimized.
-%             safetyfactorsatisfied = 0;
-            %increase width of link.
-            if(A.B<0.6*A.H)
-                A.B = 1.5*A.B;
-            elseif(A.B<0.85*A.H)
-                A.B=1.15*A.B;
-            else
-                A.T = 1.2*A.T;
-            end
-            %recalculate inertial properties
-            A = calculate_inertial_props(A);
-            %update SF for critical frame
-            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
-            MinAnt = SF.SF_ant;
+%% Anterior Link Parametrization
+app.TextArea.Value = "Optimizing Anterior Link (3/8 components)";
+drawnow;
+%Flag if anterior link is satisfied WRT Safety Factor Range.
+AnteriorSatisfied = 0;
+%obtain minimum SF & index thru gait cycle.
+[MinAnt, AntIndex] = min(AntSFArr);
+while(AnteriorSatisfied == 0)
+    if(MinAnt > 4)
+        %decrease width of link.
+        A.B = 0.75*A.B;
+        %recalculate inertial properties
+        A = calculate_inertial_props(A);
+        %update SF for critical frame
+        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
+        MinAnt = SF.SF_ant;
+    elseif(MinAnt < 2)
+        %increase width of link.
+        if(A.B<0.6*A.H)
+            A.B = 1.5*A.B;
+        elseif(A.B<0.85*A.H)
+            A.B=1.15*A.B;
         else
-            %Inferior Min SF is satisfied.
-            AnteriorSatisfied = 1;
+            A.T = 1.2*A.T;
         end
+        %recalculate inertial properties
+        A = calculate_inertial_props(A);
+        %update SF for critical frame
+        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, AntIndex+27, verticaloffset);
+        MinAnt = SF.SF_ant;
+    else
+        %Inferior Min SF is satisfied.
+        AnteriorSatisfied = 1;
     end
+end
     
-    %% Posterior Link Parametrization
-    disp("Optimizing Posterior Link.");
-    %Flag if posterior link is satisfied WRT Safety Factor Range.
-    PosteriorSatisfied = 0;
-    %obtain minimum SF & index thru gait cycle.
-    [MinPos, PosIndex] = min(PosSFArr);
-    while(PosteriorSatisfied == 0)
-        if(MinPos > 4)
-            %Flag to recheck with entire gait cycle after has been optimized. 
-%             safetyfactorsatisfied = 0;
-            %decrease width of link.
-            P.B = 0.75*P.B;
-            %recalculate inertial properties
-            P = calculate_inertial_props(P);
-            %update SF for critical frame
-            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
-            MinPos = SF.SF_pos;
-        elseif(MinPos < 2)
-            %Flag to recheck with entire gait cycle after has been optimized.
-%             safetyfactorsatisfied = 0;
-            %increase width of link.
-            if(P.B<0.6*P.H)
-                P.B = 1.5*P.B;
-            elseif(P.B<0.85*P.H)
-                P.B=1.15*P.B;
-            else
-                P.T = 1.2*P.T;
-            end
-            %recalculate inertial properties
-            P = calculate_inertial_props(P);
-            %update SF for critical frame
-            IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
-            MinPos = SF.SF_pos;
+%% Posterior Link Parametrization
+app.TextArea.Value = "Optimizing Posterior Link (4/8 components)";
+drawnow;
+%Flag if posterior link is satisfied WRT Safety Factor Range.
+PosteriorSatisfied = 0;
+%obtain minimum SF & index thru gait cycle.
+[MinPos, PosIndex] = min(PosSFArr);
+while(PosteriorSatisfied == 0)
+    if(MinPos > 4)
+        %decrease width of link.
+        P.B = 0.75*P.B;
+        %recalculate inertial properties
+        P = calculate_inertial_props(P);
+        %update SF for critical frame
+        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
+        MinPos = SF.SF_pos;
+    elseif(MinPos < 2)
+        %increase width of link.
+        if(P.B<0.6*P.H)
+            P.B = 1.5*P.B;
+        elseif(P.B<0.85*P.H)
+            P.B=1.15*P.B;
         else
-            %Inferior Min SF is satisfied.
-            PosteriorSatisfied = 1;
+            P.T = 1.2*P.T;
         end
+        %recalculate inertial properties
+        P = calculate_inertial_props(P);
+        %update SF for critical frame
+        IndividualFrameCheck(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, Z_forces, SF, mass, PosIndex+27, verticaloffset);
+        MinPos = SF.SF_pos;
+    else
+        %Inferior Min SF is satisfied.
+        PosteriorSatisfied = 1;
     end
+end
 
 
 %% Thigh Velcro Parametrization
-disp("Optimizing Thigh Velcro.");
+app.TextArea.Value = "Optimizing Thigh Velcro (5/8 components)";
+drawnow;
 %Flag if thigh velcro is satisfied WRT Safety Factor Range.
 VTsatisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.
@@ -227,7 +225,8 @@ while(VTsatisfied == 0)
 end
 
 %% Calf Velcro Parametrization
-disp("Optimizing Calf Velcro.");
+app.TextArea.Value = "Optimizing Calf Velcro (6/8 components)";
+drawnow;
 %Flag if calf velcro is satisfied WRT Safety Factor Range.
 VCsatisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.
@@ -254,7 +253,8 @@ while(VCsatisfied == 0)
 end
 
 %% TS1 Parametrization
-disp("Optimizing Torsional Spring 1.");
+app.TextArea.Value = "Optimizing Torsional Spring 1 (7/8 components)";
+drawnow;
 %Flag if Torsional Spring 1 (SA) is satisfied WRT Safety Factor Range.
 T1satisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.
@@ -289,7 +289,8 @@ end
 
 
 %% TS2 Parametrization
-disp("Optimizing Torsional Spring 2.");
+app.TextArea.Value = "Optimizing Torsional Spring 2 (8/8 components)";
+drawnow;
 %Flag if Torsional Spring 2 (IP) is satisfied WRT Safety Factor Range.
 T2satisfied = 0;
 %Obtain Minimum Critical SF of gaitcycle & index of occurance.

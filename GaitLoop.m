@@ -1,4 +1,4 @@
-function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset)
+function [SupSFArr,AntSFArr,PosSFArr,InfSFArr,T1SFArr,T2SFArr,VtSFArr,VcSFArr, BLSPSFArr, BLSASFArr, BLIASFArr, BLIPSFArr, BNSPFArr, BNSAFArr, BNIAFArr, BNIPFArr, percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, BSA, BIA, BSP, BIP, OA_KAM, new_KAM, healthy_KAM] = GaitLoop(S,In,P,A,thighlength,calflength,T1,T2, VT, VC, Blt, Brng, ZF, SF, mass, verticaloffset, app)
 %Gait Loop Function
 %Loops through the gait cycle for initial calculations of critical safety
 %factors and other data.
@@ -159,7 +159,9 @@ for i=startframe:endframe
     
     %Percentage array (For plotting).
     percentage(dataindex) = ((i - startframe + 1)/(endframe - startframe + 1)) * 100;
-    disp(percentage(dataindex) + "% of gait cycle completed.");
+    compstring = strcat(num2str(percentage(dataindex)), "% of gait cycle completed.");
+    app.TextArea.Value = compstring;
+    drawnow;
     
     
     %% ICR Calculations
