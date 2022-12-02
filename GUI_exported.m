@@ -56,7 +56,7 @@ classdef GUI_exported < matlab.apps.AppBase
                 app.TextArea.Value = 'Invalid Entry. Please enter a height between 100 cm and 200 cm';
             else
                 app.EditField_h.Value = userheight; %Sets text field equal to slider value
-                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.'
+                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.';
             end
         end
 
@@ -78,7 +78,7 @@ classdef GUI_exported < matlab.apps.AppBase
                 app.TextArea.Value = 'Invalid Entry. Please enter a weight between 36 kg and 115 kg';
             else
                 app.EditField_w.Value = userweight; %Sets text field equal to slider value
-                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.'
+                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.';
             end
             
         end
@@ -101,7 +101,7 @@ classdef GUI_exported < matlab.apps.AppBase
                 app.TextArea.Value = 'Invalid Entry. Please enter a thigh circumference between 33 cm and 81 cm';
             else
                 app.EditField_t.Value = userthigh; %Sets text field equal to slider value
-                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.'
+                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.';
             end
             
         end
@@ -125,7 +125,7 @@ classdef GUI_exported < matlab.apps.AppBase
                 app.TextArea.Value = 'Invalid Entry. Please enter a calf circumference between 27 cm and 61 cm';
             else
                 app.EditField_c.Value = usercalf; %Sets text field equal to slider value
-                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.'
+                app.TextArea.Value = 'Click BUILD to submit design inputs. Click Exit Designer to close the GUI.';
             end
             
         end
@@ -160,10 +160,7 @@ classdef GUI_exported < matlab.apps.AppBase
                
                 % Calls the design code function using input arguments from the GUI
                 [percentage, biokneemoment, newkneemoment, totalPE, ICRx, ICRy, Parts, SafetyFactors, OA_KAM, new_KAM, healthy_KAM] = DesignCode(weight, height, thighD, calfD, app); 
-                finalstring = "Parametrization Complete! See S.F Tab for detailed safety factors." + '\n' + 'Overall Safety Factor of Brace: ' + num2str(min(SafetyFactors));
-                finalstring = compose(finalstring);
-                app.TextArea.Value = finalstring;
-                drawnow;
+                
                 
                 % Generate plots for ICR, potential energy, frontal plane contribution, moment contribution 
                 
@@ -231,7 +228,7 @@ classdef GUI_exported < matlab.apps.AppBase
 
             % Create TextArea_sf
             app.TextArea_sf = uitextarea(app.SFTab);
-            app.TextArea_sf.Position = [11 0 459 301];
+            app.TextArea_sf.Position = [10 12 459 301];
 
             % Create ICRTab
             app.ICRTab = uitab(app.TabGroup);
@@ -257,7 +254,7 @@ classdef GUI_exported < matlab.apps.AppBase
             xlabel(app.UIAxes_frontalplane, 'Percent of Gait Cycle (%)')
             ylabel(app.UIAxes_frontalplane, 'Moment (Nm)')
             zlabel(app.UIAxes_frontalplane, 'Z')
-            app.UIAxes_frontalplane.Position = [1 -12 479 323];
+            app.UIAxes_frontalplane.Position = [14 4 455 313];
 
             % Create TotalPETab
             app.TotalPETab = uitab(app.TabGroup);
@@ -270,7 +267,7 @@ classdef GUI_exported < matlab.apps.AppBase
             xlabel(app.UIAxes_PE, 'Percent of Gait Cycle (%)')
             ylabel(app.UIAxes_PE, 'Potential Energy (J)')
             zlabel(app.UIAxes_PE, 'Z')
-            app.UIAxes_PE.Position = [1 -11 479 322];
+            app.UIAxes_PE.Position = [7 4 469 312];
 
             % Create SaggitalContributionTab
             app.SaggitalContributionTab = uitab(app.TabGroup);
@@ -292,8 +289,8 @@ classdef GUI_exported < matlab.apps.AppBase
 
             % Create Image2
             app.Image2 = uiimage(app.AboutUsTab);
-            app.Image2.Position = [1 19 393 292];
-            app.Image2.ImageSource = '/Users/ellafossum/Documents/GitHub/MCG4322B_Brace_Yourself/Slide64.jpg';
+            app.Image2.Position = [1 19 479 292];
+            app.Image2.ImageSource = 'Slide64.jpg';
 
             % Create Image
             app.Image = uiimage(app.MCG4322BGroup03UIFigure);
@@ -404,7 +401,6 @@ classdef GUI_exported < matlab.apps.AppBase
 
             % Create YoudeservetostepintocomfortLabel
             app.YoudeservetostepintocomfortLabel = uilabel(app.MCG4322BGroup03UIFigure);
-            app.YoudeservetostepintocomfortLabel.BackgroundColor = [0.9608 0.9608 0.9804];
             app.YoudeservetostepintocomfortLabel.HorizontalAlignment = 'center';
             app.YoudeservetostepintocomfortLabel.FontName = 'PingFang TC';
             app.YoudeservetostepintocomfortLabel.FontSize = 14;

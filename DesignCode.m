@@ -649,5 +649,12 @@ In.clip_hole_y1=0.25*V_buck.slot_h;
 In.clip_hole_dist=0.5*V_buck.slot_h;
 In.unpad_L1=(2/3)*Hbase.width;
 In.outputDimensions();
+
+%% Final Output to Run Screen GUI
+
+finalstring = "Parametrization Complete! See S.F Tab for detailed safety factors." + '\n' + 'Overall Safety Factor of Brace: ' + num2str(min(SafetyFactors)) + '\nMass of User: ' + num2str(mass) + ' kg\nHeight of User: ' + num2str(height) + ' m\nThigh Diameter: ' + num2str(thighdiameter*100) + ' cm\nCalf Diameter: ' + num2str(calfdiameter*100) + ' cm\nMass of Brace: ' + num2str(FinalBraceMass) + ' kg';
+finalstring = compose(finalstring);
+app.TextArea.Value = finalstring;
+drawnow;
 end
 
